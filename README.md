@@ -2,7 +2,7 @@
 # 3d_PLANET  
 (в процессе)
 
-![pic](https://github.com/fire888/3dViewer/blob/master/www_dist/assets/screenshot.jpg)  
+![pic](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)  
 [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
 
 
