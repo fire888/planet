@@ -75,9 +75,9 @@ const addOnWindowResize = () => {
 } 
 
 const handleWindowResize = () => {
-	renderer.setSize(window.innerWidth, window.innerHeight)
-	camera.aspect = window.innerWidth / window.innerHeight
-	camera.updateProjectionMatrix()
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
 }
 
 const showCanvasWebGL = () => {
@@ -90,9 +90,7 @@ const hidePreloader = () => {
   preloader.className = 'hide'
 }
 
-const startCheckMouseWheell = () => {
-	window.addEventListener( 'wheel', onMouseWheel, false )
-} 
+const startCheckMouseWheell = () => window.addEventListener( 'wheel', onMouseWheel, false )
 
 const onMouseWheel = () => {
   setSpeedEarthNormal()
