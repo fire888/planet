@@ -1,10 +1,9 @@
 
 # 3d_PLANET  
-(в процессе)
 
-![pic](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)  
-[*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
+![pic](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
 
+(в процессе) [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
 
 Собранное приложение находится в папке *www_dist/*  
 
