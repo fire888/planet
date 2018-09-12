@@ -17,50 +17,56 @@
     overflow-x: hidden;
   }
 
+
+
+
+
+
+
+  /* APPLICATION STYLES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */  
   #App-webGL{
     height: 100vh; 
     width: 100vw; 
     display: block;
   }
-
-  #preloader, #slogan {
+  #App-webGL #preloader, #App-webGL #slogan {
     position: absolute;
     top: 50vh;
     width: 100vw;
   }
-
-  #preloader {
+  #App-webGL #preloader {
     text-align: center; 
   }
-
-  #slogan {
+  #App-webGL #slogan {
     padding-left: 10vw; 
   } 
-  
-  .hidden {
-    display: none;
-  }
-
-  .show { 
+  #App-webGL .show { 
     animation: animatonShow 0.4s ease-out 1; 
     display: block;
   }
-
-  .hide {
+  #App-webGL .hide {
     animation: animatonHide 0.4s ease-in 1; 
     opacity: 0;
     display: block;
+  }  
+  #App-webGL .hidden {
+    display: none;
   }
-
   @keyframes animatonShow {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-
   @keyframes animatonHide {
     from { opacity: 1; }  
     to { opacity: 0; }
   }
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */ 
+
+
+
+
+
+
 
  </style>		
 </head>
@@ -68,7 +74,11 @@
 
 
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+
+
+
+
+<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
 <div id = 'App-webGL'>
   <canvas id = 'webGL'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
@@ -77,6 +87,8 @@
 <script src = 'js/libs.min.js'></script>    
 <script src = 'js/main.min.js'></script>
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+
+
 
 
 
