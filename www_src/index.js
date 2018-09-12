@@ -67,6 +67,17 @@ const drawFrame = () => {
 }
 
 
+const handleWindowResize = () => {
+	renderer.setSize(window.innerWidth, window.innerHeight)
+	camera.aspect = window.innerWidth / window.innerHeight
+	camera.updateProjectionMatrix()
+}
+
+const addOnWindowResize = () => {
+  window.addEventListener('resize', handleWindowResize, false)
+}  
+
+
 const showCanvasWebGL = () => {
   let canvas = document.getElementById( 'webGL' )
   canvas.className = 'show'
@@ -197,6 +208,7 @@ const updateAnimationEarth = () => {
 window.onload = () => {
   loadAssets( () => { 
     initScene()
+    addOnWindowResize()
     createEarth()
     drawFrame()
     showCanvasWebGL()
