@@ -17,7 +17,7 @@ ____
 ```
 npm i
 ```
-Сборка в файл *www_dist/js/main.js*:
+Сборка в файл *www_dist/js/main.min.js*:
 ```
 npm run build
 ```
