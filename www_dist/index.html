@@ -41,13 +41,13 @@
     padding-left: 10vw; 
   } 
   #App-webGL .show { 
+    display: block;  
     animation: animatonShow 0.4s ease-out 1; 
-    display: block;
   }
   #App-webGL .hide {
-    animation: animatonHide 0.4s ease-in 1; 
     opacity: 0;
-    display: block;
+    display: block;    
+    animation: animatonHide 0.4s ease-in 1; 
   }  
   #App-webGL .hidden {
     display: none;
@@ -80,7 +80,7 @@
 
 <!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
 <div id = 'App-webGL'>
-  <canvas id = 'webGL'></canvas>
+  <canvas id = 'webGL' class = 'hidden'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
   <div id = 'slogan' class = 'hidden'>SLOGAN</div> 
 </div>

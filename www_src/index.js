@@ -1,16 +1,11 @@
 
 
 let textureLoader,
-scene, camera, renderer,
-earth,
 textures = {
   sceneBack: null,
   waterNormals: null
 }
 
-
-
-/********************************************************************/
 
 const loadAssets = ( onLoad ) => {
   textureLoader = new THREE.TextureLoader()
@@ -30,22 +25,24 @@ const loadAssets = ( onLoad ) => {
             }
         )	
   }) )
-  .then( () => { onLoad() } )      
+  .then( () => { 
+    textureLoader = null
+    onLoad() } 
+  )      
 }
 
 
-
-
-
 /*******************************************************************/
+
+let scene, camera, renderer
+
 
 const initScene = () => {
   scene = new THREE.Scene()
   scene.background = textures.sceneBack
 
   camera = new THREE.PerspectiveCamera( 75,	window.innerWidth / window.innerHeight, 3.5, 15000 )
-  camera.position.set( -800, 0, 1800 )
-  //camera.lookAt( scene.position )   
+  camera.position.set( -800, 0, 1800 )   
 
   let pointL = new THREE.PointLight( 0xffffff, 2.0 )
   pointL.position.set( -400, 1000, 1600 )
@@ -61,10 +58,16 @@ const initScene = () => {
   
 const drawFrame = () => {  
   updateAnimationEarth()
-
   renderer.render( scene, camera )
   requestAnimationFrame( drawFrame ) 
 }
+
+
+/*******************************************************************/
+
+const addOnWindowResize = () => {
+  window.addEventListener('resize', handleWindowResize, false)
+} 
 
 
 const handleWindowResize = () => {
@@ -72,10 +75,6 @@ const handleWindowResize = () => {
 	camera.aspect = window.innerWidth / window.innerHeight
 	camera.updateProjectionMatrix()
 }
-
-const addOnWindowResize = () => {
-  window.addEventListener('resize', handleWindowResize, false)
-}  
 
 
 const showCanvasWebGL = () => {
@@ -89,23 +88,26 @@ const hidePreloader = () => {
   preloader.className = 'hide'
 }
 
+
 const startCheckMouseWheell = () => {
-	window.addEventListener( 'wheel', onMouseWheel, false );
+	window.addEventListener( 'wheel', onMouseWheel, false )
 } 
 
+
 const onMouseWheel = () => {
-  earthDir = 'normal'
+  setSpeedEarthNormal()
   let preloader = document.getElementById( 'preloader' )
   preloader.className = 'hidden'
   let slogan = document.getElementById( 'slogan' )
   setTimeout( () => { slogan.className = 'show' }, 500 )  
-  window.removeEventListener('wheel', onMouseWheel, false);
+  window.removeEventListener('wheel', onMouseWheel, false)
 }
 
 
-
-
 /********************************************************************/
+
+let earth
+
 
 const createEarth = () => {
   earth = new THREE.Group()
@@ -114,7 +116,7 @@ const createEarth = () => {
 }
 
 const createGlobe = () => {
-  let globe =  new THREE.Mesh( 
+  return new THREE.Mesh( 
     new THREE.SphereGeometry( 600, 30, 30 ),
     new THREE.MeshPhongMaterial( {
       map: textures.waterNormals,
@@ -125,70 +127,12 @@ const createGlobe = () => {
       color: 0x1F2A44,
     } )
   )
-  return globe
-}
-
-/*
-const earthContourShadow = () => {
-  let g = new THREE.SphereGeometry( 603, 30, 30 )
-  let m = new THREE.MeshPhongMaterial( {
-    map: new THREE.TextureLoader().load( 'assets/EarthMap_transparent.png' ),
-    side: THREE.DoubleSide,
-    shininess: 0.0,
-    transparent: true,
-    opacity: 1.0,
-    color: 0x000000,
-    emissive: 0x000000,
-    specular: 0x000000,
-  })
-  return new THREE.Mesh(g, m)  
 }
 
 
-const clouds = () => {
-  let mt = textureCloads
-  let mta = textureCloads
-  let g = new THREE.SphereGeometry(603, 50, 50, 0, 2*Math.PI, 0, Math.PI)
-  let m = new THREE.MeshLambertMaterial({
-    map: mt,
-    alphaMap: mta,
-    blending: 1,
-    side: THREE.DoubleSide,
-    transparent:true,
-    opacity: 0.5,
-    color: 0x000000,
-    emissive: 0x000000,
-  });
-  return new THREE.Mesh(g, m);
-}
+let earthSpd = 0.002, 
+earthDir = 'left' // || 'right' || 'normal'  
 
-
-const cloudsShadow = () => {
-  let mt = textureCloads
-  let mta = textureCloads
-  let g = new THREE.SphereGeometry(618, 500, 500, 0, 2*Math.PI, 0, Math.PI)
-  let m = new THREE.MeshLambertMaterial({
-    map: mt,
-    alphaMap: mta,
-    blending: 2,
-    side: THREE.DoubleSide,
-    transparent:true,
-    opacity: 0.6,
-    color: 0x505050,
-    emissive: 0x090909
-  })
-  m.map.generateMipalphaMaps = false;
-  m.map.magFilter = THREE.LinearFilter;
-  m.map.minFilter = THREE.LinearFilter;
-  m.needsUpdate = true;
-  m.fog = false;
-  return new THREE.Mesh(g, m);
-}
-
-*/
-/******************************************************************/
-
-let earthSpd = 0.002, earthDir = 'left' // || 'right' || 'normal'  
 
 const updateAnimationEarth = () => {
   if ( ! earth ) return
@@ -202,6 +146,11 @@ const updateAnimationEarth = () => {
   earth.rotation.y += earthSpd
   earth.rotation.z += earthSpd*0.2
 }
+
+const setSpeedEarthNormal = () => {
+  earthDir = 'normal'
+}  
+
 
 /******************************************************************/
 
