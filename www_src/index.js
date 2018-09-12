@@ -1,65 +1,126 @@
 
 
-let controls, scene, camera, renderer,
-textureCloads
+let textureLoader,
+scene, camera, renderer,
+earth,
+textures = {
+  sceneBack: null,
+  waterNormals: null
+}
+
+
+
+/********************************************************************/
+
+const loadAssets = ( onLoad ) => {
+  textureLoader = new THREE.TextureLoader()
+  new Promise ( ( resolve ) => {
+        textures.sceneBack = textureLoader.load( 
+            'assets/background_map.jpg',
+            () => { resolve() }
+        )			
+  })
+  .then( () => new Promise ( ( resolve ) => {
+        textures.waterNormals = textureLoader.load( 
+            'assets/Voda_normali.jpg',
+            () => { 
+              textures.waterNormals.wrapS = textures.waterNormals.wrapT = THREE.RepeatWrapping
+              textures.waterNormals.repeat.set( 5.0, 5.0 )              
+              resolve() 
+            }
+        )	
+  }) )
+  .then( () => { onLoad() } )      
+}
+
+
+
 
 
 /*******************************************************************/
 
-const createWebGl = () => {
+const initScene = () => {
   scene = new THREE.Scene()
-  scene.background = new THREE.TextureLoader().load( 'assets/background_map.jpg' );
+  scene.background = textures.sceneBack
 
   camera = new THREE.PerspectiveCamera( 75,	window.innerWidth / window.innerHeight, 3.5, 15000 )
-  camera.position.set( -1800, 200, 300 )
-  camera.lookAt( scene.position )
-  controls = new THREE.OrbitControls( camera )    
+  camera.position.set( -800, 0, 1800 )
+  //camera.lookAt( scene.position )   
 
   let pointL = new THREE.PointLight( 0xffffff, 2.0 )
-  pointL.position.set( -400, 300, 1600 )
+  pointL.position.set( -400, 1000, 1600 )
   scene.add( pointL )
-  let lightAmb = new THREE.AmbientLight( 0xadd6eb, 0.5 )
+  let lightAmb = new THREE.AmbientLight( 0xffffff, 0.5 )
   scene.add( lightAmb )
 
   renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webGL' ) } )
   renderer.setPixelRatio( window.devicePixelRatio )
   renderer.setSize( window.innerWidth, window.innerHeight )	
-
-  scene.add( createSphere() )
-
-  drawFrame()
 }
   
   
 const drawFrame = () => {  
+  updateAnimationEarth()
+
   renderer.render( scene, camera )
-  controls.update()
   requestAnimationFrame( drawFrame ) 
 }
 
 
-/********************************************************************/
-
-const createSphere = () => {
-  let g = new THREE.SphereGeometry( 600, 80, 80 )
-  let m = new THREE.MeshPhongMaterial({
-    map: new THREE.TextureLoader().load( 'assets/Voda_normali.jpg' ),
-    bumpMap: new THREE.TextureLoader().load( 'assets/Shum_dlya_vody_bump.jpg' ),
-    bumpScale: 1.65,
-    shininess: 0.0,
-    wireframe: false,
-    transparent: true,
-    opacity: 0.94,
-    color: 0x1F2A44,
-  })
-
-  return new THREE.Mesh(g, m)
+const showCanvasWebGL = () => {
+  let canvas = document.getElementById( 'webGL' )
+  canvas.className = 'show'
 }
 
 
+const hidePreloader = () => {
+  let preloader = document.getElementById( 'preloader' )
+  preloader.className = 'hide'
+}
+
+const startCheckMouseWheell = () => {
+	window.addEventListener( 'wheel', onMouseWheel, false );
+} 
+
+const onMouseWheel = () => {
+  earthDir = 'normal'
+  let preloader = document.getElementById( 'preloader' )
+  preloader.className = 'hidden'
+  let slogan = document.getElementById( 'slogan' )
+  setTimeout( () => { slogan.className = 'show' }, 500 )  
+  window.removeEventListener('wheel', onMouseWheel, false);
+}
+
+
+
+
+/********************************************************************/
+
+const createEarth = () => {
+  earth = new THREE.Group()
+  earth.add( createGlobe() )
+  scene.add( earth )
+}
+
+const createGlobe = () => {
+  let globe =  new THREE.Mesh( 
+    new THREE.SphereGeometry( 600, 30, 30 ),
+    new THREE.MeshPhongMaterial( {
+      map: textures.waterNormals,
+      normalMap: textures.waterNormals,
+      shininess: 0.0,
+      transparent: true,
+      opacity: 0.94,
+      color: 0x1F2A44,
+    } )
+  )
+  return globe
+}
+
+/*
 const earthContourShadow = () => {
-  let g = new THREE.SphereGeometry(603, 50, 50, 0, Math.PI*2, 0, Math.PI);
-  let m = new THREE.MeshPhongMaterial({
+  let g = new THREE.SphereGeometry( 603, 30, 30 )
+  let m = new THREE.MeshPhongMaterial( {
     map: new THREE.TextureLoader().load( 'assets/EarthMap_transparent.png' ),
     side: THREE.DoubleSide,
     shininess: 0.0,
@@ -113,26 +174,35 @@ const cloudsShadow = () => {
   return new THREE.Mesh(g, m);
 }
 
+*/
+/******************************************************************/
 
-const testBox = () => { 
-  return ( new THREE.Mesh(
-    new THREE.BoxGeometry( 30, 30, 30 ),
-    new THREE.MeshBasicMaterial( { color: 0xff0000 } ) 
-  ) ) 
+let earthSpd = 0.002, earthDir = 'left' // || 'right' || 'normal'  
+
+const updateAnimationEarth = () => {
+  if ( ! earth ) return
+
+  if ( earthSpd > 0.005 && earthDir == 'left' ) earthDir = 'right' 
+  if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
+  if ( earthDir == 'left' ) earthSpd += 0.0001
+  if ( earthDir == 'right') earthSpd -= 0.0001
+  if ( earthDir == 'normal' && earthSpd < 0.02 ) earthSpd += 0.0001 
+  
+  earth.rotation.y += earthSpd
+  earth.rotation.z += earthSpd*0.2
 }
-
 
 /******************************************************************/
 
 window.onload = () => {
-  textureCloads = new THREE.TextureLoader()
-    .load( 'assets/clouds_new_1.png', () => {
-      createWebGl()
-      scene.add( createSphere() )
-      scene.add( earthContourShadow() )
-      scene.add( clouds() )
-      scene.add( cloudsShadow() )  
-    } )
+  loadAssets( () => { 
+    initScene()
+    createEarth()
+    drawFrame()
+    showCanvasWebGL()
+    hidePreloader()
+    startCheckMouseWheell()   
+  } )
 }  
 
 

@@ -26,7 +26,7 @@ export default {
    input:  'www_src/index.js',
  
    // this is the output file.
-   output:{ file:   'www_dist/js/main.js',
+   output:{ file:   'www_dist/js/main.min.js',
  
    // this is the output format. iife is best for web apps meant to run in a
    // browser. iife means that the script is packaged as a self contained self 

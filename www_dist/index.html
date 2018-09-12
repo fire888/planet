@@ -2,21 +2,86 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">  				
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <style type="text/css">
+
+  * {
+    padding: 0px;
+    margin: 0px;
+  }  
+
+  body {
+    color: white;
+    font-size: 25px;
+    background-color: black;
+    overflow-x: hidden;
+  }
+
+  #App-webGL{
+    height: 100vh; 
+    width: 100vw; 
+    display: block;
+  }
+
+  #preloader, #slogan {
+    position: absolute;
+    top: 50vh;
+    width: 100vw;
+  }
+
+  #preloader {
+    text-align: center; 
+  }
+
+  #slogan {
+    padding-left: 10vw; 
+  } 
+  
+  .hidden {
+    display: none;
+  }
+
+  .show { 
+    animation: animatonShow 0.4s ease-out 1; 
+    display: block;
+  }
+
+  .hide {
+    animation: animatonHide 0.4s ease-in 1; 
+    opacity: 0;
+    display: block;
+  }
+
+  @keyframes animatonShow {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes animatonHide {
+    from { opacity: 1; }  
+    to { opacity: 0; }
+  }
+
+ </style>		
 </head>
 <body>
 
 
-<canvas id = "webGL"></canvas>  
-<div id = "preloader" style = "color: red; position: absolute; z-index: 1000; left: 100px; top: 100px;">PRELOADER</div>
-<div id = "slogan"  style = "color: red; position: absolute; z-index: 1000; left: 100px; top: 200px;">SLOGAN</div> 
-<script src="js/jsLibs/three.min.js"></script>
-<script src="js/jsLibs/OrbitControls.js"></script>
-<script src="js/jsLibs/MTLLoader.js"></script>
-<script src="js/jsLibs/OBJLoader.js"></script>      
-<script src="js/main.js"></script>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<div id = 'App-webGL'>
+  <canvas id = "webGL"></canvas>
+  <div id = "preloader" class = 'show'>LOADING</div>
+  <div id = "slogan" class = 'hidden'>SLOGAN</div> 
+</div>
+<script src="js/libs.min.js"></script>    
+<script src="js/main.min.js"></script>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
 
 
+
+
+Wireless communication, or sometimes simply wireless, is the transfer of information or power between two or more points that are not connected by an electrical conductor. The most common wireless technologies use radio waves. With radio waves distances can be short, such as a few meters for Bluetooth or as far as millions of kilometers for deep-space radio communications. It encompasses various types of fixed, mobile, and portable applications, including two-way radios, cellular telephones, personal digital assistants (PDAs), and wireless networking. Other examples of applications of radio wireless technology include GPS units, garage door openers, wireless computer mice, keyboards and headsets, headphones, radio receivers, satellite television, broadcast television and cordless telephones. 
 
 </body>
 </html>
