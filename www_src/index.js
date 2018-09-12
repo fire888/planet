@@ -1,11 +1,14 @@
 
 
+
+
+/*******************************************************************/
+
 let textureLoader,
 textures = {
   sceneBack: null,
   waterNormals: null
 }
-
 
 const loadAssets = ( onLoad ) => {
   textureLoader = new THREE.TextureLoader()
@@ -32,10 +35,11 @@ const loadAssets = ( onLoad ) => {
 }
 
 
+
+
 /*******************************************************************/
 
 let scene, camera, renderer
-
 
 const initScene = () => {
   scene = new THREE.Scene()
@@ -54,13 +58,14 @@ const initScene = () => {
   renderer.setPixelRatio( window.devicePixelRatio )
   renderer.setSize( window.innerWidth, window.innerHeight )	
 }
-  
-  
+    
 const drawFrame = () => {  
   updateAnimationEarth()
   renderer.render( scene, camera )
   requestAnimationFrame( drawFrame ) 
 }
+
+
 
 
 /*******************************************************************/
@@ -69,45 +74,43 @@ const addOnWindowResize = () => {
   window.addEventListener('resize', handleWindowResize, false)
 } 
 
-
 const handleWindowResize = () => {
 	renderer.setSize(window.innerWidth, window.innerHeight)
 	camera.aspect = window.innerWidth / window.innerHeight
 	camera.updateProjectionMatrix()
 }
 
-
 const showCanvasWebGL = () => {
   let canvas = document.getElementById( 'webGL' )
   canvas.className = 'show'
 }
-
 
 const hidePreloader = () => {
   let preloader = document.getElementById( 'preloader' )
   preloader.className = 'hide'
 }
 
-
 const startCheckMouseWheell = () => {
 	window.addEventListener( 'wheel', onMouseWheel, false )
 } 
-
 
 const onMouseWheel = () => {
   setSpeedEarthNormal()
   let preloader = document.getElementById( 'preloader' )
   preloader.className = 'hidden'
-  let slogan = document.getElementById( 'slogan' )
-  setTimeout( () => { slogan.className = 'show' }, 500 )  
+  setTimeout( () => { 
+      let slogan = document.getElementById( 'slogan' )
+      slogan.className = 'show' 
+    }, 500 )  
   window.removeEventListener('wheel', onMouseWheel, false)
 }
+
+
 
 
 /********************************************************************/
 
 let earth
-
 
 const createEarth = () => {
   earth = new THREE.Group()
@@ -129,27 +132,24 @@ const createGlobe = () => {
   )
 }
 
-
 let earthSpd = 0.002, 
 earthDir = 'left' // || 'right' || 'normal'  
 
-
 const updateAnimationEarth = () => {
   if ( ! earth ) return
-
   if ( earthSpd > 0.005 && earthDir == 'left' ) earthDir = 'right' 
   if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
   if ( earthDir == 'left' ) earthSpd += 0.0001
   if ( earthDir == 'right') earthSpd -= 0.0001
   if ( earthDir == 'normal' && earthSpd < 0.02 ) earthSpd += 0.0001 
-  
   earth.rotation.y += earthSpd
   earth.rotation.z += earthSpd*0.2
 }
 
-const setSpeedEarthNormal = () => {
-  earthDir = 'normal'
-}  
+const setSpeedEarthNormal = () => earthDir = 'normal'
+
+
+
 
 
 /******************************************************************/
@@ -165,5 +165,6 @@ window.onload = () => {
     startCheckMouseWheell()   
   } )
 }  
+
 
 
