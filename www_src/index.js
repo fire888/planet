@@ -119,14 +119,16 @@ const onMouseWheel = () => {
 
 /********************************************************************/
 
-let earth, globeMesh, continentsMesh
+let earth, globeMesh, continentsMesh, glowMesh
 
 const createEarth = () => {
   earth = new THREE.Group()
   globeMesh = createGlobe() 
-  earth.add( globeMesh )
+  //earth.add( globeMesh )
   continentsMesh = createContinents() 
   earth.add( continentsMesh )
+  glowMesh = createEarthGlow()
+  scene.add( glowMesh )
   scene.add( earth )
 }
 
@@ -159,6 +161,24 @@ const createContinents = () => {
   return mesh
 }
 
+const createEarthGlow = () => {
+  let mesh =  new THREE.Mesh( 
+    new THREE.SphereGeometry( 780, 40, 40 ),
+    new THREE.ShaderMaterial( glowEarthShader )
+  )  
+  mesh.material.transparent = true
+  mesh.material.blending = THREE.AdditiveBlending,
+  mesh.material.side = THREE.DoubleSide
+  mesh.material.depthWrite = false
+  mesh.material.needsUpdate = true
+  return mesh
+}
+
+
+
+
+
+/********************************************************************/
 
 let earthSpd = 0.002, 
 earthDir = 'left' // || 'right' || 'normal'  
@@ -174,8 +194,7 @@ const updateAnimationEarth = () => {
       earthSpd += 0.00005
       if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
         continentsMesh.material.uniforms.light.value += 0.012
-        globeMesh.material.opacity -= 0.0005
-        globeMesh.material.needsUpdate = true
+        glowMesh.material.uniforms.light.value += 0.0034
       }
     } else {
       earthSpd = 0.02
@@ -240,7 +259,7 @@ const continentsShader = {
 
     'float point (in vec2 uv, in vec2 center, in float radius) {',
       'float len = length(center - uv);',
-      'return float(1. - smoothstep(radius, radius + .04, len));',  
+      'return float(1. - smoothstep(radius, radius + .6, len));',  
     '}',
 
     'void main() {',	
@@ -250,19 +269,19 @@ const continentsShader = {
       "vec4 diff = texture2D(tDiffuse, uv);",
 
       //points
-      'vec2 tileuv = vec2(uv.x, uv.y*0.8) * 80.;',
-      'float radius = .12;',
+      'vec2 tileuv = vec2(uv.x, uv.y*0.8) * 180.;',
+      'float radius = .03;',
       'vec2 center = floor( tileuv ) + vec2( 0.5, 0.5 );',
       'float point = point( tileuv, center, radius );',
-      "vec4 points = vec4( 0.3 * light - 0.2, 0.3 * light - 0.2, 0.7 * light,  (1.01 - diff.y) * point );",
+      "vec4 points = vec4( 1.5 * light - 0.2, 1.5 * light - 0.2, 1.8 * light,  (1.01 - diff.y) * point );",
 
 
       //contur
-      "vec4 contur = vec4( 0.2*light, 0.2*light, 0.8*light,  diff.x );",
+      "vec4 contur = vec4( 1.2*light, 1.2*light, 1.8*light,  diff.x );",
 
 
       //continents
-      "vec4 continents = vec4( .1, .1, .2, (1.5 - diff.y) * (1.0 - points.z) * 0.2 );",
+      "vec4 continents = vec4( .1, .1, .2, (1.5 - diff.y) * (1.0 - points.z) * 0.01 );",
 
 
       "gl_FragColor = contur + continents + points;",
@@ -271,5 +290,32 @@ const continentsShader = {
 }
 
 
+const glowEarthShader = {
+  uniforms: {		
+    'viewVector' : { value: new THREE.Vector3( -800, 0, 1800 ) },
+    'light': { value: 0.0 }, 
+    'glowColor': { value: new THREE.Vector3( 0.5, 0.5, 0.9 ) }      	
+  },
+  vertexShader: [	
+    'uniform vec3 viewVector;',
+    'uniform float light;',
+    'varying float intensity;',
 
+    'void main() {',
+      'vec3 vNormal = normalize( normalMatrix * normal );',
+      'vec3 vNormel = normalize( normalMatrix * viewVector );',
+      'intensity = pow( light - dot(vNormal, vNormel), 2.9 );',
+      
+      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+    '}'
+  ].join( '\n' ),	
+  fragmentShader: [
+    'uniform vec3 glowColor;',
+    'varying float intensity;',
+    'void main() {',
+	    'vec3 glow = glowColor * intensity;',
+      'gl_FragColor = vec4( glow, 1.0 );',
+    '}'
+  ].join( "\n" )
+} 
 
