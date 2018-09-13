@@ -124,7 +124,7 @@ let earth, globeMesh, continentsMesh, glowMesh
 const createEarth = () => {
   earth = new THREE.Group()
   globeMesh = createGlobe() 
-  //earth.add( globeMesh )
+  earth.add( globeMesh )
   continentsMesh = createContinents() 
   earth.add( continentsMesh )
   glowMesh = createEarthGlow()
