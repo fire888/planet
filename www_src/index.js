@@ -10,9 +10,17 @@ textures = {
   waterNormals: null,
   continents: null
 }
+let objectLoader,
+geoms = {
+  corpus: null,
+  isLoadedCorpus: false,
+  diod: null,
+  isLoadedDiod: false
+}
 
 const loadAssets = ( onLoad ) => {
   textureLoader = new THREE.TextureLoader()
+  objectLoader = new THREE.OBJLoader()
   new Promise ( ( resolve ) => {
         textures.sceneBack = textureLoader.load( 
             'assets/background_map.jpg',
@@ -34,9 +42,31 @@ const loadAssets = ( onLoad ) => {
             'assets/contour.jpg',
             () => { resolve() }
         )	
+  }) )
+  .then( () => new Promise ( ( resolve ) => {
+        objectLoader.load( 
+            'assets/connector.obj', 
+            ( obj ) => {
+                obj.traverse( ( child ) => {
+                  if ( child instanceof THREE.Mesh != true ) return
+                  if ( child.name == 'diod' ) { 
+                    geoms.diod = child.geometry
+                    geoms.isLoadedDiod = true 
+                  }
+                  if ( child.name == 'iron' ) { 
+                    geoms.corpus = child.geometry
+                    geoms.isLoadedCorpus = true
+                  }   
+                  if ( geoms.isLoadedCorpus && geoms.isLoadedDiod ) {
+                    resolve()
+                  }
+                })  
+            } 
+        )
   }) )  
   .then( () => { 
     textureLoader = null
+    objectLoader = null
     onLoad() } 
   )      
 }
@@ -68,6 +98,7 @@ const initScene = () => {
     
 const drawFrame = () => {  
   updateAnimationEarth()
+  updateAnimationConnectors()
   renderer.render( scene, camera )
   requestAnimationFrame( drawFrame ) 
 }
@@ -213,6 +244,62 @@ const checkPlanetSpeedNormal = () => {
 
 
 
+
+
+/******************************************************************/
+
+let arrConnectors = [], matIron, matDiod  
+
+const createConnectors = () => {
+  createConnectorMaterials()
+  for ( let i = 0; i < 12; i ++ ) {
+    let connector = createConnector()
+    scene.add( connector )
+    connector.rotation.x = - Math.PI /2
+    connector.position.x =  i * 300 -1700
+    arrConnectors.push( { mesh: connector } )      
+  }
+}
+
+const createConnectorMaterials = () => {
+  matIron = new THREE.MeshPhongMaterial({
+		color: 0x1520,
+		emissive: 0x20202,
+		specular: 0xc0c0c0,
+    shininess: 100,
+    envMap: textures.sceneBack
+  })
+  matDiod = new THREE.ShaderMaterial( diodShader )    
+}
+
+const createConnector = () => {
+  let corpus = createIronPart()
+  let diod = createDiodPart()
+  let group = new THREE.Group()
+  group.add( corpus )
+  group.add( diod )
+  return group
+}
+
+const createIronPart = () => { return new THREE.Mesh( geoms.corpus, matIron ) }
+
+const createDiodPart = () => { return new THREE.Mesh( geoms.diod, matDiod ) }
+
+
+
+
+
+/******************************************************************/
+
+const updateAnimationConnectors = () => {
+  if ( continentsMesh.material.uniforms.light.value < 1.35 && earthDir == 'normal' ) 
+    matDiod.uniforms.light.value -= 0.01  
+}
+
+
+
+
+
 /******************************************************************/
 
 window.onload = () => {
@@ -220,6 +307,7 @@ window.onload = () => {
     initScene()
     addOnWindowResize()
     createEarth()
+    createConnectors()
     drawFrame()
     showCanvasWebGL()
     hidePreloader()
@@ -315,6 +403,25 @@ const glowEarthShader = {
     'void main() {',
 	    'vec3 glow = glowColor * intensity;',
       'gl_FragColor = vec4( glow, 1.0 );',
+    '}'
+  ].join( "\n" )
+} 
+
+
+const diodShader = {
+  uniforms: {		
+    'light': { value: 1.0 }       	
+  },
+  vertexShader: [	
+    'uniform float light;',
+    'void main() {',
+      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+    '}'
+  ].join( '\n' ),	
+  fragmentShader: [
+    'uniform float light;',
+    'void main() {',
+      'gl_FragColor = vec4( 0.7*light, 0.8*light, 1.0*light, 1.0 );',
     '}'
   ].join( "\n" )
 } 
