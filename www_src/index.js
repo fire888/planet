@@ -205,15 +205,15 @@ window.onload = () => {
 
 const continentsShader = {
   uniforms: {		
-	  'tDiffuse' : { value: null },
+    'tDiffuse' : { value: null },
     'light': { value: 0.2 },       	
   },
   vertexShader: [	
-	  'varying vec2 vUv;',
+    'varying vec2 vUv;',
 	
-	  'void main() {',
+    'void main() {',
       'vUv = uv;',
-      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+       'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
     '}'
   ].join( '\n' ),	
   fragmentShader: [
