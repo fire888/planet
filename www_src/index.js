@@ -97,9 +97,13 @@ const hidePreloader = () => {
   preloader.className = 'hide'
 }
 
-const startCheckMouseWheell = () => window.addEventListener( 'wheel', onMouseWheel, false )
+const startCheckMouseWheell = () => { 
+  window.addEventListener( 'wheel', onMouseWheel, false )
+  window.onscroll = () => { onMouseWheel() }
+}  
 
 const onMouseWheel = () => {
+  if ( checkPlanetSpeedNormal() ) return
   setSpeedEarthNormal()
   let preloader = document.getElementById( 'preloader' )
   preloader.className = 'hidden'
@@ -165,20 +169,28 @@ const updateAnimationEarth = () => {
   if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
   if ( earthDir == 'left' ) earthSpd += 0.0001
   if ( earthDir == 'right') earthSpd -= 0.0001
-  if ( earthDir == 'normal' && earthSpd < 0.02 ) { 
-    if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
-      continentsMesh.material.uniforms.light.value += 0.012
-      globeMesh.material.opacity -= 0.0005
-      globeMesh.material.needsUpdate = true
-    }  
-    earthSpd += 0.00005
+  if ( earthDir == 'normal') {
+    if ( earthSpd < 0.02 ) { 
+      earthSpd += 0.00005
+      if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
+        continentsMesh.material.uniforms.light.value += 0.012
+        globeMesh.material.opacity -= 0.0005
+        globeMesh.material.needsUpdate = true
+      }
+    } else {
+      earthSpd = 0.02
+    }    
+    
   }   
   earth.rotation.y += earthSpd
 }
 
 const setSpeedEarthNormal = () => earthDir = 'normal'
 
-
+const checkPlanetSpeedNormal = () => {
+  if ( earthDir == 'normal' ) return true
+  if ( earthDir != 'normal' ) return false
+} 
 
 
 
