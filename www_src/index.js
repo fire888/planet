@@ -218,34 +218,54 @@ window.onload = () => {
 const continentsShader = {
   uniforms: {		
     'tDiffuse' : { value: null },
-    'light': { value: 0.2 },       	
+    'light': { value: 0.0 },       	
   },
   vertexShader: [	
     'varying vec2 vUv;',
 	
     'void main() {',
       'vUv = uv;',
-       'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
     '}'
   ].join( '\n' ),	
   fragmentShader: [
     '#ifdef GL_ES',
-    'precision highp float;',
+    'precision mediump float;',
     '#endif',
 
-    'uniform highp sampler2D tDiffuse;', 
+    'uniform sampler2D tDiffuse;', 
     'uniform float light;', 
 
     'varying vec2 vUv;',
 
+    'float point (in vec2 uv, in vec2 center, in float radius) {',
+      'float len = length(center - uv);',
+      'return float(1. - smoothstep(radius, radius + .04, len));',  
+    '}',
+
     'void main() {',	
+
       'vec2 uv = vUv;',
 
       "vec4 diff = texture2D(tDiffuse, uv);",
-      "vec4 cont = vec4( 0.7*light, 0.7*light, 1.0*light,  diff.x*light*1.3 );",
-      "vec4 ground = vec4( 0.01*light-0.5, 0.01*light-0.5, 0.6*light,  (1.0 - diff.y)*light*0.6 );",
 
-      "gl_FragColor = cont + ground;",
+      //points
+      'vec2 tileuv = vec2(uv.x, uv.y*0.8) * 80.;',
+      'float radius = .12;',
+      'vec2 center = floor( tileuv ) + vec2( 0.5, 0.5 );',
+      'float point = point( tileuv, center, radius );',
+      "vec4 points = vec4( 0.3 * light - 0.2, 0.3 * light - 0.2, 0.7 * light,  (1.01 - diff.y) * point );",
+
+
+      //contur
+      "vec4 contur = vec4( 0.2*light, 0.2*light, 0.8*light,  diff.x );",
+
+
+      //continents
+      "vec4 continents = vec4( .1, .1, .2, (1.5 - diff.y) * (1.0 - points.z) * 0.2 );",
+
+
+      "gl_FragColor = contur + continents + points;",
     '}'
   ].join( "\n" )
 }
