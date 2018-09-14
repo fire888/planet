@@ -254,10 +254,11 @@ const createConnectors = () => {
     wireGeom.dynamic = true
     let wire = new THREE.Mesh( wireGeom, materialIron ) 
     
-    scene.add( connectorsCenter.add( plug, wire ) )  
-
-    arrConnectors.push( { plug, wire, dirX, dirY } ) 
+    arrConnectors.push( { plug, wire, dirX, dirY } )
+    
+    connectorsCenter.add( plug, wire )   
   }
+  scene.add( connectorsCenter ) 
 }
 
 const createMaterialIron = () => {
