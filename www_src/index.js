@@ -315,10 +315,12 @@ const animationConnectorsFlash = () => {
   materialDiod.uniforms.light.value -= 0.01  
   spdConnectors += 0.3
   arrConnectors.forEach( ( item ) => {
-    item.plug.position.x += item.dirX * spdConnectors
-    item.plug.position.y += item.dirY * spdConnectors
-    item.wire.position.x += item.dirX * spdConnectors
-    item.wire.position.y += item.dirY * spdConnectors  
+    let spdX = item.dirX * spdConnectors
+    let spdY = item.dirY * spdConnectors   
+    item.plug.position.x += spdX
+    item.plug.position.y += spdY
+    item.wire.position.x += spdX
+    item.wire.position.y += spdY  
   } )
 }
 
