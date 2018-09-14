@@ -232,23 +232,39 @@ let arrConnectors = [], connectorsCenter, materialIron, materialDiod
 const createConnectors = () => {
   materialIron = createMaterialIron()
   materialDiod = createMaterialDiod()
+
   connectorsCenter = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0.5, 0.5 ), new THREE.MeshBasicMaterial( { color: 0x00ffff } ) )
   scene.add( connectorsCenter ) 
+
   for ( let i = 0; i < 12; i ++ ) {
+
     let mesh = createConnector()
     let dirX =  Math.cos( i/12 * Math.PI * 2 ) 
     let dirY = Math.sin( i/12 * Math.PI * 2 )
     mesh.position.set ( 770 * dirX, 770 * dirY, 0 )
     mesh.lookAt( 0, 0, 0 )
-    arrConnectors.push( { mesh, dirX, dirY } ) 
-    connectorsCenter.add( mesh )     
+
+    connectorsCenter.add( mesh )   
+  
+    let points = [
+      new THREE.Vector3( dirX*770, dirY*770, 0 ),
+      new THREE.Vector3( dirX*1800, dirY*1800, 0 ),
+      new THREE.Vector3( dirX*5000, dirY*5000, 0 )
+    ]
+    let curveQuad = new THREE.QuadraticBezierCurve3( points[0], points[1], points[2] ) 
+    let tubegeom = new THREE.TubeGeometry( curveQuad, 10, 10, 10, false);
+    let tube = new THREE.Mesh( tubegeom , materialIron ) 
+    connectorsCenter.add( tube )  
+
+    arrConnectors.push( { mesh, dirX, dirY, points, tube } ) 
+
   }
 }
 
 const createMaterialIron = () => {
   return new THREE.MeshPhongMaterial( {
-    color: 0x1520,
-    emissive: 0x20202,
+    color: 0x0c0a19,
+    emissive: 0x00000,
     specular: 0xc0c0c0,
     shininess: 100
   } )
@@ -272,14 +288,25 @@ const createConnector = () => {
 
 /*******************************************************************/
 
+let spdConnectors = 3.5
+
 const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
-  if ( STATE == 'DARK' ) connectorsCenter.rotation.y = earth.rotation.y
+  if ( STATE == 'DARK' ) { 
+    connectorsCenter.rotation.y = earth.rotation.y
+   // arrConnectors.forEach( ( item ) => {
+   //   item.tube.position.x += item.dirX * 3.5
+    //  item.tube.position.y += item.dirY * 3.5  
+   // } ) 
+  } 
   if ( STATE == 'FLASH' ) { 
+    spdConnectors += 0.3
     materialDiod.uniforms.light.value -= 0.01
     arrConnectors.forEach( ( item ) => {
-      item.mesh.position.x += item.dirX * 3.5
-      item.mesh.position.y += item.dirY * 3.5  
+      item.mesh.position.x += item.dirX * spdConnectors
+      item.mesh.position.y += item.dirY * spdConnectors
+      item.tube.position.x += item.dirX * spdConnectors
+      item.tube.position.y += item.dirY * spdConnectors  
     } ) 
   }  
 }
