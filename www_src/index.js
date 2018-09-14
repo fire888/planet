@@ -142,13 +142,11 @@ const drawFrame = () => {
 let earth, globeMesh, continentsMesh, glowMesh
 
 const createEarth = () => {
+  glowMesh = createEarthGlow()
   globeMesh = createGlobe() 
   continentsMesh = createContinents() 
   earth = new THREE.Group()
-  earth.add( continentsMesh, globeMesh )
-  scene.add( earth )
-  glowMesh = createEarthGlow()
-  scene.add( glowMesh )
+  scene.add( earth.add( continentsMesh, globeMesh ), glowMesh )
 }
 
 const createGlobe = () => {
@@ -200,20 +198,24 @@ let earthSpd = 0.002, earthDir = 'left' // || 'right'
 
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
-  if ( STATE == 'DARK' ) {
-    if ( earthSpd > 0.008 && earthDir == 'left' ) earthDir = 'right' 
-    if ( earthSpd < -0.008 && earthDir == 'right' ) earthDir = 'left'  
-    if ( earthDir == 'left' ) earthSpd += 0.0003
-    if ( earthDir == 'right') earthSpd -= 0.0003
-  }  
-  if ( STATE == 'FLASH') {
-    earthSpd < 0.02 ? earthSpd += 0.0001 : earthSpd = 0.02
-    if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
-        continentsMesh.material.uniforms.light.value += 0.012
-        glowMesh.material.uniforms.light.value += 0.0034
-    }
-  }
+  if ( STATE == 'DARK' ) earthUpdateParamsDark() 
+  if ( STATE == 'FLASH') earthUpdateParamsFlash()
   earth.rotation.y += earthSpd
+}
+
+const earthUpdateParamsDark = () => {
+  if ( earthSpd > 0.008 && earthDir == 'left' ) earthDir = 'right' 
+  if ( earthSpd < -0.008 && earthDir == 'right' ) earthDir = 'left'  
+  if ( earthDir == 'left' ) earthSpd += 0.0003
+  if ( earthDir == 'right') earthSpd -= 0.0003
+}
+
+const earthUpdateParamsFlash = () => {
+  earthSpd < 0.02 ? earthSpd += 0.0001 : earthSpd = 0.02
+  if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
+      continentsMesh.material.uniforms.light.value += 0.012
+      glowMesh.material.uniforms.light.value += 0.0034
+  }
 }
 
 const checkEarthStateLight = () => {
@@ -232,30 +234,29 @@ let arrConnectors = [], connectorsCenter, materialIron, materialDiod
 const createConnectors = () => {
   materialIron = createMaterialIron()
   materialDiod = createMaterialDiod()
-  connectorsCenter = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0.5, 0.5 ), new THREE.MeshBasicMaterial( { color: 0x00ffff } ) )
-  scene.add( connectorsCenter ) 
+  connectorsCenter = new THREE.Group()
   
   let count = 7
   
   for ( let i = 0; i < count; i ++ ) {
-    let mesh = createConnector()
+    let plug = createConnector()
     let dirX = Math.cos( i/count * Math.PI * 2 + 0.2 ) 
     let dirY = Math.sin( i/count * Math.PI * 2 + 0.2 )
-    mesh.position.set ( 770 * dirX, 770 * dirY, 0 )
-    mesh.lookAt( 0, 0, 0 )
-    connectorsCenter.add( mesh )   
+    plug.position.set( 770 * dirX, 770 * dirY, 0 )
+    plug.lookAt( 0, 0, 0 )
   
     let curveQuad = new THREE.QuadraticBezierCurve3(       
       new THREE.Vector3( dirX*770, dirY*770, 0 ),
       new THREE.Vector3( dirX*900, dirY*900, 0 ),
       new THREE.Vector3( dirX*5000, dirY*5000, 0 ) 
     ) 
-    let tubegeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
-    tubegeom.dynamic = true
-    let tube = new THREE.Mesh( tubegeom , materialIron ) 
-    connectorsCenter.add( tube )  
+    let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
+    wireGeom.dynamic = true
+    let wire = new THREE.Mesh( wireGeom, materialIron ) 
+    
+    scene.add( connectorsCenter.add( plug, wire ) )  
 
-    arrConnectors.push( { mesh, dirX, dirY, tube } ) 
+    arrConnectors.push( { plug, wire, dirX, dirY } ) 
   }
 }
 
@@ -268,17 +269,12 @@ const createMaterialIron = () => {
   } )
 }
 
-const createMaterialDiod = () => { 
-  return new THREE.ShaderMaterial( SHADERS.diodShader )
-}      
-
+const createMaterialDiod = () => new THREE.ShaderMaterial( SHADERS.diodShader )
+     
 const createConnector = () => {
   let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
   let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
-  let group = new THREE.Mesh(
-    new THREE.BoxGeometry( 0.5, 0.5, 0.5 ),
-    new THREE.MeshBasicMaterial( { color: 0x00ffff } )
-  )
+  let group = new THREE.Group()
   group.add( corpus, diod )
   return group
 }
@@ -292,7 +288,7 @@ const removeConnectorsFromScene = () => {
 
 /*******************************************************************/
 
-let spdConnectors = 3.5
+let spdConnectors = 3.5, countFrame = 0
 
 const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
@@ -302,10 +298,16 @@ const animateConnectors = ( STATE ) => {
 
 const animationConnectorsDark = () => {
   connectorsCenter.rotation.y = earth.rotation.y
+  if ( countFrame != 2 ) {
+    countFrame ++ 
+  } else {
+    countFrame = 0
+    return
+  }
   arrConnectors.forEach( ( item ) => {  
-    item.tube.geometry.parameters.path.v2.x -= 3000 * earthSpd
-    item.tube.geometry.copy( new THREE.TubeBufferGeometry( item.tube.geometry.parameters.path, 16, 10, 4, false) )
-    item.tube.geometry.needsUpdate = true
+    item.wire.geometry.parameters.path.v2.x -= 3000 * earthSpd
+    item.wire.geometry.copy( new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 8, 10, 4, false ) )
+    item.wire.geometry.needsUpdate = true
   } ) 
 }
 
@@ -313,16 +315,16 @@ const animationConnectorsFlash = () => {
   materialDiod.uniforms.light.value -= 0.01  
   spdConnectors += 0.3
   arrConnectors.forEach( ( item ) => {
-    item.mesh.position.x += item.dirX * spdConnectors
-    item.mesh.position.y += item.dirY * spdConnectors
-    item.tube.position.x += item.dirX * spdConnectors
-    item.tube.position.y += item.dirY * spdConnectors  
+    item.plug.position.x += item.dirX * spdConnectors
+    item.plug.position.y += item.dirY * spdConnectors
+    item.wire.position.x += item.dirX * spdConnectors
+    item.wire.position.y += item.dirY * spdConnectors  
   } )
 }
 
 const checkConnectorsStateLight = () => {
   if ( arrConnectors.length == 0 ) return true
-  if ( arrConnectors[0].mesh.position.x > 3000 ) {
+  if ( arrConnectors[0].plug.position.x > 3000 ) {
     removeConnectorsFromScene()
     return true
   } 

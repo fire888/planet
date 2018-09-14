@@ -57,7 +57,7 @@ const continentsShader = {
   const glowEarthShader = {
     uniforms: {		
       'viewVector' : { value: new THREE.Vector3( -800, 0, 1800 ) },
-      'light': { value: 0.0 }, 
+      'light': { value: 0.01 }, 
       'glowColor': { value: new THREE.Vector3( 0.5, 0.5, 0.9 ) }      	
     },
     vertexShader: [	
@@ -68,7 +68,7 @@ const continentsShader = {
       'void main() {',
         'vec3 vNormal = normalize( normalMatrix * normal );',
         'vec3 vNormel = normalize( normalMatrix * viewVector );',
-        'intensity = pow( light - dot(vNormal, vNormel), 2.9 );',
+        'intensity = pow( abs(light) - dot(vNormal, vNormel), 2.9 );',
         
         'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
       '}'
