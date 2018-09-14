@@ -246,16 +246,16 @@ const createConnectors = () => {
     plug.lookAt( 0, 0, 0 )
   
     let curveQuad = new THREE.QuadraticBezierCurve3(       
-      new THREE.Vector3( dirX*770, dirY*770, 0 ),
-      new THREE.Vector3( dirX*900, dirY*900, 0 ),
-      new THREE.Vector3( dirX*5000, dirY*5000, 0 ) 
+      new THREE.Vector3( dirX * 770, dirY * 770, 0 ),
+      new THREE.Vector3( dirX * 1300, dirY * 1300, 0 ),
+      new THREE.Vector3( dirX * 5000, dirY * 5000, 0 ) 
     ) 
     let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
     wireGeom.dynamic = true
     let wire = new THREE.Mesh( wireGeom, materialIron ) 
     
     arrConnectors.push( { plug, wire, dirX, dirY } )
-    
+
     connectorsCenter.add( plug, wire )   
   }
   scene.add( connectorsCenter ) 
@@ -306,7 +306,8 @@ const animationConnectorsDark = () => {
     return
   }
   arrConnectors.forEach( ( item ) => {  
-    item.wire.geometry.parameters.path.v2.x -= 3000 * earthSpd
+    if ( item.plug.position.x < 0 ) item.wire.geometry.parameters.path.v2.z -= 10000 * earthSpd
+    if ( item.plug.position.x > 0 ) item.wire.geometry.parameters.path.v2.z += 10000 * earthSpd
     item.wire.geometry.copy( new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 8, 10, 4, false ) )
     item.wire.geometry.needsUpdate = true
   } ) 
