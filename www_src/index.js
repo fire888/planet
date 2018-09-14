@@ -1,21 +1,18 @@
 
 
-import * as Shaders from "./shaders.js"
-import * as DocElems from "./documentElems.js"
-
-
-/*******************************************************************/
+import * as SHADERS from "./shaders.js"
+import * as DOC_ELEMS from "./documentElems.js"
 
 window.onload = () => {
   loadAssets( () => { 
     initScene()
-    DocElems.setActionsWindowResize( resizeCanvas )
+    DOC_ELEMS.setActionsWindowResize( resizeCanvas )
     createEarth()
     createConnectors()
     drawFrame()
-    DocElems.showCanvas()
-    DocElems.hidePreloader()
-    DocElems.setActionsMouseWheel( onUserActionMouseWheel )   
+    DOC_ELEMS.showCanvas()
+    DOC_ELEMS.hidePreloader()
+    DOC_ELEMS.setActionsMouseWheel( onUserActionMouseWheel )   
   } )
 }
 
@@ -25,39 +22,59 @@ window.onload = () => {
 /*******************************************************************/
 /*******************************************************************/
 
-let textureLoader,
-textures = {
-  sceneBack: null,
-  waterNormals: null,
-  continents: null
+let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
+
+const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
+
+const animateAllObjects = () => {
+  if ( APP_STATE == 'FLASH') {
+    if ( checkEarthStateLight() && checkConnectorsStateLight() ) APP_STATE = 'LIGHT'
+  }    
+  animateEarth( APP_STATE )
+  animateConnectors( APP_STATE )
 }
-let objectLoader,
-geoms = {
-  corpus: null,
-  diod: null
-}
+
+
+
+
+/*******************************************************************/
+/*******************************************************************/
+
+let textureLoader, objectLoader
+
+const ASSETS = { 
+  textures: {
+    sceneBack: null,
+    waterNormals: null,
+    continents: null
+  },
+  geoms: {
+    corpus: null,
+    diod: null
+  }
+}  
 
 const loadAssets = ( onLoad ) => {
   textureLoader = new THREE.TextureLoader()
   objectLoader = new THREE.OBJLoader()
   new Promise ( ( resolve ) => {
-        textures.sceneBack = textureLoader.load( 
+        ASSETS.textures.sceneBack = textureLoader.load( 
             'assets/background_map.jpg',
             () => { resolve() }
         )			
   })
   .then( () => new Promise ( ( resolve ) => {
-        textures.waterNormals = textureLoader.load( 
+        ASSETS.textures.waterNormals = textureLoader.load( 
             'assets/Voda_normali.jpg',
-            () => { 
-              textures.waterNormals.wrapS = textures.waterNormals.wrapT = THREE.RepeatWrapping
-              textures.waterNormals.repeat.set( 5.0, 5.0 )              
+            ( texture ) => { 
+              texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+              texture.repeat.set( 5.0, 5.0 )              
               resolve() 
             }
         )	
   }) )
   .then( () => new Promise ( ( resolve ) => {
-        textures.continents = textureLoader.load( 
+        ASSETS.textures.continents = textureLoader.load( 
             'assets/contour.jpg',
             () => { resolve() }
         )	
@@ -68,9 +85,9 @@ const loadAssets = ( onLoad ) => {
             ( obj ) => {
                 obj.traverse( ( child ) => {
                   if ( child instanceof THREE.Mesh != true ) return
-                  if ( child.name == 'diod' ) geoms.diod = child.geometry
-                  if ( child.name == 'iron' )  geoms.corpus = child.geometry 
-                  if ( geoms.diod && geoms.corpus ) resolve() 
+                  if ( child.name == 'diod' ) ASSETS.geoms.diod = child.geometry
+                  if ( child.name == 'iron' ) ASSETS.geoms.corpus = child.geometry 
+                  if ( ASSETS.geoms.diod && ASSETS.geoms.corpus ) resolve() 
                 })  
             } 
         )
@@ -92,7 +109,7 @@ let scene, camera, renderer
 
 const initScene = () => {
   scene = new THREE.Scene()
-  scene.background = textures.sceneBack
+  scene.background = ASSETS.textures.sceneBack
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 3.5, 15000 )
   camera.position.set( -800, 0, 1800 )   
   let pointL = new THREE.PointLight( 0xffffff, 2.0 )
@@ -112,8 +129,7 @@ const resizeCanvas = () => {
 } 
     
 const drawFrame = () => {  
-  updateAnimationEarth()
-  updateAnimationConnectors()
+  animateAllObjects()
   renderer.render( scene, camera )
   requestAnimationFrame( drawFrame ) 
 }
@@ -127,22 +143,21 @@ const drawFrame = () => {
 let earth, globeMesh, continentsMesh, glowMesh
 
 const createEarth = () => {
-  earth = new THREE.Group()
   globeMesh = createGlobe() 
-  earth.add( globeMesh )
   continentsMesh = createContinents() 
-  earth.add( continentsMesh )
+  earth = new THREE.Group()
+  earth.add( continentsMesh, globeMesh )
+  scene.add( earth )
   glowMesh = createEarthGlow()
   scene.add( glowMesh )
-  scene.add( earth )
 }
 
 const createGlobe = () => {
   return new THREE.Mesh( 
     new THREE.SphereGeometry( 600, 40, 40 ),
     new THREE.MeshPhongMaterial( {
-      map: textures.waterNormals,
-      normalMap: textures.waterNormals,
+      map: ASSETS.textures.waterNormals,
+      normalMap: ASSETS.textures.waterNormals,
       shininess: 0.0,
       transparent: true,
       opacity: 0.94,
@@ -154,7 +169,7 @@ const createGlobe = () => {
 const createContinents = () => {
   let mesh =  new THREE.Mesh( 
     new THREE.SphereGeometry( 608, 40, 40 ),
-    new THREE.ShaderMaterial( Shaders.continentsShader )
+    new THREE.ShaderMaterial( SHADERS.continentsShader )
   )  
   mesh.rotation.z = -0.5
   mesh.rotation.x = -0.5
@@ -162,14 +177,14 @@ const createContinents = () => {
   mesh.material.side = THREE.DoubleSide
   mesh.material.depthWrite = false
   mesh.material.needsUpdate = true
-  mesh.material.uniforms.tDiffuse.value = textures.continents
+  mesh.material.uniforms.tDiffuse.value = ASSETS.textures.continents
   return mesh
 }
 
 const createEarthGlow = () => {
   let mesh =  new THREE.Mesh( 
     new THREE.SphereGeometry( 780, 40, 40 ),
-    new THREE.ShaderMaterial( Shaders.glowEarthShader )
+    new THREE.ShaderMaterial( SHADERS.glowEarthShader )
   )  
   mesh.material.transparent = true
   mesh.material.blending = THREE.AdditiveBlending,
@@ -183,32 +198,30 @@ const createEarthGlow = () => {
 /*******************************************************************/
 
 let earthSpd = 0.002, 
-earthDir = 'left' // || 'right' || 'normal'  
+earthDir = 'left' // || 'right' 
 
-const updateAnimationEarth = () => {
+const animateEarth = ( STATE ) => {
   if ( ! earth ) return
-  if ( earthSpd > 0.005 && earthDir == 'left' ) earthDir = 'right' 
-  if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
-  if ( earthDir == 'left' ) earthSpd += 0.0001
-  if ( earthDir == 'right') earthSpd -= 0.0001
-  if ( earthDir == 'normal') {
-    if ( earthSpd < 0.02 ) { 
-      earthSpd += 0.00005
-      if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
+  if ( STATE == 'DARK' ) {
+    if ( earthSpd > 0.005 && earthDir == 'left' ) earthDir = 'right' 
+    if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
+    if ( earthDir == 'left' ) earthSpd += 0.0001
+    if ( earthDir == 'right') earthSpd -= 0.0001
+  }  
+  if ( STATE == 'FLASH') {
+    earthSpd < 0.02 ? earthSpd += 0.00005 : earthSpd = 0.02
+    if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
         continentsMesh.material.uniforms.light.value += 0.012
         glowMesh.material.uniforms.light.value += 0.0034
-      }
-    } else {
-      earthSpd = 0.02
-    }        
-  }   
+    }
+  }
   earth.rotation.y += earthSpd
 }
 
-const onUserActionMouseWheel = () => { 
-  if ( earthDir == 'normal' ) return
-  earthDir = 'normal'
-}  
+const checkEarthStateLight = () => {
+  if ( earthSpd == 0.02 ) return true
+  return false
+}
 
  
 
@@ -240,25 +253,28 @@ const createMaterialIron = () => {
 }
 
 const createMaterialDiod = () => { 
-  return new THREE.ShaderMaterial( Shaders.diodShader )
+  return new THREE.ShaderMaterial( SHADERS.diodShader )
 }      
 
 const createConnector = () => {
-  let corpus = new THREE.Mesh( geoms.corpus, materialIron )
-  let diod = new THREE.Mesh( geoms.diod, materialDiod )
+  let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
+  let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
   let group = new THREE.Group()
-  group.add( corpus )
-  group.add( diod )
+  group.add( corpus, diod )
   return group
 }
 
 
 /*******************************************************************/
 
-const updateAnimationConnectors = () => {
+const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
-  if ( continentsMesh.material.uniforms.light.value < 1.35 && earthDir == 'normal' ) 
-    materialDiod.uniforms.light.value -= 0.01  
+  if ( STATE == 'FLASH' ) materialDiod.uniforms.light.value -= 0.01  
+}
+
+const checkConnectorsStateLight = () => {
+  if ( materialDiod.uniforms.light.value < 0 ) return true
+  return false
 }
 
 
