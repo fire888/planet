@@ -9,13 +9,13 @@ import * as DocElems from "./documentElems.js"
 window.onload = () => {
   loadAssets( () => { 
     initScene()
-    DocElems.setActionsResize( resizeCanvas )
+    DocElems.setActionsWindowResize( resizeCanvas )
     createEarth()
     createConnectors()
     drawFrame()
-    DocElems.showCanvasWebGL()
+    DocElems.showCanvas()
     DocElems.hidePreloader()
-    DocElems.setActionsWeel( onUserActionMouseWheel )   
+    DocElems.setActionsMouseWheel( onUserActionMouseWheel )   
   } )
 }
 

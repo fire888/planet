@@ -1,28 +1,51 @@
 
 
 export { 
-    setActionsResize,
-    showCanvasWebGL, 
-    hidePreloader, 
-    setActionsWeel
+  setActionsWindowResize,
+  setActionsMouseWheel,
+  showCanvas, 
+  hidePreloader
 }
 
 
 /*******************************************************************/
 
-let funcResizeCanvas
+let onResize
 
-const setActionsResize = ( f ) => { 
-    funcResizeCanvas = f 
-    window.addEventListener( 'resize', handleWindowResize, false )
+const setActionsWindowResize = ( f ) => { 
+    onResize = f 
+    window.addEventListener( 'resize', onResize, false )
 }
-
-const handleWindowResize = () => { funcResizeCanvas() } 
 
 
 /*******************************************************************/
 
-const showCanvasWebGL = () => {
+let actionsMouseWheel
+
+const setActionsMouseWheel = ( f ) => { 
+  actionsMouseWheel = f
+  window.addEventListener( 'wheel', onMouseWheel, false )
+  window.addEventListener( 'scroll', onMouseWheel, false )    
+}   
+
+let onMouseWheel = () => {
+  actionsMouseWheel()
+  removeListenerMouseWheel()
+  setTimeout( () => { 
+      let slogan = document.getElementById( 'slogan' )
+      slogan.className = 'show' 
+    }, 500 )
+}
+
+const removeListenerMouseWheel = () => {
+  window.removeEventListener( 'wheel', onMouseWheel, false )
+  window.removeEventListener( 'scroll', onMouseWheel, false )
+}
+
+
+/*******************************************************************/
+
+const showCanvas = () => {
   let canvas = document.getElementById( 'webGL' )
   canvas.className = 'show'
 }
@@ -30,26 +53,8 @@ const showCanvasWebGL = () => {
 const hidePreloader = () => {
   let preloader = document.getElementById( 'preloader' )
   preloader.className = 'hide'
-}
-
-
-/*******************************************************************/
-
-let funcWeelMouse 
-
-const setActionsWeel = ( f ) => { 
-    funcWeelMouse = f
-    window.addEventListener( 'wheel', onMouseWheel, false )
-    window.onscroll = () => { onMouseWheel() }    
-}    
-
-const onMouseWheel = () => {
-  funcWeelMouse()
-  let preloader = document.getElementById( 'preloader' )
-  preloader.className = 'hidden'
   setTimeout( () => { 
-      let slogan = document.getElementById( 'slogan' )
-      slogan.className = 'show' 
-    }, 500 )  
-  window.removeEventListener( 'wheel', onMouseWheel, false )
+      preloader.className = 'hidden'    
+    }, 1000 )
 }
+
