@@ -1,7 +1,7 @@
 
 
-import * as SHADERS from "./shaders.js"
-import * as DOC_ELEMS from "./documentElems.js"
+import * as SHADERS from "./Shaders.js"
+import * as DOC_ELEMS from "./DocumentElems.js"
 
 window.onload = () => {
   loadAssets( () => { 
@@ -108,18 +108,17 @@ const loadAssets = ( onLoad ) => {
 let scene, camera, renderer
 
 const initScene = () => {
-  scene = new THREE.Scene()
-  scene.background = ASSETS.textures.sceneBack
+  renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webGL' ) } )
+  renderer.setPixelRatio( window.devicePixelRatio )
+  renderer.setSize( window.innerWidth, window.innerHeight )	
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 3.5, 15000 )
   camera.position.set( -800, 0, 1800 )   
   let pointL = new THREE.PointLight( 0xffffff, 2.0 )
   pointL.position.set( 1000, 1000, 1000 )
-  scene.add( pointL )
   let lightAmb = new THREE.AmbientLight( 0xffffff, 0.2 )
-  scene.add( lightAmb )
-  renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webGL' ) } )
-  renderer.setPixelRatio( window.devicePixelRatio )
-  renderer.setSize( window.innerWidth, window.innerHeight )	
+  scene = new THREE.Scene()
+  scene.background = ASSETS.textures.sceneBack
+  scene.add( pointL, lightAmb )
 }
 
 const resizeCanvas = () => {
@@ -197,8 +196,7 @@ const createEarthGlow = () => {
 
 /*******************************************************************/
 
-let earthSpd = 0.002, 
-earthDir = 'left' // || 'right' 
+let earthSpd = 0.002, earthDir = 'left' // || 'right' 
 
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
@@ -229,17 +227,21 @@ const checkEarthStateLight = () => {
 /*******************************************************************/
 /*******************************************************************/
 
-let arrConnectors = [], materialIron, materialDiod  
+let arrConnectors = [], connectorsCenter, materialIron, materialDiod  
 
 const createConnectors = () => {
   materialIron = createMaterialIron()
   materialDiod = createMaterialDiod()
+  connectorsCenter = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0.5, 0.5 ), new THREE.MeshBasicMaterial( { color: 0x00ffff } ) )
+  scene.add( connectorsCenter ) 
   for ( let i = 0; i < 12; i ++ ) {
-    let connector = createConnector()
-    scene.add( connector )
-    connector.rotation.x = - Math.PI / 2
-    connector.position.x = i * 300 - 1700
-    arrConnectors.push( { mesh: connector } )      
+    let mesh = createConnector()
+    let dirX =  Math.cos( i/12 * Math.PI * 2 ) 
+    let dirY = Math.sin( i/12 * Math.PI * 2 )
+    mesh.position.set ( 770 * dirX, 770 * dirY, 0 )
+    mesh.lookAt( 0, 0, 0 )
+    arrConnectors.push( { mesh, dirX, dirY } ) 
+    connectorsCenter.add( mesh )     
   }
 }
 
@@ -259,7 +261,10 @@ const createMaterialDiod = () => {
 const createConnector = () => {
   let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
   let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
-  let group = new THREE.Group()
+  let group = new THREE.Mesh(
+    new THREE.BoxGeometry( 0.5, 0.5, 0.5 ),
+    new THREE.MeshBasicMaterial( { color: 0x00ffff } )
+  )
   group.add( corpus, diod )
   return group
 }
@@ -269,7 +274,14 @@ const createConnector = () => {
 
 const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
-  if ( STATE == 'FLASH' ) materialDiod.uniforms.light.value -= 0.01  
+  if ( STATE == 'DARK' ) connectorsCenter.rotation.y = earth.rotation.y
+  if ( STATE == 'FLASH' ) { 
+    materialDiod.uniforms.light.value -= 0.01
+    arrConnectors.forEach( ( item ) => {
+      item.mesh.position.x += item.dirX * 3.5
+      item.mesh.position.y += item.dirY * 3.5  
+    } ) 
+  }  
 }
 
 const checkConnectorsStateLight = () => {
@@ -278,3 +290,40 @@ const checkConnectorsStateLight = () => {
 }
 
 
+
+/*
+	jetRoundHeight = 50
+
+	height = 300
+	radius = 300
+	radius2 = 750 
+	countJet = 16
+			
+	arrJets = []
+		
+	dummy;
+		
+		   
+  cubeGeometry = new THREE.BoxGeometry(0.005, 0.005, 0.005)
+  dummy = new THREE.Mesh(cubeGeometry, basicMaterial)			  	
+
+  for ( var a=0; a < this.countJet; a++){
+      numPoints = 20;
+      arrPoints = [] 
+      for ( var  ix = 0; ix < 3; ix ++ ){	
+        paramX = Math.sin(a/this.countJet * Math.PI * 2);
+        paramZ = Math.cos(a/this.countJet * Math.PI * 2); 						  
+        xP = paramX * this.radius + paramX * this.radius2 * ix;
+        zP = paramZ * this.radius + paramZ * this.radius2 * ix;  						  
+        point1 = new THREE.Vector3( xP  , (Math.sin(ix*1.57)*this.height)-11, zP ) ;               					  
+        arrPoints.push(point1);   
+      } 			
+      curveQuad = new THREE.QuadraticBezierCurve3( arrPoints[0], arrPoints[1], arrPoints[2]);
+      tube = new THREE.TubeGeometry( curveQuad, numPoints, 0.15, 10, false);
+      mesh1 = new THREE.Mesh(tube,materialWaterJets );
+      this.arrJets.push(mesh1); 	 					  
+      this.dummy.add(mesh1);	               					  
+    
+  }
+					  
+*/
