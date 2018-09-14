@@ -97,7 +97,7 @@ const continentsShader = {
     fragmentShader: [
       'uniform float light;',
       'void main() {',
-        'gl_FragColor = vec4( 0.7*light, 0.8*light, 1.0*light, 1.0 );',
+        'gl_FragColor = vec4( 0.8*light, 0.9*light, 1.3*light, 1.0 );',
       '}'
     ].join( "\n" )
   } 

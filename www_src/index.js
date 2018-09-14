@@ -112,7 +112,7 @@ const initScene = () => {
   renderer.setPixelRatio( window.devicePixelRatio )
   renderer.setSize( window.innerWidth, window.innerHeight )	
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 3.5, 15000 )
-  camera.position.set( -800, 0, 1800 )   
+  camera.position.set( -800, 0, 1800 )    
   let pointL = new THREE.PointLight( 0xffffff, 2.0 )
   pointL.position.set( 1000, 1000, 1000 )
   let lightAmb = new THREE.AmbientLight( 0xffffff, 0.2 )
@@ -201,13 +201,13 @@ let earthSpd = 0.002, earthDir = 'left' // || 'right'
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
   if ( STATE == 'DARK' ) {
-    if ( earthSpd > 0.005 && earthDir == 'left' ) earthDir = 'right' 
-    if ( earthSpd < -0.005 && earthDir == 'right' ) earthDir = 'left'  
-    if ( earthDir == 'left' ) earthSpd += 0.0001
-    if ( earthDir == 'right') earthSpd -= 0.0001
+    if ( earthSpd > 0.008 && earthDir == 'left' ) earthDir = 'right' 
+    if ( earthSpd < -0.008 && earthDir == 'right' ) earthDir = 'left'  
+    if ( earthDir == 'left' ) earthSpd += 0.0003
+    if ( earthDir == 'right') earthSpd -= 0.0003
   }  
   if ( STATE == 'FLASH') {
-    earthSpd < 0.02 ? earthSpd += 0.00005 : earthSpd = 0.02
+    earthSpd < 0.02 ? earthSpd += 0.0001 : earthSpd = 0.02
     if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
         continentsMesh.material.uniforms.light.value += 0.012
         glowMesh.material.uniforms.light.value += 0.0034
@@ -232,32 +232,30 @@ let arrConnectors = [], connectorsCenter, materialIron, materialDiod
 const createConnectors = () => {
   materialIron = createMaterialIron()
   materialDiod = createMaterialDiod()
-
   connectorsCenter = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0.5, 0.5 ), new THREE.MeshBasicMaterial( { color: 0x00ffff } ) )
   scene.add( connectorsCenter ) 
-
-  for ( let i = 0; i < 12; i ++ ) {
-
+  
+  let count = 7
+  
+  for ( let i = 0; i < count; i ++ ) {
     let mesh = createConnector()
-    let dirX =  Math.cos( i/12 * Math.PI * 2 ) 
-    let dirY = Math.sin( i/12 * Math.PI * 2 )
+    let dirX = Math.cos( i/count * Math.PI * 2 + 0.2 ) 
+    let dirY = Math.sin( i/count * Math.PI * 2 + 0.2 )
     mesh.position.set ( 770 * dirX, 770 * dirY, 0 )
     mesh.lookAt( 0, 0, 0 )
-
     connectorsCenter.add( mesh )   
   
-    let points = [
+    let curveQuad = new THREE.QuadraticBezierCurve3(       
       new THREE.Vector3( dirX*770, dirY*770, 0 ),
-      new THREE.Vector3( dirX*1800, dirY*1800, 0 ),
-      new THREE.Vector3( dirX*5000, dirY*5000, 0 )
-    ]
-    let curveQuad = new THREE.QuadraticBezierCurve3( points[0], points[1], points[2] ) 
-    let tubegeom = new THREE.TubeGeometry( curveQuad, 10, 10, 10, false);
+      new THREE.Vector3( dirX*900, dirY*900, 0 ),
+      new THREE.Vector3( dirX*5000, dirY*5000, 0 ) 
+    ) 
+    let tubegeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
+    tubegeom.dynamic = true
     let tube = new THREE.Mesh( tubegeom , materialIron ) 
     connectorsCenter.add( tube )  
 
-    arrConnectors.push( { mesh, dirX, dirY, points, tube } ) 
-
+    arrConnectors.push( { mesh, dirX, dirY, tube } ) 
   }
 }
 
@@ -285,6 +283,12 @@ const createConnector = () => {
   return group
 }
 
+const removeConnectorsFromScene = () => {
+  if ( arrConnectors.length == 0 ) return
+  scene.remove( connectorsCenter )
+  arrConnectors = []
+}
+
 
 /*******************************************************************/
 
@@ -292,65 +296,37 @@ let spdConnectors = 3.5
 
 const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
-  if ( STATE == 'DARK' ) { 
-    connectorsCenter.rotation.y = earth.rotation.y
-   // arrConnectors.forEach( ( item ) => {
-   //   item.tube.position.x += item.dirX * 3.5
-    //  item.tube.position.y += item.dirY * 3.5  
-   // } ) 
-  } 
-  if ( STATE == 'FLASH' ) { 
-    spdConnectors += 0.3
-    materialDiod.uniforms.light.value -= 0.01
-    arrConnectors.forEach( ( item ) => {
-      item.mesh.position.x += item.dirX * spdConnectors
-      item.mesh.position.y += item.dirY * spdConnectors
-      item.tube.position.x += item.dirX * spdConnectors
-      item.tube.position.y += item.dirY * spdConnectors  
-    } ) 
-  }  
+  if ( STATE == 'DARK' ) animationConnectorsDark()
+  if ( STATE == 'FLASH' ) animationConnectorsFlash()  
+}
+
+const animationConnectorsDark = () => {
+  connectorsCenter.rotation.y = earth.rotation.y
+  arrConnectors.forEach( ( item ) => {  
+    item.tube.geometry.parameters.path.v2.x -= 3000 * earthSpd
+    item.tube.geometry.copy( new THREE.TubeBufferGeometry( item.tube.geometry.parameters.path, 16, 10, 4, false) )
+    item.tube.geometry.needsUpdate = true
+  } ) 
+}
+
+const animationConnectorsFlash = () => { 
+  materialDiod.uniforms.light.value -= 0.01  
+  spdConnectors += 0.3
+  arrConnectors.forEach( ( item ) => {
+    item.mesh.position.x += item.dirX * spdConnectors
+    item.mesh.position.y += item.dirY * spdConnectors
+    item.tube.position.x += item.dirX * spdConnectors
+    item.tube.position.y += item.dirY * spdConnectors  
+  } )
 }
 
 const checkConnectorsStateLight = () => {
-  if ( materialDiod.uniforms.light.value < 0 ) return true
+  if ( arrConnectors[0].mesh.position.x > 3000 ) {
+    removeConnectorsFromScene()
+    return true
+  } 
   return false
 }
 
 
 
-/*
-	jetRoundHeight = 50
-
-	height = 300
-	radius = 300
-	radius2 = 750 
-	countJet = 16
-			
-	arrJets = []
-		
-	dummy;
-		
-		   
-  cubeGeometry = new THREE.BoxGeometry(0.005, 0.005, 0.005)
-  dummy = new THREE.Mesh(cubeGeometry, basicMaterial)			  	
-
-  for ( var a=0; a < this.countJet; a++){
-      numPoints = 20;
-      arrPoints = [] 
-      for ( var  ix = 0; ix < 3; ix ++ ){	
-        paramX = Math.sin(a/this.countJet * Math.PI * 2);
-        paramZ = Math.cos(a/this.countJet * Math.PI * 2); 						  
-        xP = paramX * this.radius + paramX * this.radius2 * ix;
-        zP = paramZ * this.radius + paramZ * this.radius2 * ix;  						  
-        point1 = new THREE.Vector3( xP  , (Math.sin(ix*1.57)*this.height)-11, zP ) ;               					  
-        arrPoints.push(point1);   
-      } 			
-      curveQuad = new THREE.QuadraticBezierCurve3( arrPoints[0], arrPoints[1], arrPoints[2]);
-      tube = new THREE.TubeGeometry( curveQuad, numPoints, 0.15, 10, false);
-      mesh1 = new THREE.Mesh(tube,materialWaterJets );
-      this.arrJets.push(mesh1); 	 					  
-      this.dummy.add(mesh1);	               					  
-    
-  }
-					  
-*/
