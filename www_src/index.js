@@ -321,6 +321,7 @@ const animationConnectorsFlash = () => {
 }
 
 const checkConnectorsStateLight = () => {
+  if ( arrConnectors.length == 0 ) return true
   if ( arrConnectors[0].mesh.position.x > 3000 ) {
     removeConnectorsFromScene()
     return true
