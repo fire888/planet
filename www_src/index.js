@@ -276,7 +276,7 @@ const createConnector = () => {
   let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
   let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
   let group = new THREE.Group()
-  group.add( corpus, diod )
+  group.add( diod, corpus )
   return group
 }
 
@@ -299,11 +299,11 @@ const animateConnectors = ( STATE ) => {
 
 const animationConnectorsDark = () => {
   connectorsCenter.rotation.y = earth.rotation.y
-  if ( countFrame != 2 ) {
-    countFrame ++ 
-  } else {
+  if ( countFrame == 2 ) {
     countFrame = 0
     return
+  } else {
+    countFrame ++    
   }
   arrConnectors.forEach( ( item ) => {  
     if ( item.plug.position.x < 0 ) item.wire.geometry.parameters.path.v2.z -= 10000 * earthSpd

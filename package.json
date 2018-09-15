@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "build-dev": "rollup -c rollup.config-dev.js"
   },
   "author": "www.otrisovano.ru",
   "license": "ISC",
