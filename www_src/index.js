@@ -28,7 +28,7 @@ const startStateFLASH = () => APP_STATE = 'FLASH'
 
 const animateAllObjects = () => {
   if ( APP_STATE == 'FLASH') 
-    if ( checkIsEarthReadyToStateLIGHT() && checkIsConnectorsReadyToStateLIGHT() ) APP_STATE = 'LIGHT'
+    if ( checkIsEarthReadyToStateLIGHT() && checkIsConnectorsReadyToStateLIGHT() ) APP_STATE = 'LIGHT' 
   animateEarth( APP_STATE )
   animateConnectors( APP_STATE )
 }
@@ -311,8 +311,8 @@ const animateConnectors = ( STATE ) => {
 }
 
 const animationConnectorsDARK = () => {
-  if ( countFrame == 2 ) { return countFrame = 0 }
-  countFrame ++    
+  if ( countFrame == 2 ) return countFrame = 0
+  countFrame ++   
   arrConnectors.forEach( ( item ) => {
     if ( ! item.plug || ! item.wire ) return  
     if ( item.plug.position.x < 0 ) item.wire.geometry.parameters.path.v2.z -= 10000 * earthSpd
