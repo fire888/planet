@@ -12,7 +12,7 @@ window.onload = () => {
     drawFrame()
     DOC_ELEMS.showCanvas()
     DOC_ELEMS.hidePreloader()
-    DOC_ELEMS.setActionsMouseWheel( onUserActionMouseWheel )   
+    DOC_ELEMS.setActionsMouseWheel( startStateFLASH )   
   } )
 }
 
@@ -24,12 +24,11 @@ window.onload = () => {
 
 let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
 
-const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
+const startStateFLASH = () => APP_STATE = 'FLASH'
 
 const animateAllObjects = () => {
-  if ( APP_STATE == 'FLASH') {
-    if ( checkEarthStateLight() && checkConnectorsStateLight() ) APP_STATE = 'LIGHT'
-  }    
+  if ( APP_STATE == 'FLASH') 
+    if ( checkIsEarthReadyToStateLIGHT() && checkIsConnectorsReadyToStateLIGHT() ) APP_STATE = 'LIGHT'
   animateEarth( APP_STATE )
   animateConnectors( APP_STATE )
 }
@@ -62,7 +61,7 @@ const loadAssets = ( onLoad ) => {
             'assets/background_map.jpg',
             () => { resolve() }
         )			
-  })
+  } )
   .then( () => new Promise ( ( resolve ) => {
         ASSETS.textures.waterNormals = textureLoader.load( 
             'assets/Voda_normali.jpg',
@@ -72,31 +71,31 @@ const loadAssets = ( onLoad ) => {
               resolve() 
             }
         )	
-  }) )
+  } ) )
   .then( () => new Promise ( ( resolve ) => {
         ASSETS.textures.continents = textureLoader.load( 
             'assets/contour.jpg',
             () => { resolve() }
         )	
-  }) )
+  } ) )
   .then( () => new Promise ( ( resolve ) => {
-        objectLoader.load( 
-            'assets/connector.obj', 
-            ( obj ) => {
-                obj.traverse( ( child ) => {
-                  if ( child instanceof THREE.Mesh != true ) return
-                  if ( child.name == 'diod' ) ASSETS.geoms.diod = child.geometry
-                  if ( child.name == 'iron' ) ASSETS.geoms.corpus = child.geometry 
-                  if ( ASSETS.geoms.diod && ASSETS.geoms.corpus ) resolve() 
-                })  
-            } 
-        )
-  }) )  
+      objectLoader.load( 
+          'assets/connector.obj', 
+          ( obj ) => {
+              obj.traverse( ( child ) => {
+                if ( child instanceof THREE.Mesh != true ) return
+                if ( child.name == 'diod' ) ASSETS.geoms.diod = child.geometry
+                if ( child.name == 'iron' ) ASSETS.geoms.corpus = child.geometry 
+                if ( ASSETS.geoms.diod && ASSETS.geoms.corpus ) resolve() 
+              })  
+          } 
+      )
+  } ) )  
   .then( () => { 
     textureLoader = null
     objectLoader = null
-    onLoad() } 
-  )      
+    onLoad() 
+  } )      
 }
 
 
@@ -113,12 +112,12 @@ const initScene = () => {
   renderer.setSize( window.innerWidth, window.innerHeight )	
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 3.5, 15000 )
   camera.position.set( -800, 0, 1800 )    
-  let pointL = new THREE.PointLight( 0xffffff, 2.0 )
-  pointL.position.set( 1000, 1000, 1000 )
+  let lightPoint = new THREE.PointLight( 0xffffff, 2.0 )
+  lightPoint.position.set( 1000, 1000, 1000 )
   let lightAmb = new THREE.AmbientLight( 0xffffff, 0.2 )
   scene = new THREE.Scene()
   scene.background = ASSETS.textures.sceneBack
-  scene.add( pointL, lightAmb )
+  scene.add( lightPoint, lightAmb )
 }
 
 const resizeCanvas = () => {
@@ -198,19 +197,20 @@ let earthSpd = 0.002, earthDir = 'left' // || 'right'
 
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
-  if ( STATE == 'DARK' ) earthUpdateParamsDark() 
-  if ( STATE == 'FLASH') earthUpdateParamsFlash()
+  if ( STATE == 'DARK' ) earthUpdateParamsDARK() 
+  if ( STATE == 'FLASH') earthUpdateParamsFLASH()
   earth.rotation.y += earthSpd
 }
 
-const earthUpdateParamsDark = () => {
+const earthUpdateParamsDARK = () => {
   if ( earthSpd > 0.008 && earthDir == 'left' ) earthDir = 'right' 
   if ( earthSpd < -0.008 && earthDir == 'right' ) earthDir = 'left'  
   if ( earthDir == 'left' ) earthSpd += 0.0003
   if ( earthDir == 'right') earthSpd -= 0.0003
 }
 
-const earthUpdateParamsFlash = () => {
+const earthUpdateParamsFLASH = () => {
+  if ( ! continentsMesh || ! glowMesh ) return
   earthSpd < 0.02 ? earthSpd += 0.0001 : earthSpd = 0.02
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) {
       continentsMesh.material.uniforms.light.value += 0.012
@@ -218,47 +218,44 @@ const earthUpdateParamsFlash = () => {
   }
 }
 
-const checkEarthStateLight = () => {
+
+/*******************************************************************/
+
+const checkIsEarthReadyToStateLIGHT = () => {
+  if ( ! earth ) return true
   if ( earthSpd == 0.02 ) return true
   return false
 }
 
+
+
  
-
-
 /*******************************************************************/
 /*******************************************************************/
 
-let arrConnectors = [], connectorsCenter, materialIron, materialDiod  
+let arrConnectors = [], connectorsCenter, materialDiod  
 
 const createConnectors = () => {
-  materialIron = createMaterialIron()
-  materialDiod = createMaterialDiod()
   connectorsCenter = new THREE.Group()
-  
+  scene.add( connectorsCenter ) 
+
+  let materialIron = createMaterialIron()
+  materialDiod = createMaterialDiod()
+
   let count = 7
   
   for ( let i = 0; i < count; i ++ ) {
-    let plug = createConnector()
-    let dirX = Math.cos( i/count * Math.PI * 2 + 0.2 ) 
-    let dirY = Math.sin( i/count * Math.PI * 2 + 0.2 )
-    plug.position.set( 770 * dirX, 770 * dirY, 0 )
-    plug.lookAt( 0, 0, 0 )
-  
-    let curveQuad = new THREE.QuadraticBezierCurve3(       
-      new THREE.Vector3( dirX * 770, dirY * 770, 0 ),
-      new THREE.Vector3( dirX * 1300, dirY * 1300, 0 ),
-      new THREE.Vector3( dirX * 5000, dirY * 5000, 0 ) 
-    ) 
-    let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
-    wireGeom.dynamic = true
-    let wire = new THREE.Mesh( wireGeom, materialIron ) 
-    
-    arrConnectors.push( { plug, wire, dirX, dirY } )
-
-    connectorsCenter.add( plug, wire )   
+    let dirX = Math.cos( i / count * Math.PI * 2 + 0.2 ) 
+    let dirY = Math.sin( i / count * Math.PI * 2 + 0.2 )
+    let connector = {
+      wire: createWire( materialIron, dirX, dirY ), 
+      plug: createPlug( materialIron, dirX, dirY ),
+      dirX,
+      dirY
+    }
+    connectorsCenter.add( connector.plug, connector.wire )
+    arrConnectors.push( connector ) 
   }
-  scene.add( connectorsCenter ) 
 }
 
 const createMaterialIron = () => {
@@ -272,15 +269,31 @@ const createMaterialIron = () => {
 
 const createMaterialDiod = () => new THREE.ShaderMaterial( SHADERS.diodShader )
      
-const createConnector = () => {
+const createWire = ( materialIron, dirX, dirY ) => {
+  let curveQuad = new THREE.QuadraticBezierCurve3(       
+    new THREE.Vector3( dirX * 770, dirY * 770, 0 ),
+    new THREE.Vector3( dirX * 1300, dirY * 1300, 0 ),
+    new THREE.Vector3( dirX * 5000, dirY * 5000, 0 ) 
+  ) 
+  let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
+  wireGeom.dynamic = true
+  return new THREE.Mesh( wireGeom, materialIron )  
+}
+
+const createPlug = ( materialIron, dirX, dirY ) => {
   let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
   let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
   let group = new THREE.Group()
   group.add( diod, corpus )
+  group.position.set( 770 * dirX, 770 * dirY, 0 )
+  group.lookAt( 0, 0, 0 ) 
   return group
 }
 
-const removeConnectorsFromScene = () => {
+
+/*******************************************************************/
+
+const deleteConnectors = () => {
   if ( arrConnectors.length == 0 ) return
   scene.remove( connectorsCenter )
   arrConnectors = []
@@ -293,30 +306,29 @@ let spdConnectors = 3.5, countFrame = 0
 
 const animateConnectors = ( STATE ) => {
   if ( arrConnectors.length == 0 ) return
-  if ( STATE == 'DARK' ) animationConnectorsDark()
-  if ( STATE == 'FLASH' ) animationConnectorsFlash()  
+  if ( STATE == 'DARK' ) animationConnectorsDARK()
+  if ( STATE == 'FLASH' ) animationConnectorsFLASH()  
 }
 
-const animationConnectorsDark = () => {
-  connectorsCenter.rotation.y = earth.rotation.y
-  if ( countFrame == 2 ) {
-    countFrame = 0
-    return
-  } else {
-    countFrame ++    
-  }
-  arrConnectors.forEach( ( item ) => {  
+const animationConnectorsDARK = () => {
+  if ( countFrame == 2 ) { return countFrame = 0 }
+  countFrame ++    
+  arrConnectors.forEach( ( item ) => {
+    if ( ! item.plug || ! item.wire ) return  
     if ( item.plug.position.x < 0 ) item.wire.geometry.parameters.path.v2.z -= 10000 * earthSpd
     if ( item.plug.position.x > 0 ) item.wire.geometry.parameters.path.v2.z += 10000 * earthSpd
     item.wire.geometry.copy( new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 8, 10, 4, false ) )
     item.wire.geometry.needsUpdate = true
   } ) 
+  if ( ! earth ) return
+  connectorsCenter.rotation.y = earth.rotation.y
 }
 
-const animationConnectorsFlash = () => { 
+const animationConnectorsFLASH = () => { 
   materialDiod.uniforms.light.value -= 0.01  
   spdConnectors += 0.3
   arrConnectors.forEach( ( item ) => {
+    if ( ! item.plug || ! item.wire ) return     
     let spdX = item.dirX * spdConnectors
     let spdY = item.dirY * spdConnectors   
     item.plug.position.x += spdX
@@ -326,14 +338,20 @@ const animationConnectorsFlash = () => {
   } )
 }
 
-const checkConnectorsStateLight = () => {
+
+/*******************************************************************/
+
+const checkIsConnectorsReadyToStateLIGHT = () => {
   if ( arrConnectors.length == 0 ) return true
+  if ( ! arrConnectors[0].plug ) return true
   if ( arrConnectors[0].plug.position.x > 3000 ) {
-    removeConnectorsFromScene()
+    deleteConnectors()
     return true
   } 
   return false
 }
+
+
 
 
 

@@ -7,7 +7,7 @@ export default {
   input:  'www_src/index.js',
   output:{ 
       file: 'www_dist/js/main.min.js',
-      format: 'es',
+      format: 'iife',
       sourcemap: 'inline'
   },
   plugins: [

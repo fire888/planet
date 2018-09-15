@@ -41,7 +41,7 @@ export default {
          output: {
             comments: false
          },
-         sourceMap: true,
+         sourceMap: false,
          'process.env.NODE_ENV': JSON.stringify( 'production' )		 
       })
    ]
