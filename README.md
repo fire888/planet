@@ -2,7 +2,9 @@
 # 3d_PLANET  
 
 
-![Screenshot](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
+![Screenshot](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)  
+
+____
 
 ![Build status](https://img.shields.io/badge/build-45%25-yellow.svg)  
 [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
