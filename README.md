@@ -6,7 +6,7 @@
 
 ____
 
-![Build status](https://img.shields.io/badge/build-45%25-yellow.svg)  
+![Build status](https://img.shields.io/badge/build-45%25-red.svg)  
 [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
 
 ____
