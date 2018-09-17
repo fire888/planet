@@ -45,7 +45,8 @@ const ASSETS = {
   textures: {
     sceneBack: null,
     waterNormals: null,
-    continents: null
+    continents: null,
+    clouds: null
   },
   geoms: {
     corpus: null,
@@ -79,6 +80,12 @@ const loadAssets = ( onLoad ) => {
         )	
   } ) )
   .then( () => new Promise ( ( resolve ) => {
+    ASSETS.textures.clouds = textureLoader.load( 
+        'assets/clouds.jpg',
+        () => { resolve() }
+    )	
+  } ) )  
+  .then( () => new Promise ( ( resolve ) => {
       objectLoader.load( 
           'assets/connector.obj', 
           ( obj ) => {
@@ -109,9 +116,9 @@ let scene, camera, renderer
 const initScene = () => {
   renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webGL' ) } )
   renderer.setPixelRatio( window.devicePixelRatio )
-  renderer.setSize( window.innerWidth, window.innerHeight )	
-  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 3.5, 15000 )
-  camera.position.set( -800, 0, 1800 )    
+  renderer.setSize( window.innerWidth, window.innerWidth * 0.7 )	
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerWidth * 0.7), 3.5, 15000 )
+  camera.position.set( -800, -200, 2200 )    
   let lightPoint = new THREE.PointLight( 0xffffff, 2.0 )
   lightPoint.position.set( 1000, 1000, 1000 )
   let lightAmb = new THREE.AmbientLight( 0xffffff, 0.2 )
@@ -121,8 +128,8 @@ const initScene = () => {
 }
 
 const resizeCanvas = () => {
-  renderer.setSize( window.innerWidth, window.innerHeight )
-  camera.aspect = window.innerWidth / window.innerHeight
+  renderer.setSize( window.innerWidth,  window.innerWidth * 0.7 )
+  camera.aspect = window.innerWidth / (window.innerWidth * 0.7)
   camera.updateProjectionMatrix()  
 } 
     
@@ -138,14 +145,16 @@ const drawFrame = () => {
 /*******************************************************************/
 /*******************************************************************/
 
-let earth, globeMesh, continentsMesh, glowMesh
+let earth, globeMesh, continentsMesh, glowMesh, cloudsMesh
+
 
 const createEarth = () => {
   glowMesh = createEarthGlow()
   globeMesh = createGlobe() 
   continentsMesh = createContinents() 
+  cloudsMesh = createClouds()
   earth = new THREE.Group()
-  scene.add( earth.add( continentsMesh, globeMesh ), glowMesh )
+  scene.add( earth.add( continentsMesh, globeMesh, cloudsMesh ), glowMesh )
 }
 
 const createGlobe = () => {
@@ -175,6 +184,20 @@ const createContinents = () => {
   mesh.material.needsUpdate = true
   mesh.material.uniforms.tDiffuse.value = ASSETS.textures.continents
   return mesh
+}
+
+const createClouds = () => {
+  console.log( ASSETS.textures.clouds )
+  return new THREE.Mesh( 
+    new THREE.SphereGeometry( 616, 40, 40 ),
+    new THREE.MeshPhongMaterial( {
+      color: 0xddddff,
+      alphaMap: ASSETS.textures.clouds,
+      shininess: 0.0,
+      transparent: true,
+      depthWrite: false
+    } ) 
+  )
 }
 
 const createEarthGlow = () => {
@@ -247,9 +270,12 @@ const createConnectors = () => {
   for ( let i = 0; i < count; i ++ ) {
     let dirX = Math.cos( i / count * Math.PI * 2 + 0.2 ) 
     let dirY = Math.sin( i / count * Math.PI * 2 + 0.2 )
+    let wire = createWire( materialIron, dirX, dirY )
     let connector = {
-      wire: createWire( materialIron, dirX, dirY ), 
+      wire: wire.mesh,
       plug: createPlug( materialIron, dirX, dirY ),
+      arrPoints: wire.arrPoints,
+      arrDistancePoints: wire.arrDistancePoints,
       dirX,
       dirY
     }
@@ -270,14 +296,25 @@ const createMaterialIron = () => {
 const createMaterialDiod = () => new THREE.ShaderMaterial( SHADERS.diodShader )
      
 const createWire = ( materialIron, dirX, dirY ) => {
-  let curveQuad = new THREE.QuadraticBezierCurve3(       
-    new THREE.Vector3( dirX * 770, dirY * 770, 0 ),
-    new THREE.Vector3( dirX * 1300, dirY * 1300, 0 ),
-    new THREE.Vector3( dirX * 5000, dirY * 5000, 0 ) 
-  ) 
-  let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 16, 10, 4, false )
+  let arrPoints = [] 
+  let arrDistancePoints = []
+  for ( let i = 0; i < 6; i ++ ) {
+    arrPoints.push( new THREE.Vector3( 
+          ( Math.random() * 100 - 50 + dirX * 700 ) * i + dirX * 770, 
+          ( Math.random() * 100 - 50 + dirY * 700 ) * i + dirY * 770, 
+          ( Math.random() * 100 - 50 ) * i 
+        ) 
+    )
+    arrDistancePoints.push( [ 
+      ( Math.random() * 10 - 5 ) * i,
+      ( Math.random() * 10 - 5 ) * i,
+      ( Math.random() * 10 - 5 ) * i   
+    ] )
+  }
+  let spline = new THREE.SplineCurve3( arrPoints )
+  let wireGeom = new THREE.TubeBufferGeometry( spline, 300, 20, 3, false )
   wireGeom.dynamic = true
-  return new THREE.Mesh( wireGeom, materialIron )  
+  return ( { mesh: new THREE.Mesh( wireGeom, materialIron ), arrPoints, arrDistancePoints } )  
 }
 
 const createPlug = ( materialIron, dirX, dirY ) => {
@@ -313,11 +350,18 @@ const animateConnectors = ( STATE ) => {
 const animationConnectorsDARK = () => {
   if ( countFrame == 2 ) return countFrame = 0
   countFrame ++   
+  let time = Date.now()
   arrConnectors.forEach( ( item ) => {
     if ( ! item.plug || ! item.wire ) return  
-    if ( item.plug.position.x < 0 ) item.wire.geometry.parameters.path.v2.z -= 10000 * earthSpd
-    if ( item.plug.position.x > 0 ) item.wire.geometry.parameters.path.v2.z += 10000 * earthSpd
-    item.wire.geometry.copy( new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 8, 10, 4, false ) )
+    item.wire.geometry.parameters.path.points.forEach( ( point, index  ) => {
+      point.x = item.arrPoints[ index ].x  + item.arrDistancePoints[ index ][ 0 ] * Math.sin( time * 0.0018 )    
+      point.y = item.arrPoints[ index ].y  + item.arrDistancePoints[ index ][ 1 ] * Math.sin( time * 0.0035 ) 
+      item.plug.position.x < 0 ?
+        point.z = item.arrPoints[ index ].z  + item.arrDistancePoints[ index ][ 2 ] * Math.sin( time * 0.0021 ) - 1000 * earthSpd * index
+      :  
+        point.z = item.arrPoints[ index ].z  + item.arrDistancePoints[ index ][ 2 ] * Math.sin( time * 0.0021 ) + 1000 * earthSpd * index   
+    } )  
+    item.wire.geometry.copy( new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 300, 20, 3, false ) )
     item.wire.geometry.needsUpdate = true
   } ) 
   if ( ! earth ) return
