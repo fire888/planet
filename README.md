@@ -1,8 +1,10 @@
 
 # 3d_PLANET  
 
-![[Build Status]](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
 
+![Screenshot](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
+
+![Build status](https://img.shields.io/badge/<build>-<50%>-<red>.svg)
 (в процессе) [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
 
 ____
