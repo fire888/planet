@@ -4,8 +4,9 @@ import * as SHADERS from "./Shaders.js"
 import * as DOC_ELEMS from "./DocumentElems.js"
 
 window.onload = () => {
-  loadAssets( () => { 
-    initScene()
+  loadAssets( () => {
+    let widthCanvas = DOC_ELEMS.getParentContainerSize() 
+    initScene( widthCanvas )
     DOC_ELEMS.setActionsWindowResize( resizeCanvas )
     createEarth()
     createConnectors()
@@ -113,11 +114,11 @@ const loadAssets = ( onLoad ) => {
 
 let scene, camera, renderer
 
-const initScene = () => {
+const initScene = ( width ) => {
   renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webGL' ) } )
   renderer.setPixelRatio( window.devicePixelRatio )
-  renderer.setSize( window.innerWidth, window.innerWidth * 0.7 )	
-  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerWidth * 0.7), 3.5, 15000 )
+  renderer.setSize( width, width * 0.7 )	
+  camera = new THREE.PerspectiveCamera( 75, width / ( width * 0.7 ) , 3.5, 15000 )
   camera.position.set( -800, -200, 2200 )    
   let lightPoint = new THREE.PointLight( 0xffffff, 2.0 )
   lightPoint.position.set( 1000, 1000, 1000 )
@@ -127,9 +128,9 @@ const initScene = () => {
   scene.add( lightPoint, lightAmb )
 }
 
-const resizeCanvas = () => {
-  renderer.setSize( window.innerWidth,  window.innerWidth * 0.7 )
-  camera.aspect = window.innerWidth / (window.innerWidth * 0.7)
+const resizeCanvas = ( width ) => {
+  renderer.setSize( width, width * 0.7 )
+  camera.aspect = width / ( width * 0.7 )
   camera.updateProjectionMatrix()  
 } 
     
@@ -187,7 +188,6 @@ const createContinents = () => {
 }
 
 const createClouds = () => {
-  console.log( ASSETS.textures.clouds )
   return new THREE.Mesh( 
     new THREE.SphereGeometry( 616, 40, 40 ),
     new THREE.MeshPhongMaterial( {

@@ -28,7 +28,7 @@
   #App-webGL{
     width: 100vw; 
     height: 70vw; 
-    display: block;
+    display: table;
   }
   #App-webGL #preloader, #App-webGL #slogan {
     position: absolute;
@@ -95,11 +95,13 @@
 
 
 <script>
-  window.addEventListener( 'wheel', wheelMouseWindow, false );
+  document.addEventListener( 'wheel', wheelMouseWindow, false );
+  document.addEventListener( 'touchstart', wheelMouseWindow, false);
   function wheelMouseWindow () {
     setTimeout( function(){
       document.body.style.overflowY = 'auto';
-      window.removeEventListener( 'wheel', wheelMouseWindow, false );
+      document.removeEventListener( 'wheel', wheelMouseWindow, false );
+      document.removeEventListener( 'touchstart', wheelMouseWindow, false);
     }, 2000 )
   } 
 </script>
@@ -111,6 +113,9 @@
 
 
 Wireless communication, or sometimes simply wireless, is the transfer of information or power between two or more points that are not connected by an electrical conductor. The most common wireless technologies use radio waves. With radio waves distances can be short, such as a few meters for Bluetooth or as far as millions of kilometers for deep-space radio communications. It encompasses various types of fixed, mobile, and portable applications, including two-way radios, cellular telephones, personal digital assistants (PDAs), and wireless networking. Other examples of applications of radio wireless technology include GPS units, garage door openers, wireless computer mice, keyboards and headsets, headphones, radio receivers, satellite television, broadcast television and cordless telephones. 
+
+
+
 
 </body>
 </html>

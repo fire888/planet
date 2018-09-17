@@ -1,6 +1,7 @@
 
 
 export { 
+  getParentContainerSize,
   setActionsWindowResize,
   setActionsMouseWheel,
   showCanvas, 
@@ -12,9 +13,16 @@ export {
 
 let onResize
 
+const getParentContainerSize = () => {
+  let parent = document.getElementById( 'App-webGL' )
+  let w = parent.clientWidth || parent.offsetWidth;
+  if ( w > window.innerWidth ) w = window.innerWidth
+  return w
+}
+
 const setActionsWindowResize = ( f ) => { 
     onResize = f 
-    window.addEventListener( 'resize', onResize, false )
+    window.addEventListener( 'resize', () => { onResize( getParentContainerSize() ) }, false )
 }
 
 
@@ -24,8 +32,9 @@ let actionsMouseWheel
 
 const setActionsMouseWheel = ( f ) => { 
   actionsMouseWheel = f
-  window.addEventListener( 'wheel', onMouseWheel, false )
-  window.addEventListener( 'scroll', onMouseWheel, false )    
+  document.addEventListener( 'wheel', onMouseWheel, false )
+  document.addEventListener( 'scroll', onMouseWheel, false )
+  document.addEventListener( 'touchstart', onMouseWheel, false) 
 }   
 
 let onMouseWheel = () => {
@@ -38,8 +47,9 @@ let onMouseWheel = () => {
 }
 
 const removeListenerMouseWheel = () => {
-  window.removeEventListener( 'wheel', onMouseWheel, false )
-  window.removeEventListener( 'scroll', onMouseWheel, false )
+  document.removeEventListener( 'wheel', onMouseWheel, false )
+  document.removeEventListener( 'scroll', onMouseWheel, false )
+  document.removeEventListener( 'touchstart', onMouseWheel, false)
 }
 
 
