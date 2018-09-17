@@ -1,7 +1,7 @@
 
 # 3d_PLANET  
 
-![pic](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
+![[Build Status]](https://github.com/fire888/planet/blob/master/www_dist/assets/screenshot.jpg)   
 
 (в процессе) [*Посмотреть промежуточную версию*](http://js.otrisovano.ru/tests/180911Planet/master)
 
