@@ -25,32 +25,32 @@
 
 
   /* APPLICATION STYLES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */  
-  #App-webGL{
+  #app-webgl{
     width: 100vw; 
     height: 70vw; 
     display: table;
   }
-  #App-webGL #preloader, #App-webGL #slogan {
+  #app-webgl #preloader, #app-webgl #slogan {
     position: absolute;
     top: 35vw;
     width: 100vw;
   }
-  #App-webGL #preloader {
+  #app-webgl #preloader {
     text-align: center; 
   }
-  #App-webGL #slogan {
+  #app-webgl #slogan {
     padding-left: 10vw; 
   } 
-  #App-webGL .show { 
+  #app-webgl .show { 
     display: block;  
     animation: animatonShow 0.4s ease-out 1; 
   }
-  #App-webGL .hide {
+  #app-webgl .hide {
     opacity: 0;
     display: block;    
     animation: animatonHide 0.4s ease-in 1; 
   }  
-  #App-webGL .hidden {
+  #app-webgl .hidden {
     display: none;
   }
   @keyframes animatonShow {
@@ -80,8 +80,8 @@
 
 
 <!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
-<div id = 'App-webGL'>
-  <canvas id = 'webGL' class = 'hidden'></canvas>
+<div id = 'app-webgl'>
+  <canvas id = 'webgl' class = 'hidden'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
   <div id = 'slogan' class = 'hidden'>SLOGAN</div> 
 </div>
@@ -94,6 +94,7 @@
 
 
 
+<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!! -->   
 <script>
   document.addEventListener( 'wheel', wheelMouseWindow, false );
   document.addEventListener( 'touchstart', wheelMouseWindow, false);
@@ -105,6 +106,8 @@
     }, 2000 )
   } 
 </script>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+
 
 
 

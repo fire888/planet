@@ -56,7 +56,7 @@ const continentsShader = {
   
   const glowEarthShader = {
     uniforms: {		
-      'viewVector' : { value: new THREE.Vector3( -800, 0, 1800 ) },
+      'viewVector' : { value: new THREE.Vector3(  -800, -200, 8200 ) },
       'light': { value: 0.01 }, 
       'glowColor': { value: new THREE.Vector3( 0.5, 0.5, 0.9 ) }      	
     },
