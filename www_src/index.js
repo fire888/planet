@@ -20,6 +20,7 @@ window.onload = () => {
 
 
 
+
 /*******************************************************************/
 /*******************************************************************/
 
@@ -30,7 +31,7 @@ const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
 const animateAllObjects = () => {
   if ( APP_STATE == 'FLASH') {
     if ( checkEarthStateLight() && checkConnectorsStateLight() ) APP_STATE = 'LIGHT'
-  }    
+  }   
   animateEarth( APP_STATE )
   animateConnectors( APP_STATE )
 }
@@ -174,9 +175,8 @@ let earthSpd = 0.002,
 addSpd = 0.0003,
 earthMaxSpd = 0.01,
 earthDir = 'left',  // || 'right'
-
-earthMaxRotationLeft = 1,
-earthMaxRotationRight = -1
+earthMaxRotationLeft = 0.8,
+earthMaxRotationRight = 0.0
 
 
 const animateEarth = ( STATE ) => {
@@ -196,13 +196,13 @@ const earthUpdateParamsDark = () => {
 }
 
 const earthUpdateParamsFlash = () => {
-  if ( earthSpd < earthMaxSpd ) earthSpd += addSpd
+  earthSpd < earthMaxSpd ? earthSpd += addSpd : earthSpd = earthMaxSpd
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) continentsMesh.material.uniforms.light.value += 0.012
   if ( glowMesh.material.uniforms.light.value < 0.1 ) glowMesh.material.uniforms.light.value += 0.0034
 }
 
 const checkEarthStateLight = () => {
-  if ( earthSpd == 0.02 ) return true
+  if ( earthSpd == earthMaxSpd ) return true
   return false
 }
 
@@ -214,16 +214,16 @@ const checkEarthStateLight = () => {
 
 let arrConnectors = [],
 connectorsData = [
-  {  //america
-    dirY: -0.2,
+  { //america
+    dirY: 6.08,
     dirZ: 0.8  
   }, 
-  {  //soushAm
+  { //soushAm
     dirY: 0.2,
     dirZ: 1.8  
   }, 
   { //russia
-    dirY: -3.0,
+    dirY: 3.24,
     dirZ: 0.8  
   },
   { //europe
@@ -245,8 +245,6 @@ const createConnectors = () => {
   materialIron = createMaterialIron()
   materialDiod = createMaterialDiod()
   connectorsCenter = new THREE.Group()
-  
-
   connectorsData.forEach ( ( item ) => { 
     let plug = createPlug()
     let connector = new THREE.Group()
@@ -257,20 +255,11 @@ const createConnectors = () => {
       Math.sin( item.dirZ ) * Math.cos( item.dirY )  * 795 
     )
     connector.lookAt( 0, 0, 0 )
-    let curveQuad = new THREE.QuadraticBezierCurve3(       
-      new THREE.Vector3( 0, 0, 0 ),
-      new THREE.Vector3( 0, 0, -1000 ),
-      new THREE.Vector3( 0, 0, -5000 ) 
-    )
-    let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
-    wireGeom.dynamic = true
-    let wire = new THREE.Mesh( wireGeom, materialIron )      
+    let wire = createWire()
     plug.add( wire )
-
-    arrConnectors.push( { connector, plug, wire } )
+    arrConnectors.push( { connector, plug, wire, dirY: item.dirY } )
     connectorsCenter.add( connector )   
   } )
-  
   continentsMesh.add( connectorsCenter ) 
 }
 
@@ -293,12 +282,21 @@ const createPlug = () => {
   return group
 }
 
+const createWire = () => {
+      let curveQuad = new THREE.QuadraticBezierCurve3(       
+      new THREE.Vector3( 0, 0, 0 ),
+      new THREE.Vector3( 0, 0, -1000 ),
+      new THREE.Vector3( 0, 0, -3000 ) 
+    )
+    let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
+    return new THREE.Mesh( wireGeom, materialIron )   
+}
 
 /*******************************************************************/
 
 const removeConnectorsFromScene = () => {
   if ( arrConnectors.length == 0 ) return
-  arrConnectors.forEach( ( item ) => {
+  arrConnectors.forEach( ( item ) => { 
     scene.remove( item.plug )
     scene.remove( item.wire )
   } )
@@ -331,9 +329,7 @@ const animateConnectors = ( STATE ) => {
 const animationConnectorsDark = () => {
   arrConnectors.forEach( ( item ) => {
     if ( ! item.plug || ! item.wire ) return   
-    if ( item.connector.position.x < 0 ) item.wire.geometry.parameters.path.v2.x += 4000 * earthSpd
-    //item.wire.geometry.parameters.path.v2.x -= 3000 * earthSpd
-    if ( item.connector.position.x > 0 ) item.wire.geometry.parameters.path.v2.x -= 4000 * earthSpd
+    item.wire.geometry.parameters.path.v2.x = 5000 * Math.sin( continentsMesh.rotation.y - 0.4 )
     item.wire.geometry.dispose()  
     item.wire.geometry = new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 30, 25, 8, false  ) 
     item.wire.geometry.needsUpdate = true
@@ -360,17 +356,8 @@ const animationConnectorsFlash = () => {
 const checkConnectorsStateLight = () => {
 
   if ( arrConnectors.length == 0 ) return true
-  let item
-  if ( arrConnectors[0].plug ) { 
-    item = arrConnectors[0].plug 
-  } else {
-    if ( arrConnectors[0].wire ) { 
-      item = arrConnectors[0].wire
-    } else {
-      return true
-    }
-  }
-  if ( item.position.z < 3000 ) {
+  if ( ! arrConnectors[0].plug ) return true
+  if ( arrConnectors[0].plug.position.z < -15000 ) {
     removeConnectorsFromScene()
     return true
   } 
