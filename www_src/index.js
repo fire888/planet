@@ -286,7 +286,7 @@ const createWire = () => {
       let curveQuad = new THREE.QuadraticBezierCurve3(       
       new THREE.Vector3( 0, 0, 0 ),
       new THREE.Vector3( 0, 0, -1000 ),
-      new THREE.Vector3( 0, 0, -3000 ) 
+      new THREE.Vector3( 0, 0, -3500 ) 
     )
     let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
     return new THREE.Mesh( wireGeom, materialIron )   
