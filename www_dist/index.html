@@ -15,7 +15,8 @@
     font-size: 25px;
     background-color: black;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: scroll;
+    position: fixed;
   }
 
 
@@ -96,15 +97,20 @@
 
 <!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!! -->   
 <script>
+  var isStartWheel = false
   document.addEventListener( 'wheel', wheelMouseWindow, false );
   document.addEventListener( 'touchstart', wheelMouseWindow, false);
   function wheelMouseWindow () {
-    setTimeout( function(){
-      document.body.style.overflowY = 'auto';
+    if ( isStartWheel ) { return }
+    isStartWheel = true
+    setTimeout( function() {
+      console.log( 'T' )
+      document.body.style.position = 'static'
+      document.body.style.overflowY = 'auto'      
       document.removeEventListener( 'wheel', wheelMouseWindow, false );
       document.removeEventListener( 'touchstart', wheelMouseWindow, false);
     }, 2000 )
-  } 
+  }
 </script>
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
 

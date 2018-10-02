@@ -247,6 +247,8 @@ const createConnectors = () => {
   connectorsCenter = new THREE.Group()
   connectorsData.forEach ( ( item ) => { 
     let plug = createPlug()
+    let wire = createWire()
+    plug.add( wire )
     let connector = new THREE.Group()
     connector.add( plug )
     connector.position.set( 
@@ -255,9 +257,7 @@ const createConnectors = () => {
       Math.sin( item.dirZ ) * Math.cos( item.dirY )  * 795 
     )
     connector.lookAt( 0, 0, 0 )
-    let wire = createWire()
-    plug.add( wire )
-    arrConnectors.push( { connector, plug, wire, dirY: item.dirY } )
+    arrConnectors.push( { connector, plug, wire } )
     connectorsCenter.add( connector )   
   } )
   continentsMesh.add( connectorsCenter ) 
@@ -291,6 +291,7 @@ const createWire = () => {
     let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
     return new THREE.Mesh( wireGeom, materialIron )   
 }
+
 
 /*******************************************************************/
 
