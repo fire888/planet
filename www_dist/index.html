@@ -97,16 +97,15 @@
 
 <!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!! -->   
 <script>
-  var isStartWheel = false
+  var isStartWheel = false;
   document.addEventListener( 'wheel', wheelMouseWindow, false );
   document.addEventListener( 'touchstart', wheelMouseWindow, false);
   function wheelMouseWindow () {
     if ( isStartWheel ) { return }
-    isStartWheel = true
+    isStartWheel = true;
     setTimeout( function() {
-      console.log( 'T' )
-      document.body.style.position = 'static'
-      document.body.style.overflowY = 'auto'      
+      document.body.style.position = 'static';
+      document.body.style.overflowY = 'auto';      
       document.removeEventListener( 'wheel', wheelMouseWindow, false );
       document.removeEventListener( 'touchstart', wheelMouseWindow, false);
     }, 2000 )
