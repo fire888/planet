@@ -13,10 +13,15 @@
   body {
     color: white;
     font-size: 25px;
-    background-color: black;
+    background-color: white;
     overflow-x: hidden;
     overflow-y: scroll;
     position: fixed;
+    text-align: center;
+  }
+
+    body img{
+    max-width: 100vw;
   }
 
 
@@ -30,6 +35,7 @@
     width: 100vw; 
     height: 70vw; 
     display: table;
+    background-color: black;
   }
   #app-webgl #preloader, #app-webgl #slogan {
     position: absolute;
@@ -41,6 +47,7 @@
   }
   #app-webgl #slogan {
     padding-left: 10vw; 
+    text-align: left;
   } 
   #app-webgl .show { 
     display: block;  
@@ -85,7 +92,7 @@
   <canvas id = 'webgl' class = 'hidden'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
   <div id = 'slogan' class = 'hidden'>WIRELESS COMMUNICATIONS</div> 
-</div>
+</div> 
 <script src = 'js/libs.min.js'></script>    
 <script src = 'js/main.min.js'></script>
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
@@ -97,15 +104,15 @@
 
 <!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!! -->   
 <script>
-  var isStartWheel = false;
+  var isStartWheel = false
   document.addEventListener( 'wheel', wheelMouseWindow, false );
   document.addEventListener( 'touchstart', wheelMouseWindow, false);
   function wheelMouseWindow () {
     if ( isStartWheel ) { return }
-    isStartWheel = true;
+    isStartWheel = true
     setTimeout( function() {
-      document.body.style.position = 'static';
-      document.body.style.overflowY = 'auto';      
+      document.body.style.position = 'static'
+      document.body.style.overflowY = 'auto'      
       document.removeEventListener( 'wheel', wheelMouseWindow, false );
       document.removeEventListener( 'touchstart', wheelMouseWindow, false);
     }, 2000 )
@@ -117,12 +124,7 @@
 
 
 
-
-
-
-Wireless communication, or sometimes simply wireless, is the transfer of information or power between two or more points that are not connected by an electrical conductor. The most common wireless technologies use radio waves. With radio waves distances can be short, such as a few meters for Bluetooth or as far as millions of kilometers for deep-space radio communications. It encompasses various types of fixed, mobile, and portable applications, including two-way radios, cellular telephones, personal digital assistants (PDAs), and wireless networking. Other examples of applications of radio wireless technology include GPS units, garage door openers, wireless computer mice, keyboards and headsets, headphones, radio receivers, satellite television, broadcast television and cordless telephones. 
-
-
+<img src="page/content.jpg"/>
 
 
 </body>

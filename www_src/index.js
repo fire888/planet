@@ -1,5 +1,4 @@
 
-
 import * as SHADERS from "./Shaders.js"
 import * as DOC_ELEMS from "./DocumentElems.js"
 
@@ -8,6 +7,8 @@ window.onload = () => {
     let widthCanvas = DOC_ELEMS.getParentContainerSize() 
     initScene( widthCanvas )
     DOC_ELEMS.setActionsWindowResize( resizeCanvas )
+    initGui()
+    createCubes()
     createEarth()
     createConnectors()
     drawFrame()
@@ -18,6 +19,36 @@ window.onload = () => {
 }
 
 
+
+
+/*******************************************************************/
+/*******************************************************************/
+
+var text
+
+var guiParams = function () {
+  this.earthRed = 0.0
+  this.earthGreen = 0.04
+  this.earthBlue = 0.08
+  this.glowRed = 0.0
+  this.glowGreen = 0.19
+  this.glowBlue = 0.22
+  this.glowLight = 0.0
+  this.glowBorder = 2.9
+  this.wireColor = "#ffae23"
+  this.wireDiodRed = 0.9
+  this.wireDiodGreen = 0.9
+  this.wireDiodBlue = 0.9
+  this.earthLeftMax = -2.0
+  this.earthRightMax = 0.45
+  this.earthAxell = 0.00085
+  this.earthMaxSpd = 0.017
+  this.earthSpdFree = 0.015
+}
+
+const initGui = () => {
+  text = new guiParams()
+}
 
 
 
@@ -31,9 +62,10 @@ const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
 const animateAllObjects = () => {
   if ( APP_STATE == 'FLASH') {
     if ( checkEarthStateLight() && checkConnectorsStateLight() ) APP_STATE = 'LIGHT'
-  }   
+  } 
   animateEarth( APP_STATE )
   animateConnectors( APP_STATE )
+  animateCubes( APP_STATE )
 }
 
 
@@ -46,7 +78,6 @@ let textureLoader, objectLoader
 
 const ASSETS = { 
   textures: {
-    sceneBack: null,
     waterNormals: null,
     continents: null
   },
@@ -60,17 +91,11 @@ const loadAssets = ( onLoad ) => {
   textureLoader = new THREE.TextureLoader()
   objectLoader = new THREE.OBJLoader()
   new Promise ( ( resolve ) => {
-        ASSETS.textures.sceneBack = textureLoader.load( 
-            'assets/background_map.jpg',
-            () => { resolve() }
-        )			
-  })
-  .then( () => new Promise ( ( resolve ) => {
         ASSETS.textures.continents = textureLoader.load( 
             'assets/contour.jpg',
             () => { resolve() }
         )	
-  }) )
+  }) 
   .then( () => new Promise ( ( resolve ) => {
         objectLoader.load( 
             'assets/connector.obj', 
@@ -105,11 +130,10 @@ const initScene = ( width ) => {
   renderer.setSize( width, width * 0.7 )	
   camera = new THREE.PerspectiveCamera( 20, width / ( width * 0.7 ) , 3.5, 15000 )
   camera.position.set( -800, -200, 8200 )    
-  let lightPoint = new THREE.PointLight( 0xffffff, 2.0 )
-  lightPoint.position.set( 1000, 1000, 1000 )
-  let lightAmb = new THREE.AmbientLight( 0xffffff, 0.2 )
+  let lightPoint = new THREE.PointLight( 0xf114b5d, 0.2 )
+  lightPoint.position.set( 1000, 3000, 2000 )
+  let lightAmb = new THREE.AmbientLight( 0x8a0873, 0.2 )
   scene = new THREE.Scene()
-  scene.background = ASSETS.textures.sceneBack
   scene.add( lightPoint, lightAmb )
 }
 
@@ -139,6 +163,7 @@ const createEarth = () => {
   earth = new THREE.Group()
   earth.rotation.z = -0.3
   earth.rotation.x = 0.5
+  continentsMesh.rotation.y = 0.85
   scene.add( earth.add( continentsMesh ), glowMesh )
 }
 
@@ -183,31 +208,32 @@ const animateEarth = ( STATE ) => {
   if ( ! earth ) return
   if ( STATE == 'DARK' ) earthUpdateParamsDark() 
   if ( STATE == 'FLASH') earthUpdateParamsFlash()
+  
   continentsMesh.rotation.y += earthSpd
 }
 
 const earthUpdateParamsDark = () => {
-  if ( continentsMesh.rotation.y > earthMaxRotationLeft && earthDir == 'left' ) earthDir = 'right' 
-  if ( continentsMesh.rotation.y < earthMaxRotationRight && earthDir == 'right' ) earthDir = 'left'
+  if ( continentsMesh.rotation.y > text.earthLeftMax && earthDir == 'left' ) earthDir = 'right' 
+  if ( continentsMesh.rotation.y < text.earthRightMax && earthDir == 'right' ) earthDir = 'left'
   if ( earthDir == 'left' ) 
-    if ( Math.abs( earthSpd + addSpd ) < earthMaxSpd ) earthSpd += addSpd  
+    if ( Math.abs( earthSpd + text.earthAxell ) < text.earthMaxSpd ) earthSpd += text.earthAxell  
   if ( earthDir == 'right' ) 
-    if ( Math.abs( earthSpd - addSpd ) < earthMaxSpd ) earthSpd -= addSpd 
+    if ( Math.abs( earthSpd - text.earthAxell ) < text.earthMaxSpd ) earthSpd -= text.earthAxell
 }
 
 const earthUpdateParamsFlash = () => {
-  earthSpd < earthMaxSpd ? earthSpd += addSpd : earthSpd = earthMaxSpd
+  earthSpd < text.earthSpdFree ? earthSpd += addSpd : earthSpd = text.earthSpdFree
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) continentsMesh.material.uniforms.light.value += 0.012
   if ( glowMesh.material.uniforms.light.value < 0.1 ) glowMesh.material.uniforms.light.value += 0.0034
 }
 
 const checkEarthStateLight = () => {
-  if ( earthSpd == earthMaxSpd ) return true
+  if ( earthSpd == text.earthSpdFree ) return true
   return false
 }
 
- 
 
+ 
 
 /*******************************************************************/
 /*******************************************************************/
@@ -267,7 +293,7 @@ const createMaterialIron = () => {
   return new THREE.MeshPhongMaterial( {
     color: 0x0c0a19,
     emissive: 0x00000,
-    specular: 0xc0c0c0,
+    specular: 0xffffff,
     shininess: 100
   } )
 }
@@ -324,7 +350,7 @@ const animateConnectors = ( STATE ) => {
       oldSTATE = 'FLASH'
     } 
     animationConnectorsFlash()
-  }    
+  } 
 }
 
 const animationConnectorsDark = () => {
@@ -352,6 +378,7 @@ const animationConnectorsFlash = () => {
 }
 
 
+
 /*******************************************************************/
 
 const checkConnectorsStateLight = () => {
@@ -365,5 +392,38 @@ const checkConnectorsStateLight = () => {
   return false
 }
 
+
+
+
+/*******************************************************************/
+/*******************************************************************/
+
+
+let arrCubes = []
+
+const createCubes = () => {
+  let mat = new THREE.MeshPhongMaterial( {
+    color: 0x1ee5ba,
+    emissive: 0x00000,
+    specular: 0xc0c0c0,
+    shininess: 100 
+  } )
+  let geom = new THREE.CubeGeometry( 600, 600, 600 )
+  for ( let yi = 0; yi < 20; yi ++ ) {
+    for ( let xi = 0; xi < 20; xi ++ ) {
+      let cube = new THREE.Mesh( geom, mat )
+      scene.add( cube )
+      cube.position.set( xi * 600 - 5000, yi * 600 - 3000, -6000 )
+      cube.rotation.x = ( xi / 5.0 + yi / 5.0 )
+      arrCubes.push( cube )
+    }
+  }     
+}
+
+const animateCubes = STATE => {
+  arrCubes.forEach( ( item ) => {
+    item.rotation.x += 0.01 
+  } )
+}  
 
 
