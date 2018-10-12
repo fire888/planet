@@ -12,7 +12,7 @@
 
   body {
     color: white;
-    font-size: 25px;
+    font-size: 2vw;
     background-color: white;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -22,6 +22,42 @@
 
     body img{
     max-width: 100vw;
+  }
+
+  .section{
+    min-height: 500px;
+    color: black;
+    max-width: 1100px;
+    margin: 30px;
+    margin: 0 auto;
+    display: flex; 
+    align-items: center;
+    align-content: space-between;
+  }
+
+  .section .slogan {
+    padding: 20px;
+    flex: 1 1 auto; 
+    text-align: left;
+  }
+
+  .section canvas {
+    max-width: 65%;
+    height: auto;
+  }
+
+  .section-border {
+    max-width: 1200px;
+    min-height: 300px;
+    margin: 0 auto;
+    margin-top: -400px; 
+    margin-bottom: 200px;
+    border: 3px solid #154e5e;
+    padding: -30px;
+  }
+
+  .section-border-first{
+    margin-top: -500px; 
   }
 
 
@@ -87,7 +123,7 @@
 
 
 
-<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
 <div id = 'app-webgl'>
   <canvas id = 'webgl' class = 'hidden'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
@@ -95,14 +131,14 @@
 </div> 
 <script src = 'js/libs.min.js'></script>    
 <script src = 'js/main.min.js'></script>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
 
 
 
 
 
 
-<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!! -->   
+<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!!!! -->   
 <script>
   var isStartWheel = false
   document.addEventListener( 'wheel', wheelMouseWindow, false );
@@ -111,6 +147,7 @@
     if ( isStartWheel ) { return }
     isStartWheel = true
     setTimeout( function() {
+      console.log( 'T' )
       document.body.style.position = 'static'
       document.body.style.overflowY = 'auto'      
       document.removeEventListener( 'wheel', wheelMouseWindow, false );
@@ -118,13 +155,72 @@
     }, 2000 )
   }
 </script>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
 
 
 
 
+<br/><br/>
 
-<img src="page/content.jpg"/>
+
+<div class = "section">
+  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <canvas id = 'dr01' width = "500" height = "600"></canvas>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <div class = "slogan">
+    WE NOT FORGET<br/>ABOUT MAIN 
+  </div>  
+  </div>  
+<div class = "section-border section-border-first"></div>
+<div class = "section">
+  <div class = "slogan">
+    DATA<br/>TRANSMITTION<br/>LOSS
+  </div>  
+  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+  <canvas id = 'dr02' width = "500" height = "400"></canvas>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+</div>
+<div class = "section-border"></div>
+<div class = "section">
+  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <canvas id = 'dr03' width = "500" height = "400"></canvas>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <div class = "slogan">
+    NEW<br/>VISION
+  </div>  
+  </div>  
+<div class = "section-border"></div>
+<div class = "section">
+  <div class = "slogan">
+    NEW<br/>OPPORTUNITIES
+  </div>  
+  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+  <canvas id = 'dr04' width = "500" height = "400"></canvas>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+</div>
+<div class = "section-border"></div>
+<div class = "section">
+  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <canvas id = 'dr05' width = "500" height = "400"></canvas>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <div class = "slogan">
+    NEW<br/>CHALLENGE
+  </div>  
+</div>  
+<div class = "section-border"></div>
+<!-- ILLUSTRATIONS ANIMATE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<script src = 'js/canvas_animate.js'></script>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+
+
+<br/><br/>
+
+<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<canvas id = 'webgl_bottom'></canvas>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+
+
+<br/><br/>
 
 
 </body>

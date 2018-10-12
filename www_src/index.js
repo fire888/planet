@@ -6,6 +6,7 @@ window.onload = () => {
   loadAssets( () => { 
     let widthCanvas = DOC_ELEMS.getParentContainerSize() 
     initScene( widthCanvas )
+    resizeCanvas( widthCanvas )
     DOC_ELEMS.setActionsWindowResize( resizeCanvas )
     initGui()
     createCubes()
@@ -122,14 +123,18 @@ const loadAssets = ( onLoad ) => {
 /*******************************************************************/
 /*******************************************************************/
 
-let scene, camera, renderer
+let scene, camera, renderer, rendererBottom, cameraBottom
 
 const initScene = ( width ) => {
-  renderer = new THREE.WebGLRenderer( { alpha: true, canvas: document.getElementById( 'webgl' ) } )
-  renderer.setPixelRatio( window.devicePixelRatio )
-  renderer.setSize( width, width * 0.7 )	
+  renderer = new THREE.WebGLRenderer( { canvas: document.getElementById( 'webgl' ) } ) 
+  rendererBottom = new THREE.WebGLRenderer( { canvas: document.getElementById( 'webgl_bottom' ) } )
+
   camera = new THREE.PerspectiveCamera( 20, width / ( width * 0.7 ) , 3.5, 15000 )
-  camera.position.set( -800, -200, 8200 )    
+  camera.position.set( -800, -200, 8200 )
+  
+  cameraBottom = camera.clone()
+  cameraBottom.position.set( 0, 0, 8200 )
+  
   let lightPoint = new THREE.PointLight( 0xf114b5d, 0.2 )
   lightPoint.position.set( 1000, 3000, 2000 )
   let lightAmb = new THREE.AmbientLight( 0x8a0873, 0.2 )
@@ -141,11 +146,18 @@ const resizeCanvas = ( width ) => {
   renderer.setSize( width, width * 0.7 )
   camera.aspect = width / ( width * 0.7 )
   camera.updateProjectionMatrix()  
+
+  rendererBottom.setSize( width, width * 0.3 )
+  cameraBottom.aspect = width / ( width * 0.3 )
+  cameraBottom.updateProjectionMatrix()  
 } 
     
 const drawFrame = () => {  
   animateAllObjects()
   renderer.render( scene, camera )
+  if ( APP_STATE == 'LIGHT' ) {
+    rendererBottom.render( scene, cameraBottom )    
+  }
   requestAnimationFrame( drawFrame ) 
 }
 
@@ -208,7 +220,6 @@ const animateEarth = ( STATE ) => {
   if ( ! earth ) return
   if ( STATE == 'DARK' ) earthUpdateParamsDark() 
   if ( STATE == 'FLASH') earthUpdateParamsFlash()
-  
   continentsMesh.rotation.y += earthSpd
 }
 
@@ -309,13 +320,13 @@ const createPlug = () => {
 }
 
 const createWire = () => {
-      let curveQuad = new THREE.QuadraticBezierCurve3(       
-      new THREE.Vector3( 0, 0, 0 ),
-      new THREE.Vector3( 0, 0, -1000 ),
-      new THREE.Vector3( 0, 0, -3500 ) 
-    )
-    let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
-    return new THREE.Mesh( wireGeom, materialIron )   
+  let curveQuad = new THREE.QuadraticBezierCurve3(       
+    new THREE.Vector3( 0, 0, 0 ),
+    new THREE.Vector3( 0, 0, -1000 ),
+    new THREE.Vector3( 0, 0, -3500 ) 
+  )
+  let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
+  return new THREE.Mesh( wireGeom, materialIron )   
 }
 
 
@@ -323,10 +334,13 @@ const createWire = () => {
 
 const removeConnectorsFromScene = () => {
   if ( arrConnectors.length == 0 ) return
-  arrConnectors.forEach( ( item ) => { 
-    scene.remove( item.plug )
-    scene.remove( item.wire )
-  } )
+  for ( let i = 0; i < arrConnectors.length; i ++ ) {
+    connectorsCenter.remove( arrConnectors[ i ].plug )
+    connectorsCenter.remove( arrConnectors[ i ].wire )
+    let md = arrConnectors[ i ]
+    arrConnectors.splice( i, 1 )
+    i -- 
+  }
   scene.remove( connectorsCenter )
   arrConnectors = []
 }
@@ -385,7 +399,7 @@ const checkConnectorsStateLight = () => {
 
   if ( arrConnectors.length == 0 ) return true
   if ( ! arrConnectors[0].plug ) return true
-  if ( arrConnectors[0].plug.position.z < -15000 ) {
+  if ( arrConnectors[0].plug.position.z < -5000 ) {
     removeConnectorsFromScene()
     return true
   } 
