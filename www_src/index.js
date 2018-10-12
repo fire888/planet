@@ -1,22 +1,23 @@
 
 import * as SHADERS from "./Shaders.js"
 import * as DOC_ELEMS from "./DocumentElems.js"
+import ILLUSTRATIONS_InitStart from "./illustrations.js"
 
 window.onload = () => {
-  CANVASES()
   loadAssets( () => { 
     let widthCanvas = DOC_ELEMS.getParentContainerSize() 
     initScene( widthCanvas )
     resizeCanvas( widthCanvas )
     DOC_ELEMS.setActionsWindowResize( resizeCanvas )
-    initGui()
     createCubes()
     createEarth()
     createConnectors()
     drawFrame()
     DOC_ELEMS.showCanvas()
     DOC_ELEMS.hidePreloader()
-    DOC_ELEMS.setActionsMouseWheel( onUserActionMouseWheel )   
+    DOC_ELEMS.setActionsMouseWheel( onUserActionMouseWheel )
+    rendererBottom.render( scene, cameraBottom )  
+    ILLUSTRATIONS_InitStart()
   } )
 }
 
@@ -26,30 +27,24 @@ window.onload = () => {
 /*******************************************************************/
 /*******************************************************************/
 
-var text
-
-var guiParams = function () {
-  this.earthRed = 0.0
-  this.earthGreen = 0.04
-  this.earthBlue = 0.08
-  this.glowRed = 0.0
-  this.glowGreen = 0.19
-  this.glowBlue = 0.22
-  this.glowLight = 0.0
-  this.glowBorder = 2.9
-  this.wireColor = "#ffae23"
-  this.wireDiodRed = 0.9
-  this.wireDiodGreen = 0.9
-  this.wireDiodBlue = 0.9
-  this.earthLeftMax = -2.0
-  this.earthRightMax = 0.45
-  this.earthAxell = 0.00085
-  this.earthMaxSpd = 0.017
-  this.earthSpdFree = 0.015
-}
-
-const initGui = () => {
-  text = new guiParams()
+const app_Params =  {
+  earthRed: 0.0,
+  earthGreen: 0.04,
+  earthBlue: 0.08,
+  glowRed: 0.0,
+  glowGreen: 0.19,
+  glowBlue: 0.22,
+  glowLight: 0.0,
+  glowBorder: 2.9,
+  wireColor: "#ffae23",
+  wireDiodRed: 0.9,
+  wireDiodGreen: 0.9,
+  wireDiodBlue: 0.9,
+  earthLeftMax: -2.0,
+  earthRightMax: 0.45,
+  earthAxell: 0.00085,
+  earthMaxSpd: 0.017,
+  earthSpdFree: 0.015
 }
 
 
@@ -133,11 +128,12 @@ const initScene = ( width ) => {
   camera = new THREE.PerspectiveCamera( 20, width / ( width * 0.7 ) , 3.5, 15000 )
   camera.position.set( -800, -200, 8200 )
   
-  cameraBottom = camera.clone()
-  cameraBottom.position.set( 0, 0, 8200 )
+  cameraBottom = new THREE.PerspectiveCamera( 20, width / ( width * 0.3 ) , 3.5, 15000 )
+  cameraBottom.position.set( 0, -2000, -4000)
+  cameraBottom.rotation.x = 1.1
   
   let lightPoint = new THREE.PointLight( 0xf114b5d, 0.2 )
-  lightPoint.position.set( 1000, 3000, 2000 )
+  lightPoint.position.set( 1000, 3000, 600 )
   let lightAmb = new THREE.AmbientLight( 0x8a0873, 0.2 )
   scene = new THREE.Scene()
   scene.add( lightPoint, lightAmb )
@@ -148,8 +144,8 @@ const resizeCanvas = ( width ) => {
   camera.aspect = width / ( width * 0.7 )
   camera.updateProjectionMatrix()  
 
-  rendererBottom.setSize( width, width * 0.3 )
-  cameraBottom.aspect = width / ( width * 0.3 )
+  rendererBottom.setSize( width, width * 0.4 )
+  cameraBottom.aspect = width / ( width * 0.4 )
   cameraBottom.updateProjectionMatrix()  
 } 
     
@@ -176,7 +172,7 @@ const createEarth = () => {
   earth = new THREE.Group()
   earth.rotation.z = -0.3
   earth.rotation.x = 0.5
-  continentsMesh.rotation.y = 0.85
+  continentsMesh.rotation.y = 0.7
   scene.add( earth.add( continentsMesh ), glowMesh )
 }
 
@@ -211,11 +207,7 @@ const createEarthGlow = () => {
 
 let earthSpd = 0.002,
 addSpd = 0.0003,
-earthMaxSpd = 0.01,
-earthDir = 'left',  // || 'right'
-earthMaxRotationLeft = 0.8,
-earthMaxRotationRight = 0.0
-
+earthDir = 'left'  // || 'right'
 
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
@@ -225,22 +217,22 @@ const animateEarth = ( STATE ) => {
 }
 
 const earthUpdateParamsDark = () => {
-  if ( continentsMesh.rotation.y > text.earthLeftMax && earthDir == 'left' ) earthDir = 'right' 
-  if ( continentsMesh.rotation.y < text.earthRightMax && earthDir == 'right' ) earthDir = 'left'
+  if ( continentsMesh.rotation.y > app_Params.earthLeftMax && earthDir == 'left' ) earthDir = 'right' 
+  if ( continentsMesh.rotation.y < app_Params.earthRightMax && earthDir == 'right' ) earthDir = 'left'
   if ( earthDir == 'left' ) 
-    if ( Math.abs( earthSpd + text.earthAxell ) < text.earthMaxSpd ) earthSpd += text.earthAxell  
+    if ( Math.abs( earthSpd + app_Params.earthAxell ) < app_Params.earthMaxSpd ) earthSpd += app_Params.earthAxell  
   if ( earthDir == 'right' ) 
-    if ( Math.abs( earthSpd - text.earthAxell ) < text.earthMaxSpd ) earthSpd -= text.earthAxell
+    if ( Math.abs( earthSpd - app_Params.earthAxell ) < app_Params.earthMaxSpd ) earthSpd -= app_Params.earthAxell
 }
 
 const earthUpdateParamsFlash = () => {
-  earthSpd < text.earthSpdFree ? earthSpd += addSpd : earthSpd = text.earthSpdFree
+  earthSpd < app_Params.earthSpdFree ? earthSpd += addSpd : earthSpd = app_Params.earthSpdFree
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) continentsMesh.material.uniforms.light.value += 0.012
   if ( glowMesh.material.uniforms.light.value < 0.1 ) glowMesh.material.uniforms.light.value += 0.0034
 }
 
 const checkEarthStateLight = () => {
-  if ( earthSpd == text.earthSpdFree ) return true
+  if ( earthSpd == app_Params.earthSpdFree ) return true
   return false
 }
 
@@ -284,18 +276,18 @@ const createConnectors = () => {
   materialDiod = createMaterialDiod()
   connectorsCenter = new THREE.Group()
   connectorsData.forEach ( ( item ) => { 
-    let plug = createPlug()
+    let  objPlug= createPlug()
     let wire = createWire()
-    plug.add( wire )
+    objPlug.plug.add( wire )
     let connector = new THREE.Group()
-    connector.add( plug )
+    connector.add( objPlug.plug )
     connector.position.set( 
       Math.sin( item.dirZ ) * Math.sin( item.dirY ) * 795, 
       Math.cos( item.dirZ ) * 795,  
       Math.sin( item.dirZ ) * Math.cos( item.dirY )  * 795 
     )
     connector.lookAt( 0, 0, 0 )
-    arrConnectors.push( { connector, plug, wire } )
+    arrConnectors.push( { connector, plug: objPlug.plug, corpus: objPlug.corpus, diod: objPlug.diod, wire } )
     connectorsCenter.add( connector )   
   } )
   continentsMesh.add( connectorsCenter ) 
@@ -315,9 +307,9 @@ const createMaterialDiod = () => new THREE.ShaderMaterial( SHADERS.diodShader )
 const createPlug = () => {
   let corpus = new THREE.Mesh( ASSETS.geoms.corpus, materialIron )
   let diod = new THREE.Mesh( ASSETS.geoms.diod, materialDiod )
-  let group = new THREE.Group()
-  group.add( diod, corpus )
-  return group
+  let plug = new THREE.Group()
+  plug.add( diod, corpus )
+  return { plug, corpus, diod }
 }
 
 const createWire = () => {
@@ -336,20 +328,19 @@ const createWire = () => {
 const removeConnectorsFromScene = () => {
   if ( arrConnectors.length == 0 ) return
   for ( let i = 0; i < arrConnectors.length; i ++ ) {
+    arrConnectors[ i ].plug.remove( arrConnectors[ i ].corpus )
+    arrConnectors[ i ].plug.remove( arrConnectors[ i ].diod )
     connectorsCenter.remove( arrConnectors[ i ].plug )
     connectorsCenter.remove( arrConnectors[ i ].wire )
     let md = arrConnectors[ i ]
     arrConnectors.splice( i, 1 )
     i -- 
+    md = null
   }
   scene.remove( connectorsCenter )
   arrConnectors = []
 }
 
-const disposeMesh = mesh => {
-  mesh.geometry.dispose()
-  mesh.material.dispose()
-}
 
 
 /*******************************************************************/
@@ -397,7 +388,6 @@ const animationConnectorsFlash = () => {
 /*******************************************************************/
 
 const checkConnectorsStateLight = () => {
-
   if ( arrConnectors.length == 0 ) return true
   if ( ! arrConnectors[0].plug ) return true
   if ( arrConnectors[0].plug.position.z < -5000 ) {
@@ -428,7 +418,7 @@ const createCubes = () => {
     for ( let xi = 0; xi < 20; xi ++ ) {
       let cube = new THREE.Mesh( geom, mat )
       scene.add( cube )
-      cube.position.set( xi * 600 - 5000, yi * 600 - 3000, -6000 )
+      cube.position.set( xi * 600 - 6000, yi * 600 - 3000, -6000 )
       cube.rotation.x = ( xi / 5.0 + yi / 5.0 )
       arrCubes.push( cube )
     }
@@ -440,251 +430,4 @@ const animateCubes = STATE => {
     item.rotation.x += 0.01 
   } )
 }  
-
-
-
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-/********************************************************************/
-
-
-var canvases = {
-  'dr01': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-         src: 'assets/ill_01_back.png',
-         data: null
-      },
-      'wire': {
-        src: 'assets/ill_02_wire.png',
-        data: null 
-     }      
-    }
-  },
-  'dr02': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-         src: 'assets/ill_02_back.png',
-         data: null
-      },
-      'wire': {
-         src: 'assets/ill_02_wire.png',
-         data: null 
-      },
-      'wire_blur': {
-         src: 'assets/ill_02_wire_blur.png',
-         data: null
-      } 
-    }
-  },
-  'dr03': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-         src: 'assets/ill_03_back.png',
-         data: null
-      },
-      'wire': {
-         src: 'assets/ill_02_wire.png',
-         data: null 
-      },
-      'wire_blur': {
-         src: 'assets/ill_02_wire_blur.png',
-         data: null
-      } 
-    }
-  },
-  'dr04': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-         src: 'assets/ill_04_back.png',
-         data: null
-      },
-      'wire': {
-        src: 'assets/ill_02_wire.png',
-        data: null 
-     }     
-    }
-  },
-  'dr05': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-         src: 'assets/ill_05_back.png',
-         data: null
-      },
-      'wire': {
-        src: 'assets/ill_02_wire.png',
-        data: null 
-     }      
-    }
-  }
-};
-
-var sprites_Data = { 
-  'LeftNORM': {
-    start: {
-      xMin: 0,
-      xMax: 50,
-      yMin: 50,
-      yMax: 200,
-    },
-    finish: {
-      xMin: 600,
-      xMax: 400
-    },
-    spd: {
-      xMin: 1.5,
-      xMax: 2.5,
-      yMin: 0,
-      yMax: 0
-    },
-    color: 'rgba(255, 255, 0, 1.0)'
-  } 
-}
-
-
-
-/*******************************************************************/
-
-var actionsLoad = [], loaded = 0;
-
-function CANVASES () {
-  loadAssetsImgs( function () {
-    initCanvases();
-    startAnimationCanvases();
-  } );
-}
-
-var interval 
-
-function startAnimationCanvases() {
-  interval = setInterval( drawFrameCanvases, 30 )
-}
-
-function drawFrameCanvases() {
-  for ( let key in canvases ) {
-    updateCanvas( canvases[ key ] )
-  }
-}
-
-
-
-/*******************************************************************/
-
-function loadAssetsImgs ( onload ) {
-  for ( let key in canvases ) {
-    for  ( let keyNameImg in canvases[ key ].imgs ) {
-      actionsLoad.push( function() {
-        canvases[ key ].imgs[ keyNameImg ].data = new Image();
-        canvases[ key ].imgs[ keyNameImg ].data.src = canvases[ key ].imgs[ keyNameImg ].src;
-        canvases[ key ].imgs[ keyNameImg ].data.onload = function () {
-          loaded ++
-          actionsLoad[ loaded ]()
-        } 
-      } )     
-    }    
-  }
-  actionsLoad.push( function() { onload() } )
-  actionsLoad[ 0 ]() 
-}
-
-function initCanvases() {
-  for ( let key in canvases ) {
-    canvases[ key ].canvas = document.getElementById( key );
-    canvases[ key ].ctx = canvases[ key ].canvas.getContext('2d'); 
-    initSprites( key );
-  }
-}
-
-function updateCanvas ( item ) {
-  item.ctx.clearRect( 0, 0, item.canvas.width, item.canvas.height )
-  item.ctx.globalCompositeOperation = 'source-over';
-  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );
-  updateSprites( item )
-  if ( item.imgs[ 'wire' ] ) {
-    item.ctx.drawImage( item.imgs[ 'wire' ].data, 100, 100 );
-  }  
-  item.ctx.globalCompositeOperation = 'destination-in';
-  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );  
-}
-
-
-
-/******************************************************************/
-
-function initSprites ( v ) {
-  if ( v == 'dr01' ) {
-    canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )       
-  }
-  if ( v == 'dr02' ) {
-    canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )       
-  }
-  if ( v == 'dr03' ) {
-    canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
-  }
-  if ( v == 'dr04' ) {
-    canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
-  }
-  if ( v == 'dr05' ) {
-    canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
-  }
-}
-
-function createDataSprites ( name, count ) {
-  var arr = []
-  for ( var i = 0; i < count; i ++ ) {
-    let s = {}
-    setStartParams( s, name )
-    arr.push( s )
-  }
-  return arr
-}
-
-function setStartParams( s, name ) {
-  var _pro = sprites_Data[ name ]
-  s.type = name  
-  s.x = Math.random() * _pro.start.xMax + _pro.start.xMin;
-  s.y = Math.random() * _pro.start.yMax + _pro.start.yMin; 
-  s.spdX = Math.random() * _pro.spd.xMax + _pro.spd.xMin; 
-  s.spdY = Math.random() * _pro.spd.yMax + _pro.spd.yMin; 
-  s.color = _pro.color; 
-}
-
-function updateSprites ( item ) {
-  for ( let i = 0; i < item.sprites.length; i ++ ) {
-    for ( let ii = 0; ii < item.sprites[ i ].length; ii ++ ) {
-      drawSprite( item, item.sprites[ i ][ ii ] )
-    }
-  }
-}
-
-function drawSprite ( dataCan, sprite ) {
-  if ( sprite.x > sprites_Data[ sprite.type ].finish.xMin ) {
-    setStartParams( sprite, sprite.type )
-  }
-  sprite.x += sprite.spdX;
-  sprite.y += sprite.spdY;
-  dataCan.ctx.fillStyle = sprite.color;
-  dataCan.ctx.fillRect( sprite.x, sprite.y, 20, 20  );
-}
 
