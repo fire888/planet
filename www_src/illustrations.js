@@ -1,5 +1,6 @@
-export default ILLUSTRATIONS_InitStart
 
+
+export default ILLUSTRATIONS_InitStart
 
 var canvases = {
     'dr01': {
@@ -12,8 +13,10 @@ var canvases = {
            data: null
         },
         'wire': {
-          src: 'assets/ill_02_wire.png',
-          data: null 
+          src: 'assets/ill_01_img.png',
+          data: null,
+          x: 30,
+          y: 0
        }      
       }
     },
@@ -28,13 +31,11 @@ var canvases = {
         },
         'wire': {
            src: 'assets/ill_02_wire.png',
-           data: null 
-        },
-        'wire_blur': {
-           src: 'assets/ill_02_wire_blur.png',
-           data: null
-        } 
-      }
+           data: null,
+           x: 120,
+           y: 150 
+        }
+      }  
     },
     'dr03': {
       canvas: null,
@@ -46,12 +47,10 @@ var canvases = {
            data: null
         },
         'wire': {
-           src: 'assets/ill_02_wire.png',
-           data: null 
-        },
-        'wire_blur': {
-           src: 'assets/ill_02_wire_blur.png',
-           data: null
+           src: 'assets/ill_03_wire.png',
+           data: null,
+           x: 80,
+           y: 70 
         } 
       }
     },
@@ -65,9 +64,11 @@ var canvases = {
            data: null
         },
         'wire': {
-          src: 'assets/ill_02_wire.png',
-          data: null 
-       }     
+           src: 'assets/ill_04_wire.png',
+           data: null,
+           x: 80,
+           y: 70 
+        }     
       }
     },
     'dr05': {
@@ -80,34 +81,248 @@ var canvases = {
            data: null
         },
         'wire': {
-          src: 'assets/ill_02_wire.png',
-          data: null 
-       }      
+           src: 'assets/ill_05_wire.png',
+           data: null,
+           x: 0,
+           y: 65
+        }
       }
     }
-  };
+  }
   
-  var sprites_Data = { 
-    'LeftNORM': {
+var sprites_Data = { 
+  'LeftNORM': {
+    conus: 1,
+    start: {
+      xMin: -20,
+      xMax: -10,
+      yMin: 80,
+      yMax: 300,
+    },
+    finish: {
+      xMin: 160,
+      xMax: 280,
+      yMin: 80,
+      yMax: 300
+    },
+    color: {
+      r: '255',
+      g: '255',
+      b: '0',
+      opasity: 1.0
+    }
+  },
+  'RightBAD': {
+    conus: 1,
+    start: {
+      xMin: 310,
+      xMax: 320,
+      yMin: 180,
+      yMax: 183,
+    },
+    finish: {
+      xMin: 500,
+      xMax: 510,
+      yMin: 110,
+      yMax: 230 
+    },
+    color: {
+      r: '255',
+      g: '255',
+      b: '255',
+      opasity: 0.5
+    }
+  },
+  'LeftCONUS': {
+    conus: 1,
+    start: {
+      xMin: -20,
+      xMax: -10,
+      yMin: 80,
+      yMax: 300,
+    },
+    finish: {
+      xMin: 160,
+      xMax: 280,
+      yMin: 150,
+      yMax: 205
+    },
+    color: {
+      r: '255',
+      g: '255',
+      b: '0',
+      opasity: 1.0
+    }
+  },  
+  'LeftCONUSred': {
+      conus: 1,
       start: {
-        xMin: 0,
-        xMax: 50,
-        yMin: 50,
-        yMax: 200,
+        xMin: -20,
+        xMax: -10,
+        yMin: 80,
+        yMax: 300,
       },
       finish: {
-        xMin: 600,
-        xMax: 400
+        xMin: 160,
+        xMax: 280,
+        yMin: 150,
+        yMax: 205
       },
-      spd: {
-        xMin: 1.5,
-        xMax: 2.5,
-        yMin: 0,
-        yMax: 0
+      color: {
+        r: '255',
+        g: '0',
+        b: '0',
+        opasity: 1.0
+      }
+    },
+    'LeftCONUSgreen': {
+      conus: 1,
+      start: {
+        xMin: -20,
+        xMax: -10,
+        yMin: 80,
+        yMax: 300,
       },
-      color: 'rgba(255, 255, 0, 1.0)'
-    } 
-  }
+      finish: {
+        xMin: 160,
+        xMax: 280,
+        yMin: 150,
+        yMax: 205
+      },
+      color: {
+        r: '0',
+        g: '255',
+        b: '0',
+    opasity: 1.0
+    }
+  }, 
+  'RightCONUS': {
+    conus: 1,
+    start: {
+      xMin: 320,
+      xMax: 330,
+      yMin: 150,
+      yMax: 205
+    },
+    finish: {
+      xMin: 500,
+      xMax: 510,
+      yMin: 80,
+      yMax: 300
+    },
+    color: {
+      r: '255',
+      g: '255',
+      b: '0',
+      opasity: 1.0
+    }
+  }, 
+  'RightCONUSred': {
+    conus: 1,
+    start: {
+      xMin: 320,
+      xMax: 330,
+      yMin: 150,
+      yMax: 205
+    },
+    finish: {
+      xMin: 500,
+      xMax: 510,
+      yMin: 80,
+      yMax: 300
+    },
+    color: {
+      r: '255',
+      g: '0',
+      b: '0',
+      opasity: 1.0
+    }
+  },
+  'RightCONUSgreen': {
+    conus: 1,
+    start: {
+      xMin: 320,
+      xMax: 330,
+      yMin: 150,
+      yMax: 205
+    },
+    finish: {
+      xMin: 500,
+      xMax: 510,
+      yMin: 80,
+      yMax: 300
+    },
+    color: {
+      r: '0',
+      g: '255',
+      b: '0',
+      opasity: 1.0
+    }
+  },
+  'RightCONUSSuperSpr': {
+    conus: 1,
+    start: {
+      xMin: 320,
+      xMax: 330,
+      yMin: 150,
+      yMax: 205
+    },
+    finish: {
+      xMin: 500,
+      xMax: 510,
+      yMin: 80,
+      yMax: 300
+    },
+    color: {
+      r: '0',
+      g: '255',
+      b: '255',
+      opasity: 1.0
+    }
+  },
+  'LeftCONUSSuperSpr': {
+    conus: 1,
+    start: {
+      xMin: -20,
+      xMax: -10,
+      yMin: 80,
+      yMax: 300,
+    },
+    finish: {
+      xMin: 160,
+      xMax: 280,
+      yMin: 150,
+      yMax: 205
+    },
+    color: {
+      r: '0',
+      g: '255',
+      b: '255',
+      opasity: 1.0
+    }  
+  },
+  'TopCONUSSuperSpr': {
+    conus: 1,
+    start: {
+      xMin: 300,
+      xMax: 400,
+      yMin: 200,
+      yMax: 300,
+    },
+    finish: {
+      xMin: 600,
+      xMax: 600,
+      yMin: 0,
+      yMax: 600
+    },
+    color: {
+      r: '0',
+      g: '255',
+      b: '255',
+    opasity: 0.3
+    }
+  }    
+}
   
   
   
@@ -169,7 +384,7 @@ var canvases = {
     item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );
     updateSprites( item )
     if ( item.imgs[ 'wire' ] ) {
-      item.ctx.drawImage( item.imgs[ 'wire' ].data, 100, 100 );
+      item.ctx.drawImage( item.imgs[ 'wire' ].data, item.imgs[ 'wire' ].x, item.imgs[ 'wire' ].y );
     }  
     item.ctx.globalCompositeOperation = 'destination-in';
     item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );  
@@ -181,19 +396,27 @@ var canvases = {
   
   function initSprites ( v ) {
     if ( v == 'dr01' ) {
-      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )       
+      canvases[ v ].sprites.push( createDataSprites( 'TopCONUSSuperSpr', 30) )       
     }
     if ( v == 'dr02' ) {
-      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )       
+      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 70 ) )  
+      canvases[ v ].sprites.push( createDataSprites( 'RightBAD', 10 ) )          
     }
     if ( v == 'dr03' ) {
-      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
+      canvases[ v ].sprites.push( createDataSprites( 'LeftCONUS', 70 ) )    
+      canvases[ v ].sprites.push( createDataSprites( 'RightCONUS', 70 ) )    
     }
     if ( v == 'dr04' ) {
-      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
+      canvases[ v ].sprites.push( createDataSprites( 'LeftCONUS', 50 ) )        
+      canvases[ v ].sprites.push( createDataSprites( 'LeftCONUSSuperSpr', 50 ) ) 
+      canvases[ v ].sprites.push( createDataSprites( 'LeftCONUSgreen', 50 ) )  
+      canvases[ v ].sprites.push( createDataSprites( 'RightCONUS', 50 ) )        
+      canvases[ v ].sprites.push( createDataSprites( 'RightCONUSSuperSpr', 50 ) ) 
+      canvases[ v ].sprites.push( createDataSprites( 'RightCONUSgreen', 50 ) )                   
     }
     if ( v == 'dr05' ) {
-      canvases[ v ].sprites.push( createDataSprites( 'LeftNORM', 200 ) )      
+      canvases[ v ].sprites.push( createDataSprites( 'LeftCONUSSuperSpr', 300 ) )   
+      canvases[ v ].sprites.push( createDataSprites( 'RightCONUSSuperSpr', 300 ) )            
     }
   }
   
@@ -206,15 +429,16 @@ var canvases = {
     }
     return arr
   }
-  
+ 
   function setStartParams( s, name ) {
     var _pro = sprites_Data[ name ]
+    let time = Math.random() * 30 + 30; 
     s.type = name  
-    s.x = Math.random() * _pro.start.xMax + _pro.start.xMin;
-    s.y = Math.random() * _pro.start.yMax + _pro.start.yMin; 
-    s.spdX = Math.random() * _pro.spd.xMax + _pro.spd.xMin; 
-    s.spdY = Math.random() * _pro.spd.yMax + _pro.spd.yMin; 
-    s.color = _pro.color; 
+    s.x = Math.random() * ( _pro.start.xMax - _pro.start.xMin ) + _pro.start.xMin;
+    s.y = Math.random() * ( _pro.start.yMax - _pro.start.yMin ) + _pro.start.yMin; 
+    s.spdX = ( _pro.finish.xMin - s.x ) / time  
+    s.spdY = ( (  _pro.finish.yMin - s.y ) + Math.random() * ( _pro.finish.yMax - _pro.finish.yMin ) * _pro.conus) / time //+  //( ( _pro.finish.yMax - _pro.finish.yMin ) / 2 + _pro.finish.yMin - s.y ) / time * _pro.conus
+    s.color =  Object.assign( {}, _pro.color )
   }
   
   function updateSprites ( item ) {
@@ -226,13 +450,15 @@ var canvases = {
   }
   
   function drawSprite ( dataCan, sprite ) {
-    if ( sprite.x > sprites_Data[ sprite.type ].finish.xMin ) {
-      setStartParams( sprite, sprite.type )
-    }
+    let _pro = sprites_Data[ sprite.type ]
+    if ( sprite.x > _pro.finish.xMin ) {
+        setStartParams( sprite, sprite.type )
+    }  
     sprite.x += sprite.spdX;
     sprite.y += sprite.spdY;
-    dataCan.ctx.fillStyle = sprite.color;
-    dataCan.ctx.fillRect( sprite.x, sprite.y, 20, 20  );
+    dataCan.ctx.fillStyle =' rgba(' + sprite.color.r + ',' + sprite.color.g + ',' + sprite.color.b + ',' + sprite.color.opasity + ')'
+    dataCan.ctx.fillRect( sprite.x, sprite.y, 10, 10  );
   }
+  
   
   
