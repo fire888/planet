@@ -52,7 +52,7 @@
 
 
 
-  /* APPLICATION STYLES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */  
+  /* APPLICATION STYLES ********************************************/  
   #app-webgl{
     width: 100vw; 
     height: 70vw; 
@@ -91,7 +91,7 @@
     from { opacity: 1; }  
     to { opacity: 0; }
   }
-  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */ 
+  /*****************************************************************/ 
 
 
 
@@ -109,7 +109,7 @@
 
 
 
-<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->   
 <div id = 'app-webgl'>
   <canvas id = 'webgl' class = 'hidden'></canvas>
   <div id = 'preloader' class = 'show'>LOADING</div>
@@ -117,30 +117,27 @@
 </div> 
 <script src = 'js/libs.min.js'></script>    
 <script src = 'js/main.min.js'></script>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+<!-- ************************************************************ --> 
 
 
 
 
 
 
-<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  !!!!!!!!!!!!! -->   
+<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  *********** -->   
 <script>
-  var isStartWheel = false
   document.addEventListener( 'wheel', wheelMouseWindow, false );
   document.addEventListener( 'touchstart', wheelMouseWindow, false);
   function wheelMouseWindow () {
-    if ( isStartWheel ) { return }
-    isStartWheel = true
-    setTimeout( function() {
+    document.removeEventListener( 'wheel', wheelMouseWindow, false );
+    document.removeEventListener( 'touchstart', wheelMouseWindow, false);
+    setTimeout( function () {
       document.body.style.position = 'static'
       document.body.style.overflowY = 'auto'      
-      document.removeEventListener( 'wheel', wheelMouseWindow, false );
-      document.removeEventListener( 'touchstart', wheelMouseWindow, false);
     }, 2000 )
   }
 </script>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+<!-- ************************************************************ --> 
 
 
 
@@ -149,9 +146,9 @@
 
 
 <div class = "section">
-  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ILLUSTRATION ********************************************* --> 
   <canvas id = 'dr01' width = "500" height = "600"></canvas>
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ********************************************************** --> 
   <div class = "slogan">
     WE NOT FORGET<br/>ABOUT MAIN 
   </div>  
@@ -160,14 +157,14 @@
   <div class = "slogan">
     DATA<br/>TRANSMITTION<br/>LOSS
   </div>  
-  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+  <!-- ILLUSTRATION *********************************************-->   
   <canvas id = 'dr02' width = "500" height = "400"></canvas>
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ********************************************************* --> 
 </div>
 <div class = "section">
-  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ILLUSTRATION ******************************************** --> 
   <canvas id = 'dr03' width = "500" height = "400"></canvas>
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ********************************************************* --> 
   <div class = "slogan">
     NEW<br/>VISION
   </div>  
@@ -176,26 +173,26 @@
   <div class = "slogan">
     NEW<br/>OPPORTUNITIES
   </div>  
-  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+  <!-- ILLUSTRATION ********************************************* -->   
   <canvas id = 'dr04' width = "500" height = "400"></canvas>
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ********************************************************** --> 
 </div>
 <div class = "section">
-  <!-- ILLUSTRATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ILLUSTRATION ********************************************* --> 
   <canvas id = 'dr05' width = "500" height = "400"></canvas>
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+  <!-- ********************************************************** --> 
   <div class = "slogan">
     NEW<br/>CHALLENGE
   </div>  
 </div>  
 <div class = "section-border"></div>
 <br/><br/>
-<!-- APPLICATION CONTAINERS/SCRIPTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->   
+<!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->   
 <canvas id = 'webgl_bottom'></canvas>
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> 
+<!-- ************************************************************ --> 
 
 
-<br/><br/>
+<br/><br/><br/><br/>
 
 
 </body>
