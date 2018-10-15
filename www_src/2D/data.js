@@ -1,6 +1,6 @@
 
 
-export { CANVASES, sprites_TYPES }
+export { CANVASES, sprites_TYPES, sprites_Imgs }
 
 var CANVASES = {
   'dr01': {
@@ -93,6 +93,7 @@ var CANVASES = {
 var sprites_TYPES = { 
   'LeftNORM': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: -20,
       xMax: -10,
@@ -105,15 +106,11 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
-    color: {
-      r: '255',
-      g: '255',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'yellow'
   },
   'RightBAD': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: 310,
       xMax: 320,
@@ -126,15 +123,11 @@ var sprites_TYPES = {
       yMin: 110,
       yMax: 230 
     },
-    color: {
-      r: '255',
-      g: '255',
-      b: '255',
-      opasity: 0.5
-    }
+    color: 'white'
   },
   'LeftCONUS': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: -20,
       xMax: -10,
@@ -147,15 +140,11 @@ var sprites_TYPES = {
       yMin: 150,
       yMax: 205
     },
-    color: {
-      r: '255',
-      g: '255',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'yellow'
   },  
   'LeftCONUSred': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: -20,
       xMax: -10,
@@ -168,15 +157,11 @@ var sprites_TYPES = {
       yMin: 150,
       yMax: 205
     },
-    color: {
-      r: '255',
-      g: '0',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'red'
   },
   'LeftCONUSgreen': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: -20,
       xMax: -10,
@@ -189,15 +174,11 @@ var sprites_TYPES = {
       yMin: 150,
       yMax: 205
     },
-    color: {
-      r: '0',
-      g: '255',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'green'
   }, 
   'RightCONUS': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: 320,
       xMax: 330,
@@ -210,15 +191,11 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
-    color: {
-      r: '255',
-      g: '255',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'yellow'
   }, 
   'RightCONUSred': {
     conus: 1,
+    spd: 1, 
     start: {
       xMin: 320,
       xMax: 330,
@@ -231,15 +208,11 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
-    color: {
-      r: '255',
-      g: '0',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'red'
   },
   'RightCONUSgreen': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: 320,
       xMax: 330,
@@ -252,15 +225,11 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
-    color: {
-      r: '0',
-      g: '255',
-      b: '0',
-      opasity: 1.0
-    }
+    color: 'green'
   },
   'RightCONUSSuperSpr': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: 320,
       xMax: 330,
@@ -273,15 +242,11 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
-    color: {
-      r: '0',
-      g: '255',
-      b: '255',
-      opasity: 1.0
-    }
+    color: 'super'
   },
   'LeftCONUSSuperSpr': {
     conus: 1,
+    spd: 1,
     start: {
       xMin: -20,
       xMax: -10,
@@ -294,33 +259,72 @@ var sprites_TYPES = {
       yMin: 150,
       yMax: 205
     },
-    color: {
-      r: '0',
-      g: '255',
-      b: '255',
-      opasity: 1.0
-    }  
+    color: 'super'
   },
-  'TopCONUSSuperSpr': {
-    conus: 1,
+  'LinesVert': {
+    conus: 0,
+    spd: 0.2,
     start: {
-      xMin: 300,
-      xMax: 400,
-      yMin: 200,
-      yMax: 300,
+      xMin: -200,
+      xMax: -30,
+      yMin: 0,
+      yMax: 0,
     },
     finish: {
       xMin: 600,
       xMax: 600,
       yMin: 0,
-      yMax: 600
+      yMax: 0
     },
-    color: {
-      r: '0',
-      g: '255',
-      b: '255',
-    opasity: 0.3
-    }
+    color: 'lineVert'
+  },
+  'LinesHor': {
+    conus: 0,
+    spd: 0.1,
+    start: {
+      xMin: 0,
+      xMax: 0,
+      yMin: 800,
+      yMax: 900,
+    },
+    finish: {
+      xMin: 0,
+      xMax: 0,
+      yMin: -40,
+      yMax: -60
+    },
+    color: 'lineHor'
   }    
 }
+
+const sprites_Imgs = {
+  'white': {
+    src: 'assets/sprite_white.png',
+    data: null
+  }, 
+  'yellow': {
+    src: 'assets/sprite_yellow.png',
+    data: null
+  },
+  'green': {
+    src: 'assets/sprite_green.png',
+    data: null
+  },
+  'red': {
+    src: 'assets/sprite_red.png',
+    data: null
+  },   
+  'super': {
+    src: 'assets/sprite_super.png',
+    data: null
+  },   
+  'lineHor': {
+    src: 'assets/sprite_line_hor.png',
+    data: null
+  },
+  'lineVert': {
+    src: 'assets/sprite_line_vert.png',
+    data: null
+  }
+}  
 

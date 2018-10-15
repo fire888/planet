@@ -1,11 +1,12 @@
 
+
+
 import * as SHADERS from "./Shaders.js"
 
 export { 
-  setCanvases,
   loadAssets,
-  init,
-  start,
+  initAPP,
+  startAPP,
   onUserActionMouseWheel,
   resizeCanvas
 } 
@@ -40,9 +41,9 @@ const app_Params =  {
 /*******************************************************************/
 /*******************************************************************/
 
-let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
+const startAPP = () => { drawFrame() }
 
-const start = () => { drawFrame() }
+let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
 
 const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
 
@@ -54,9 +55,6 @@ const animateAllObjects = () => {
   animateConnectors( APP_STATE )
   animateCubes( APP_STATE )
 }
-
-
-
 
 
 
@@ -107,32 +105,33 @@ const loadAssets = ( onLoad ) => {
 
 
 
-
 /*******************************************************************/
 /*******************************************************************/
 
-let canvasTop = null, canvasBottom = null
+const initAPP = ( 
+      c1 = {
+        canvas: 'none..',
+        w: window.innerWidth,
+        h: window.innerHeight 
+      },
+      c2 = { 
+        canvas: 'none..',
+        w: window.innerWidth,
+        h: window.innerHeight 
+      }
+    ) => {     
+  createScene()    
+  createRendererTop( c1 )   
+  createRendererBottom( c2 ) 
+  createCubes()
+  createEarth()
+  createConnectors()
+  resizeCanvas( c1, c2 )
+}
 
-const setCanvases = ( top, bottom ) => {
-  canvasTop = top,
-  canvasBottom = bottom
-} 
+let scene, camera, renderer, rendererBottom, cameraBottom
 
-let scene, camera, renderer, rendererBottom, cameraBottom,
-sceneWidth
-
-
-const init = ( width ) => {
-  renderer = new THREE.WebGLRenderer( { canvas: canvasTop } ) 
-  rendererBottom = new THREE.WebGLRenderer( { canvas: canvasBottom } )
-
-  camera = new THREE.PerspectiveCamera( 20, width / ( width * 0.7 ) , 3.5, 15000 )
-  camera.position.set( -800, -200, 8200 )
-  
-  cameraBottom = new THREE.PerspectiveCamera( 20, width / ( width * 0.3 ) , 3.5, 15000 )
-  cameraBottom.position.set( 0, -2000, -4000)
-  cameraBottom.rotation.x = 1.1
-  
+const createScene = () => {
   let lightPoint = new THREE.PointLight( 0xf114b5d, 0.2 )
   lightPoint.position.set( 1000, 3000, 600 )
   let lightAmb = new THREE.AmbientLight( 0x8a0873, 0.2 )
@@ -142,26 +141,39 @@ const init = ( width ) => {
     new THREE.CubeGeometry( 500, 500, 500 ),
     new THREE.MeshBasicMaterial( { color: 0x00ffff } )
   ))
-
-  createCubes()
-  createEarth()
-  createConnectors()
-
-  rendererBottom.render( scene, cameraBottom )  
-
-  resizeCanvas( width )
 }
 
-const resizeCanvas = ( width ) => {
-  renderer.setSize( width, width * 0.7 )
-  camera.aspect = width / ( width * 0.7 )
-  camera.updateProjectionMatrix()  
+const createRendererTop = c1 => {
+  renderer = new THREE.WebGLRenderer( { canvas: c1.canvas } ) 
+  camera = new THREE.PerspectiveCamera( 20, c1.w / c1.h, 3.5, 15000 )
+  camera.position.set( -800, -200, 8200 )
+}
 
-  rendererBottom.setSize( width, width * 0.4 )
-  cameraBottom.aspect = width / ( width * 0.4 )
+const createRendererBottom = c2 => {
+  rendererBottom = new THREE.WebGLRenderer( { canvas: c2.canvas } )
+  cameraBottom = new THREE.PerspectiveCamera( 20, c2.w / c2.h, 3.5, 15000 )
+  cameraBottom.position.set( 0, -2000, -4000)
+  cameraBottom.rotation.x = 1.1
+  rendererBottom.render( scene, cameraBottom )  
+}
+
+const resizeCanvas = (       
+      size1 = { 
+        w: window.innerWidth,
+        h: window.innerHeight 
+      },
+      size2 = { 
+        w: window.innerWidth,
+        h: window.innerHeight 
+      } ) => {
+  renderer.setSize( size1.w, size1.h )
+  camera.aspect = size1.w / size1.h
+  camera.updateProjectionMatrix()  
+  rendererBottom.setSize( size2.w, size2.h )
+  cameraBottom.aspect = size2.w / size2.h
   cameraBottom.updateProjectionMatrix()  
 } 
-    
+
 const drawFrame = () => {  
   animateAllObjects()
   renderer.render( scene, camera )
@@ -170,7 +182,6 @@ const drawFrame = () => {
   }
   requestAnimationFrame( drawFrame ) 
 }
-
 
 
 
@@ -251,7 +262,6 @@ const checkEarthStateLight = () => {
 
 
  
-
 /*******************************************************************/
 /*******************************************************************/
 
@@ -355,7 +365,6 @@ const removeConnectorsFromScene = () => {
 }
 
 
-
 /*******************************************************************/
 
 let spdConnectors = 0.005, oldSTATE = 'DARK'
@@ -397,7 +406,6 @@ const animationConnectorsFlash = () => {
 }
 
 
-
 /*******************************************************************/
 
 const checkConnectorsStateLight = () => {
@@ -412,10 +420,8 @@ const checkConnectorsStateLight = () => {
 
 
 
-
 /*******************************************************************/
 /*******************************************************************/
-
 
 let arrCubes = []
 
@@ -443,4 +449,5 @@ const animateCubes = STATE => {
     item.rotation.x += 0.01 
   } )
 }  
+
 

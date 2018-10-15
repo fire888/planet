@@ -1,28 +1,31 @@
 
 
-import * as SC from './3D/main'
-import * as ILLS from './2D/main' 
 
-
-/*******************************************************************/
-/*******************************************************************/
+import * as APP_3D from './3D/main'
+import * as C_2D from './2D/main' 
 
 window.onload = () => {
-  ILLS.InitStart( () => {
-      let windowW = window.innerWidth
-      SC.setCanvases( 
-          document.getElementById( 'webgl' ), 
-          document.getElementById( 'webgl_bottom' ) 
-        )  
-      SC.loadAssets( () => {
-          SC.init( windowW )
-          SC.start() 
-          showCanvas()
-          hidePreloader()
-          setMouseWeel( SC.onUserActionMouseWheel )   
-          setWindowResize( SC.resizeCanvas )
-        } )    
-    } )
+  C_2D.InitStart( () => {
+    APP_3D.loadAssets( () => {    
+      APP_3D.initAPP( 
+        { 
+          canvas: document.getElementById( 'webgl' ), 
+          w: window.innerWidth, 
+          h: window.innerWidth * 0.7 
+        },
+        { 
+          canvas:  document.getElementById( 'webgl_bottom' ),
+          w: window.innerWidth,
+          h: window.innerWidth * 0.5 
+        }  
+      )
+      APP_3D.startAPP() 
+      showElement( document.getElementById( 'webgl' ) )
+      hideElement( document.getElementById( 'preloader' ) )
+      setMouseWeel( APP_3D.onUserActionMouseWheel )   
+      setWindowResize( APP_3D.resizeCanvas )
+    } )    
+  } )
 }
 
 
@@ -32,19 +35,22 @@ window.onload = () => {
 
 let onResize
 
-const setWindowResize = ( f ) => { 
+const setWindowResize = f => { 
     onResize = f 
-    window.addEventListener( 'resize', () => { onResize( window.innerWidth ) }, false )
+    window.addEventListener( 'resize', () => { 
+        onResize( 
+          { w: window.innerWidth, h: window.innerWidth * 0.7 },  
+          { w: window.innerWidth, h: window.innerWidth * 0.5 },  
+         ) 
+      }, false )
 }
 
 
-
-/*******************************************************************/
 /*******************************************************************/
 
 let actionMouseWheel
 
-const setMouseWeel = ( f ) => { 
+const setMouseWeel = f => { 
   actionMouseWheel = f
   document.addEventListener( 'wheel', onMouseWheel, false )
   document.addEventListener( 'scroll', onMouseWheel, false ) 
@@ -67,20 +73,14 @@ let onMouseWheel = () => {
 }
 
 
-
-/*******************************************************************/
 /*******************************************************************/
 
-const showCanvas = () => {
-  let canvas = document.getElementById( 'webgl' )
-  canvas.className = 'show'
-}
+const showElement = elem => elem.className = 'show'
 
-const hidePreloader = () => {
-  let preloader = document.getElementById( 'preloader' )
-  preloader.className = 'hide'
+const hideElement = elem => {
+  elem.className = 'hide'
   setTimeout( () => { 
-      preloader.className = 'hidden'    
+      elem.className = 'hidden'    
     }, 1000 )
 }
 
