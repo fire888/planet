@@ -26,8 +26,15 @@ function startAnimationCanvases() {
   
 function drawFrameCanvases() {
   for ( let key in CANVASES ) {
+    if ( checkVisible( CANVASES[ key ].canvas ) )
     updateCanvas( CANVASES[ key ] )
   }
+}
+
+function checkVisible( elm ) {
+  var rect = elm.getBoundingClientRect();
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
   
   
@@ -79,7 +86,7 @@ function initSprites ( id, canvas ) {
     canvas.sprites.push( createDataSprites( 'LinesHor', 2 ) )      
   }
   if ( id == 'dr02' ) {
-    canvas.sprites.push( createDataSprites( 'LeftNORM', 70 ) )  
+    canvas.sprites.push( createDataSprites( 'LeftNORMslow', 70 ) )  
     canvas.sprites.push( createDataSprites( 'RightBAD', 10 ) )          
   }
   if ( id == 'dr03' ) {
@@ -95,8 +102,10 @@ function initSprites ( id, canvas ) {
     canvas.sprites.push( createDataSprites( 'RightCONUSgreen', 50 ) )                   
   }
   if ( id == 'dr05' ) {
-    canvas.sprites.push( createDataSprites( 'LeftCONUSSuperSpr', 300 ) )   
-    canvas.sprites.push( createDataSprites( 'RightCONUSSuperSpr', 300 ) )            
+    canvas.sprites.push( createDataSprites( 'LeftCONUSSuperSprT', 70 ) ) 
+    canvas.sprites.push( createDataSprites( 'LeftCONUSSuperSprB', 70 ) )     
+    canvas.sprites.push( createDataSprites( 'RightCONUSSuperSprT', 70 ) )   
+    canvas.sprites.push( createDataSprites( 'RightCONUSSuperSprB', 70 ) )          
   }
 }
   
@@ -118,7 +127,7 @@ function setStartParamsSprite( s, type ) {
   s.y = Math.random() * ( _pro.start.yMax - _pro.start.yMin ) + _pro.start.yMin; 
   s.spdX = ( _pro.finish.xMin - s.x ) / time * _pro.spd 
   s.spdY = ( (  _pro.finish.yMin - s.y ) + Math.random() * ( _pro.finish.yMax - _pro.finish.yMin ) * _pro.conus) / time * _pro.spd
-  s.color = _pro.color
+  //s.color = _pro.color
 }
 
 
@@ -126,12 +135,13 @@ function setStartParamsSprite( s, type ) {
 /*****************************************************************/  
   
 function updateCanvas ( item ) {
+
   item.ctx.clearRect( 0, 0, item.canvas.width, item.canvas.height )
   item.ctx.globalCompositeOperation = 'source-over';
   item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );
   updateSprites( item )
   if ( item.imgs[ 'wire' ] ) 
-    item.ctx.drawImage( item.imgs[ 'wire' ].data, item.imgs[ 'wire' ].x, item.imgs[ 'wire' ].y );    
+    item.ctx.drawImage( item.imgs[ 'wire' ].data, item.imgs[ 'wire' ].x, item.imgs[ 'wire' ].y, item.imgs[ 'wire' ].x2, item.imgs[ 'wire' ].y2, );    
   item.ctx.globalCompositeOperation = 'destination-in';
   item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );  
 }
@@ -147,15 +157,19 @@ function updateSprites ( can ) {
 function drawSprite ( ctx, sprite ) {
   let _pro = sprites_TYPES[ sprite.type ]
   if ( sprite.x > _pro.finish.xMin ) setStartParamsSprite( sprite, sprite.type )
-  /*exeption ..:( */ if ( sprite.y < _pro.finish.yMin && sprite.type == 'LinesHor' ) setStartParamsSprite( sprite, sprite.type )
+  /*exeption ..:( */ 
+  if ( sprite.type == 'LinesHor' && sprite.y < _pro.finish.yMin ) setStartParamsSprite( sprite, sprite.type )
+  /****************/ 
   sprite.x += sprite.spdX;
   sprite.y += sprite.spdY;
-  ctx.drawImage( sprites_Imgs[ sprite.color ].data, sprite.x, sprite.y )
+  if (  sprite.type == "LinesVert" || sprite.type == "LinesHor"  ) {
+    ctx.drawImage( sprites_Imgs[ sprite.type ].data, sprite.x, sprite.y )  
+    return
+  }
+  ctx.fillStyle = sprites_TYPES[ sprite.type ].color; 
+  ctx.fillRect( sprite.x, sprite.y, 7, 7 );
 }
    
 
-  
 
-  
-  
   

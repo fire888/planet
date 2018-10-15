@@ -108,6 +108,8 @@ const loadAssets = ( onLoad ) => {
 /*******************************************************************/
 /*******************************************************************/
 
+let canvasTop, canvasBottom
+
 const initAPP = ( 
       c1 = {
         canvas: 'none..',
@@ -120,6 +122,8 @@ const initAPP = (
         h: window.innerHeight 
       }
     ) => {     
+  canvasTop = c1.canvas
+  canvasBottom = c2.canvas    
   createScene()    
   createRendererTop( c1 )   
   createRendererBottom( c2 ) 
@@ -175,12 +179,19 @@ const resizeCanvas = (
 } 
 
 const drawFrame = () => {  
-  animateAllObjects()
-  renderer.render( scene, camera )
-  if ( APP_STATE == 'LIGHT' ) {
-    rendererBottom.render( scene, cameraBottom )    
-  }
+  
+  let onFocusTop = checkVisible( canvasTop )
+  let onFocusBottom = checkVisible( canvasBottom )  
+  if ( onFocusTop || onFocusBottom ) animateAllObjects()
+  if ( onFocusTop ) renderer.render( scene, camera )
+  if ( onFocusBottom ) rendererBottom.render( scene, cameraBottom )
   requestAnimationFrame( drawFrame ) 
+}
+
+function checkVisible( elm ) {
+  var rect = elm.getBoundingClientRect();
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
 
