@@ -231,7 +231,7 @@ const createContinents = () => {
 const createEarthGlow = () => {
   let geom = new THREE.PlaneGeometry( 1800, 1800 )
   let mat = new THREE.MeshBasicMaterial( { 
-    color: 0x26f2ff,
+    color: 0x3fa0d3,
     opacity: 1.5,
     alphaMap: ASSETS.textures.glow,
     transparent: true
