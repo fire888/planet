@@ -1,8 +1,10 @@
 
 
+
 export { sprites_TYPES }
 
-var sprites_TYPES = { 
+var sprites_TYPES = {
+  /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
   'LeftYellowSlow': {
     conus: 1,
     spd: 0.6,
@@ -37,6 +39,7 @@ var sprites_TYPES = {
     },
     color: '#fff'
   },
+  /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
   'LeftYellow': {
     conus: 1,
     spd: 1,
@@ -53,7 +56,7 @@ var sprites_TYPES = {
       yMax: 205
     },
     color: '#ff0'
-  },  
+  },
   'LeftMagenta': {
     conus: 1,
     spd: 1,
@@ -87,7 +90,7 @@ var sprites_TYPES = {
       yMax: 235
     },
     color: '#0f0'
-  }, 
+  },   
   'RightYellow': {
     conus: 1,
     spd: 1,
@@ -104,7 +107,7 @@ var sprites_TYPES = {
       yMax: 300
     },
     color: '#ff0'
-  }, 
+  },   
   'RightMagenta': {
     conus: 1,
     spd: 1, 
@@ -139,6 +142,7 @@ var sprites_TYPES = {
     },
     color: '#0f0'
   },
+  /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/   
   'RightSuperTop': {
     conus: 1,
     spd: 1,
@@ -155,7 +159,7 @@ var sprites_TYPES = {
       yMax: 150
     },
     color: '#0ff'
-  },
+  },   
   'RightSuperBottom': {
     conus: 1,
     spd: 1,
@@ -207,6 +211,7 @@ var sprites_TYPES = {
     },
     color: '#0ff'
   },
+  /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/   
   'LinesVert': {
     conus: 0,
     spd: 0.2,
@@ -244,3 +249,5 @@ var sprites_TYPES = {
     img: 'lineHor-img'
   }    
 }
+
+

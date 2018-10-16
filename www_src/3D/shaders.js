@@ -1,7 +1,7 @@
 
 
-export { continentsShader, glowEarthShader, diodShader }
 
+export { continentsShader, glowEarthShader, diodShader }
 
 const continentsShader = {
   uniforms: {		
@@ -61,7 +61,6 @@ const continentsShader = {
   ].join( "\n" )
 }
 
-
 const glowEarthShader = {
   uniforms: {		
     'viewVector' : { value: new THREE.Vector3(  -800, -200, 8200 ) },
@@ -92,8 +91,7 @@ const glowEarthShader = {
       'gl_FragColor = vec4( glow, 1.0 );',
     '}'
   ].join( "\n" )
-} 
-  
+}
   
 const diodShader = {
   uniforms: {		

@@ -1,5 +1,6 @@
 
 
+
 import { CANVASES } from './data-canvases'
 import { sprites_TYPES } from './data-spritesTypes'
 import { sprites_Imgs } from './data-spritesImgs'
@@ -8,7 +9,7 @@ export { InitStart }
 
 
     
-/*******************************************************************/
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
   
 let actionsLoad = [], loaded = 0
   
@@ -22,7 +23,7 @@ const InitStart = onStart => {
   
 
     
-/*******************************************************************/
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
   
 const loadAssetsImgs = onloadAll => {
   for ( let key in CANVASES ) {
@@ -50,7 +51,7 @@ const createActionLoadImg = ( img ) => {
  
 
 
-/*******************************************************************/
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 const initCanvases = canvases => {
   for ( let key in canvases ) {
@@ -89,7 +90,7 @@ const setStartParamsSprite = ( s, type ) => {
 
 
 
-/*******************************************************************/
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let interval 
   
@@ -106,8 +107,8 @@ const drawFrameCanvases = () => {
 
 const checkVisible = elm  => {
   let rect = elm.getBoundingClientRect()
-  let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
+  let viewHeight = Math.max( document.documentElement.clientHeight, window.innerHeight )
+  return ! ( rect.bottom < 0 || rect.top - viewHeight >= 0 )
 }
   
 const updateCanvas = item => {
@@ -132,9 +133,9 @@ const updateSprites = can => {
 const drawSprite = ( ctx, sprite ) => {
   let _pro = sprites_TYPES[ sprite.type ]
   if ( sprite.x > _pro.finish.xMin ) setStartParamsSprite( sprite, sprite.type )
-  /* exeption ..:( ******/ 
+  /* exeption .. :( ******/ 
   if ( sprite.type == 'LinesHor' && sprite.y < _pro.finish.yMin ) setStartParamsSprite( sprite, sprite.type )
-  /**********************/ 
+  /***********************/ 
   sprite.x += sprite.spdX
   sprite.y += sprite.spdY
   if ( _pro.img ) { 
@@ -148,6 +149,5 @@ const drawSprite = ( ctx, sprite ) => {
   }  
 }
    
-
 
   
