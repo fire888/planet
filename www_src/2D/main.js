@@ -14,7 +14,7 @@ export { InitStart }
 let actionsLoad = [], loaded = 0
   
 const InitStart = onStart => {
-  loadAssetsImgs( function () {
+  loadAssetsImgs( () => {
     initCanvases( CANVASES )
     startAnimationCanvases()
     onStart()
