@@ -1,75 +1,9 @@
 
 
-export { CANVASES, sprites_TYPES, sprites_Imgs }
+export { sprites_TYPES }
 
-var CANVASES = {
-  'dr01': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-        src: 'assets/ill_01_back.png',
-        data: null
-      }  
-    }
-  },
-  'dr02': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-        src: 'assets/ill_02_back.png',
-        data: null
-      }
-    }  
-  },
-  'dr03': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-        src: 'assets/ill_03_back.png',
-        data: null
-      } 
-    }
-  },
-  'dr04': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-        src: 'assets/ill_04_back.png',
-        data: null
-      },
-      'wire': {
-        src: 'assets/ill_04_wire.png',
-        data: null,
-        x: 0,
-        y: 0,
-        x2: 500,
-        y2: 400 
-      }     
-    }
-  },
-  'dr05': {
-    canvas: null,
-    ctx: null,
-    sprites: [],
-    imgs: {
-      'back': {
-        src: 'assets/ill_05_back.png',
-        data: null
-      }
-    }
-  }
-}
-  
 var sprites_TYPES = { 
-  'LeftNORMslow': {
+  'LeftYellowSlow': {
     conus: 1,
     spd: 0.6,
     start: {
@@ -86,24 +20,7 @@ var sprites_TYPES = {
     },
     color: '#ff0'
   },
-  'LeftNORM': {
-    conus: 1,
-    spd: 1,
-    start: {
-      xMin: -20,
-      xMax: -10,
-      yMin: 80,
-      yMax: 300,
-    },
-    finish: {
-      xMin: 160,
-      xMax: 280,
-      yMin: 80,
-      yMax: 300
-    },
-    color: '#ff0'
-  },
-  'RightBAD': {
+  'RightWhite': {
     conus: 1,
     spd: 1,
     start: {
@@ -120,7 +37,7 @@ var sprites_TYPES = {
     },
     color: '#fff'
   },
-  'LeftCONUS': {
+  'LeftYellow': {
     conus: 1,
     spd: 1,
     start: {
@@ -137,7 +54,7 @@ var sprites_TYPES = {
     },
     color: '#ff0'
   },  
-  'LeftCONUSred': {
+  'LeftMagenta': {
     conus: 1,
     spd: 1,
     start: {
@@ -154,7 +71,7 @@ var sprites_TYPES = {
     },
     color: '#f0f'
   },
-  'LeftCONUSgreen': {
+  'LeftGreen': {
     conus: 1,
     spd: 1,
     start: {
@@ -171,7 +88,7 @@ var sprites_TYPES = {
     },
     color: '#0f0'
   }, 
-  'RightCONUS': {
+  'RightYellow': {
     conus: 1,
     spd: 1,
     start: {
@@ -188,7 +105,7 @@ var sprites_TYPES = {
     },
     color: '#ff0'
   }, 
-  'RightCONUSred': {
+  'RightMagenta': {
     conus: 1,
     spd: 1, 
     start: {
@@ -205,7 +122,7 @@ var sprites_TYPES = {
     },
     color: '#f0f'
   },
-  'RightCONUSgreen': {
+  'RightGreen': {
     conus: 1,
     spd: 1,
     start: {
@@ -222,7 +139,7 @@ var sprites_TYPES = {
     },
     color: '#0f0'
   },
-  'RightCONUSSuperSprT': {
+  'RightSuperTop': {
     conus: 1,
     spd: 1,
     start: {
@@ -239,7 +156,7 @@ var sprites_TYPES = {
     },
     color: '#0ff'
   },
-  'RightCONUSSuperSprB': {
+  'RightSuperBottom': {
     conus: 1,
     spd: 1,
     start: {
@@ -256,7 +173,7 @@ var sprites_TYPES = {
     },
     color: '#0ff'
   },
-  'LeftCONUSSuperSprT': {
+  'LeftSuperTop': {
     conus: 1,
     spd: 1,
     start: {
@@ -273,7 +190,7 @@ var sprites_TYPES = {
     },
     color: '#0ff'
   },
-  'LeftCONUSSuperSprB': {
+  'LeftSuperBottom': {
     conus: 1,
     spd: 1,
     start: {
@@ -305,7 +222,8 @@ var sprites_TYPES = {
       yMin: 0,
       yMax: 0
     },
-    color: 'lineVert'
+    color: null,
+    img: 'lineVert-img'
   },
   'LinesHor': {
     conus: 0,
@@ -322,18 +240,7 @@ var sprites_TYPES = {
       yMin: -40,
       yMax: -60
     },
-    color: 'lineHor'
+    color: null,
+    img: 'lineHor-img'
   }    
 }
-
-const sprites_Imgs = {  
-  'LinesHor': {
-    src: 'assets/sprite_line_hor.png',
-    data: null
-  },
-  'LinesVert': {
-    src: 'assets/sprite_line_vert.png',
-    data: null
-  }
-}  
-

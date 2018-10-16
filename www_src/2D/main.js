@@ -1,6 +1,8 @@
 
 
-import { CANVASES, sprites_TYPES, sprites_Imgs } from './data'
+import { CANVASES } from './data-canvases'
+import { sprites_TYPES } from './data-spritesTypes'
+import { sprites_Imgs } from './data-spritesImgs'
 
 export { InitStart }
 
@@ -8,108 +10,63 @@ export { InitStart }
     
 /*******************************************************************/
   
-var actionsLoad = [], loaded = 0
+let actionsLoad = [], loaded = 0
   
-function InitStart ( on ) {
+const InitStart = onStart => {
   loadAssetsImgs( function () {
-    initCanvases( CANVASES );
-    startAnimationCanvases();
-    on();
-  } );
+    initCanvases( CANVASES )
+    startAnimationCanvases()
+    onStart()
+  } )
 }
   
-var interval 
-  
-function startAnimationCanvases() {
-  interval = setInterval( drawFrameCanvases, 30 )
-}
-  
-function drawFrameCanvases() {
-  for ( let key in CANVASES ) {
-    if ( checkVisible( CANVASES[ key ].canvas ) )
-    updateCanvas( CANVASES[ key ] )
-  }
-}
 
-function checkVisible( elm ) {
-  var rect = elm.getBoundingClientRect();
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-}
-  
-  
-  
+    
 /*******************************************************************/
   
-function loadAssetsImgs ( onload ) {
+const loadAssetsImgs = onloadAll => {
   for ( let key in CANVASES ) {
     for  ( let keyNameImg in CANVASES[ key ].imgs ) {
-      actionsLoad.push( function() {
-        CANVASES[ key ].imgs[ keyNameImg ].data = new Image();
-        CANVASES[ key ].imgs[ keyNameImg ].data.src = CANVASES[ key ].imgs[ keyNameImg ].src;
-        CANVASES[ key ].imgs[ keyNameImg ].data.onload = function () {
-          loaded ++
-          actionsLoad[ loaded ]()
-        } 
-      } )     
+      actionsLoad.push( createActionLoadImg( CANVASES[ key ].imgs[ keyNameImg ] ) )
     }    
   }
   for ( let img in sprites_Imgs ) {
-    actionsLoad.push( function() {
-      sprites_Imgs[ img ].data = new Image();
-      sprites_Imgs[ img ].data.src = sprites_Imgs[ img ].src
-      sprites_Imgs[ img ].data.onload = function () {
-        loaded ++
-        actionsLoad[ loaded ]()
-      }
-    } )
+    actionsLoad.push( createActionLoadImg( sprites_Imgs[ img ] ) )
   }
-  actionsLoad.push( function() { onload() } )
+  actionsLoad.push( onloadAll )
   actionsLoad[ 0 ]() 
+}
+
+const createActionLoadImg = ( img ) => {
+  let action = () => {
+    img.data = new Image()
+    img.data.src = img.src
+    img.data.onload = () => {
+      actionsLoad[ loaded ++ ]()    
+    }
+  }  
+  return action
 }
  
 
 
 /*******************************************************************/
 
-function initCanvases( canvases ) {
+const initCanvases = canvases => {
   for ( let key in canvases ) {
-    canvases[ key ].canvas = document.getElementById( key );
-    canvases[ key ].ctx = canvases[ key ].canvas.getContext('2d'); 
-    initSprites( key, canvases[ key ] );
+    canvases[ key ].canvas = document.getElementById( key )
+    canvases[ key ].ctx = canvases[ key ].canvas.getContext('2d')
+    initSprites( canvases[ key ] )
   }
 }
 
-function initSprites ( id, canvas ) {
-  if ( id == 'dr01' ) {
-    canvas.sprites.push( createDataSprites( 'LinesVert', 5 ) )   
-    canvas.sprites.push( createDataSprites( 'LinesHor', 2 ) )      
-  }
-  if ( id == 'dr02' ) {
-    canvas.sprites.push( createDataSprites( 'LeftNORMslow', 70 ) )  
-    canvas.sprites.push( createDataSprites( 'RightBAD', 10 ) )          
-  }
-  if ( id == 'dr03' ) {
-    canvas.sprites.push( createDataSprites( 'LeftCONUS', 70 ) )    
-    canvas.sprites.push( createDataSprites( 'RightCONUS', 70 ) )    
-  }
-  if ( id == 'dr04' ) {
-    canvas.sprites.push( createDataSprites( 'LeftCONUS', 50 ) )        
-    canvas.sprites.push( createDataSprites( 'LeftCONUSred', 50 ) ) 
-    canvas.sprites.push( createDataSprites( 'LeftCONUSgreen', 50 ) )  
-    canvas.sprites.push( createDataSprites( 'RightCONUS', 50 ) )        
-    canvas.sprites.push( createDataSprites( 'RightCONUSred', 50 ) ) 
-    canvas.sprites.push( createDataSprites( 'RightCONUSgreen', 50 ) )                   
-  }
-  if ( id == 'dr05' ) {
-    canvas.sprites.push( createDataSprites( 'LeftCONUSSuperSprT', 70 ) ) 
-    canvas.sprites.push( createDataSprites( 'LeftCONUSSuperSprB', 70 ) )     
-    canvas.sprites.push( createDataSprites( 'RightCONUSSuperSprT', 70 ) )   
-    canvas.sprites.push( createDataSprites( 'RightCONUSSuperSprB', 70 ) )          
-  }
+const initSprites = canvas => {
+  canvas.sprites_types.forEach( item => {
+    canvas.sprites.push( createDataSprites( item.type, item.count) )
+  })
 }
   
-function createDataSprites ( sprite_type, count ) {
+const createDataSprites = ( sprite_type, count ) =>  {
   var arr = []
   for ( var i = 0; i < count; i ++ ) {
     let newSprite = {}
@@ -119,34 +76,52 @@ function createDataSprites ( sprite_type, count ) {
   return arr
 }
 
-function setStartParamsSprite( s, type ) {
+const setStartParamsSprite = ( s, type ) => {
   var _pro = sprites_TYPES[ type ]
-  let time = Math.random() * 30 + 30; 
+  let time = Math.random() * 30 + 30 
   s.type = type
-  s.x = Math.random() * ( _pro.start.xMax - _pro.start.xMin ) + _pro.start.xMin;
-  s.y = Math.random() * ( _pro.start.yMax - _pro.start.yMin ) + _pro.start.yMin; 
+  s.x = Math.random() * ( _pro.start.xMax - _pro.start.xMin ) + _pro.start.xMin
+  s.y = Math.random() * ( _pro.start.yMax - _pro.start.yMin ) + _pro.start.yMin 
   s.spdX = ( _pro.finish.xMin - s.x ) / time * _pro.spd 
   s.spdY = ( (  _pro.finish.yMin - s.y ) + Math.random() * ( _pro.finish.yMax - _pro.finish.yMin ) * _pro.conus) / time * _pro.spd
-  //s.color = _pro.color
 }
 
 
 
-/*****************************************************************/  
-  
-function updateCanvas ( item ) {
 
+/*******************************************************************/
+
+let interval 
+  
+const startAnimationCanvases = () => {
+  interval = setInterval( drawFrameCanvases, 30 )
+}
+  
+const drawFrameCanvases = () => {
+  for ( let key in CANVASES ) {
+    if ( checkVisible( CANVASES[ key ].canvas ) )
+      updateCanvas( CANVASES[ key ] )
+  }
+}
+
+const checkVisible = elm  => {
+  let rect = elm.getBoundingClientRect()
+  let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
+}
+  
+const updateCanvas = item => {
   item.ctx.clearRect( 0, 0, item.canvas.width, item.canvas.height )
-  item.ctx.globalCompositeOperation = 'source-over';
-  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );
+  item.ctx.globalCompositeOperation = 'source-over'
+  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height )
   updateSprites( item )
   if ( item.imgs[ 'wire' ] ) 
-    item.ctx.drawImage( item.imgs[ 'wire' ].data, item.imgs[ 'wire' ].x, item.imgs[ 'wire' ].y, item.imgs[ 'wire' ].x2, item.imgs[ 'wire' ].y2, );    
-  item.ctx.globalCompositeOperation = 'destination-in';
-  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height );  
+    item.ctx.drawImage( item.imgs[ 'wire' ].data, item.imgs[ 'wire' ].x, item.imgs[ 'wire' ].y, item.imgs[ 'wire' ].x2, item.imgs[ 'wire' ].y2, )
+  item.ctx.globalCompositeOperation = 'destination-in'
+  item.ctx.drawImage( item.imgs[ 'back' ].data, 0, 0, item.canvas.width, item.canvas.height ) 
 }
 
-function updateSprites ( can ) {
+const updateSprites = can => {
   for ( let i = 0; i < can.sprites.length; i ++ ) {
     for ( let ii = 0; ii < can.sprites[ i ].length; ii ++ ) {
       drawSprite( can.ctx, can.sprites[ i ][ ii ] )
@@ -154,20 +129,23 @@ function updateSprites ( can ) {
   }
 }
   
-function drawSprite ( ctx, sprite ) {
+const drawSprite = ( ctx, sprite ) => {
   let _pro = sprites_TYPES[ sprite.type ]
   if ( sprite.x > _pro.finish.xMin ) setStartParamsSprite( sprite, sprite.type )
-  /*exeption ..:( */ 
+  /* exeption ..:( ******/ 
   if ( sprite.type == 'LinesHor' && sprite.y < _pro.finish.yMin ) setStartParamsSprite( sprite, sprite.type )
-  /****************/ 
-  sprite.x += sprite.spdX;
-  sprite.y += sprite.spdY;
-  if (  sprite.type == "LinesVert" || sprite.type == "LinesHor"  ) {
-    ctx.drawImage( sprites_Imgs[ sprite.type ].data, sprite.x, sprite.y )  
+  /**********************/ 
+  sprite.x += sprite.spdX
+  sprite.y += sprite.spdY
+  if ( _pro.img ) { 
+    ctx.drawImage( sprites_Imgs[ _pro.img ].data, sprite.x, sprite.y )  
     return
   }
-  ctx.fillStyle = sprites_TYPES[ sprite.type ].color; 
-  ctx.fillRect( sprite.x, sprite.y, 7, 7 );
+  if ( _pro.color ) {
+    ctx.fillStyle = sprites_TYPES[ sprite.type ].color 
+    ctx.fillRect( sprite.x, sprite.y, 7, 7 )
+    return
+  }  
 }
    
 
