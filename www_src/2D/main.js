@@ -66,8 +66,8 @@ const initSprites = canvas => {
 }
   
 const createDataSprites = ( sprite_type, count ) =>  {
-  var arr = []
-  for ( var i = 0; i < count; i ++ ) {
+  let arr = []
+  for ( let i = 0; i < count; i ++ ) {
     let newSprite = {}
     setStartParamsSprite( newSprite, sprite_type )
     arr.push( newSprite )
@@ -76,7 +76,7 @@ const createDataSprites = ( sprite_type, count ) =>  {
 }
 
 const setStartParamsSprite = ( s, type ) => {
-  var _pro = sprites_TYPES[ type ]
+  let _pro = sprites_TYPES[ type ]
   let time = Math.random() * 30 + 30 
   s.type = type
   s.x = Math.random() * ( _pro.start.xMax - _pro.start.xMin ) + _pro.start.xMin
