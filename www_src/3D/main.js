@@ -65,8 +65,8 @@ let textureLoader, objectLoader
 
 const ASSETS = { 
   textures: {
-    waterNormals: null,
-    continents: null
+    glow: null,
+    continents: null,
   },
   geoms: {
     corpus: null,
@@ -82,7 +82,14 @@ const loadAssets = ( onLoad ) => {
             'assets/contour.jpg',
             () => { resolve() }
         )	
-  }) 
+  } ) 
+  .then( () => { new Promise ( ( resolve ) => {
+      ASSETS.textures.glow = textureLoader.load( 
+          'assets/glow.png',
+          () => { resolve() }
+      )	
+    } ) 
+  } ) 
   .then( () => new Promise ( ( resolve ) => {
         objectLoader.load( 
             'assets/connector.obj', 
@@ -95,7 +102,7 @@ const loadAssets = ( onLoad ) => {
                 })  
             } 
         )
-  }) )  
+  } ) )  
   .then( () => { 
     textureLoader = null
     objectLoader = null
@@ -136,15 +143,11 @@ const initAPP = (
 let scene, camera, renderer, rendererBottom, cameraBottom
 
 const createScene = () => {
-  let lightPoint = new THREE.PointLight( 0xf114b5d, 0.2 )
-  lightPoint.position.set( 1000, 3000, 600 )
+  let lightPoint = new THREE.PointLight( 0xf114b5d, 0.3 )
+  lightPoint.position.set( 500, 500, 600 )
   let lightAmb = new THREE.AmbientLight( 0x8a0873, 0.2 )
   scene = new THREE.Scene()
   scene.add( lightPoint, lightAmb )
-  scene.add( new THREE.Mesh(
-    new THREE.CubeGeometry( 500, 500, 500 ),
-    new THREE.MeshBasicMaterial( { color: 0x00ffff } )
-  ))
 }
 
 const createRendererTop = c1 => {
@@ -179,7 +182,6 @@ const resizeCanvas = (
 } 
 
 const drawFrame = () => {  
-  
   let onFocusTop = checkVisible( canvasTop )
   let onFocusBottom = checkVisible( canvasBottom )  
   if ( onFocusTop || onFocusBottom ) animateAllObjects()
@@ -188,10 +190,10 @@ const drawFrame = () => {
   requestAnimationFrame( drawFrame ) 
 }
 
-function checkVisible( elm ) {
-  var rect = elm.getBoundingClientRect();
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+const checkVisible = elm => {
+  let rect = elm.getBoundingClientRect()
+  let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+  return ! ( rect.bottom < 0 || rect.top - viewHeight >= 0 )
 }
 
 
@@ -203,12 +205,14 @@ let earth, continentsMesh, glowMesh
 
 const createEarth = () => {
   glowMesh = createEarthGlow()
+  glowMesh.position.set( 65, 0, -700 )
   continentsMesh = createContinents() 
   earth = new THREE.Group()
   earth.rotation.z = -0.3
   earth.rotation.x = 0.5
   continentsMesh.rotation.y = 0.7
   scene.add( earth.add( continentsMesh ), glowMesh )
+  glowMesh.lookAt( camera.position )
 }
 
 const createContinents = () => {
@@ -225,16 +229,15 @@ const createContinents = () => {
 }
 
 const createEarthGlow = () => {
-  let mesh =  new THREE.Mesh( 
-    new THREE.SphereGeometry( 780, 40, 40 ),
-    new THREE.ShaderMaterial( SHADERS.glowEarthShader )
-  )  
-  mesh.material.transparent = true
-  mesh.material.blending = THREE.AdditiveBlending,
-  mesh.material.side = THREE.DoubleSide
-  mesh.material.depthWrite = false
-  mesh.material.needsUpdate = true
-  return mesh
+  let geom = new THREE.PlaneGeometry( 1800, 1800 )
+  let mat = new THREE.MeshBasicMaterial( { 
+    color: 0x26f2ff,
+    opacity: 1.5,
+    alphaMap: ASSETS.textures.glow,
+    transparent: true
+  } )
+  let mesh = new THREE.Mesh( geom, mat )
+  return mesh  
 }
 
 
@@ -263,7 +266,6 @@ const earthUpdateParamsDark = () => {
 const earthUpdateParamsFlash = () => {
   earthSpd < app_Params.earthSpdFree ? earthSpd += addSpd : earthSpd = app_Params.earthSpdFree
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) continentsMesh.material.uniforms.light.value += 0.012
-  if ( glowMesh.material.uniforms.light.value < 0.1 ) glowMesh.material.uniforms.light.value += 0.0034
 }
 
 const checkEarthStateLight = () => {
@@ -332,7 +334,7 @@ const createMaterialIron = () => {
     color: 0x0c0a19,
     emissive: 0x00000,
     specular: 0xffffff,
-    shininess: 100
+    shininess: 300
   } )
 }
 
