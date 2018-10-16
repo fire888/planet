@@ -42,9 +42,7 @@ const createActionLoadImg = ( img ) => {
   let action = () => {
     img.data = new Image()
     img.data.src = img.src
-    img.data.onload = () => {
-      actionsLoad[ loaded ++ ]()    
-    }
+    img.data.onload = () => actionsLoad[ loaded ++ ]()
   }  
   return action
 }
