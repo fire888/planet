@@ -11,7 +11,7 @@ window.onload = () => {
         { 
           canvas: document.getElementById( 'webgl' ), 
           w: window.innerWidth, 
-          h: window.innerWidth * 0.7 
+          h: window.innerHeight
         },
         { 
           canvas:  document.getElementById( 'webgl_bottom' ),
@@ -39,7 +39,7 @@ const setWindowResize = f => {
     onResize = f 
     window.addEventListener( 'resize', () => { 
         onResize( 
-          { w: window.innerWidth, h: window.innerWidth * 0.7 },  
+          { w: window.innerWidth, h: window.innerHeight },  
           { w: window.innerWidth, h: window.innerWidth * 0.5 },  
          ) 
       }, false )

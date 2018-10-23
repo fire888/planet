@@ -60,58 +60,35 @@ const continentsShader = {
     '}'
   ].join( "\n" )
 }
-
-const glowEarthShader = {
-  uniforms: {		
-    'viewVector' : { value: new THREE.Vector3(  -800, -200, 8200 ) },
-    'light': { value: 0.3 }, 
-    'glowColor': { value: new THREE.Vector3( 0.0, 0.24, 0.47) },
-    'border': { value: 3.3 },        	
-  },
-  vertexShader: [	
-    'uniform vec3 viewVector;',
-    'uniform float light;',
-    'uniform float border;',
-    'varying float intensity;',
-
-    'void main() {',
-      'vec3 vNormal = normalize( normalMatrix * normal );',
-      'vec3 vNormel = normalize( normalMatrix * viewVector );',
-      'intensity = pow( abs(light) - dot(vNormal, vNormel), border );',
-      
-      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
-    '}'
-  ].join( '\n' ),	
-  fragmentShader: [
-    'uniform vec3 glowColor;',
-    'uniform float light;',
-    'varying float intensity;',
-    'void main() {',
-      'vec3 glow = ( glowColor + light ) * intensity;',
-      'gl_FragColor = vec4( glow, 1.0 );',
-    '}'
-  ].join( "\n" )
-}
   
 const diodShader = {
   uniforms: {		
-    'color': { value: new THREE.Vector3( 1.5, 1.5, 1.9 ) },   
-    'light': { value: 1.0 }       	
+    'color': { value: new THREE.Vector3( 1, 1, 1) },   
+    'dark': { value: 0.0 },
+    'time': { value: 1.1 }        	
   },
   vertexShader: [	
-    'uniform float light;',
+    'uniform float dark;',
+    'varying vec2 vUv;',
     'void main() {',
+      'vUv = uv;',
       'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
     '}'
   ].join( '\n' ),	
   fragmentShader: [
-    'uniform float light;',
+    'uniform float dark;',
     'uniform vec3 color;',
+    'uniform float time;',
+    'varying vec2 vUv;',
     'void main() {',
-      'gl_FragColor = vec4( color * light, 1.0 );',
+      'vec2 st = vUv.xy;',
+      'float translate = fract(time*0.15);',
+      'st.y -= translate*5.1981;',    
+      'float line = float(sin(st.y/0.09));',      
+      /*'float alpha = sin(clr.y/0.8)/0.1+3.0;',*/
+      'gl_FragColor = vec4( 0.3 + line - dark*3.0, 0.7 + line*0.35 - dark, 0.8 + line*0.35 - dark, 1.0 );',
     '}'
   ].join( "\n" )
 } 
   
-  
-  
+

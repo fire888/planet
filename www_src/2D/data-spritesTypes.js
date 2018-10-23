@@ -20,11 +20,12 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
+    form: 'rect',
     color: '#ff0'
   },
   'RightWhite': {
     conus: 1,
-    spd: 1,
+    spd: 0.6,
     start: {
       xMin: 310,
       xMax: 320,
@@ -37,6 +38,7 @@ var sprites_TYPES = {
       yMin: 110,
       yMax: 230 
     },
+    form: 'circle',
     color: '#fff'
   },
   /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
@@ -55,6 +57,7 @@ var sprites_TYPES = {
       yMin: 150,
       yMax: 205
     },
+    form: 'rect',
     color: '#ff0'
   },
   'LeftMagenta': {
@@ -72,6 +75,7 @@ var sprites_TYPES = {
       yMin: 130,
       yMax: 235
     },
+    form: 'rect',
     color: '#f0f'
   },
   'LeftGreen': {
@@ -89,6 +93,7 @@ var sprites_TYPES = {
       yMin: 130,
       yMax: 235
     },
+    form: 'rect',
     color: '#0f0'
   },   
   'RightYellow': {
@@ -106,6 +111,7 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
+    form: 'rect',
     color: '#ff0'
   },   
   'RightMagenta': {
@@ -123,6 +129,7 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
+    form: 'rect',
     color: '#f0f'
   },
   'RightGreen': {
@@ -140,6 +147,7 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 300
     },
+    form: 'rect',
     color: '#0f0'
   },
   /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/   
@@ -158,6 +166,7 @@ var sprites_TYPES = {
       yMin: 80,
       yMax: 150
     },
+    form: 'rect',
     color: '#0ff'
   },   
   'RightSuperBottom': {
@@ -175,6 +184,7 @@ var sprites_TYPES = {
       yMin: 220,
       yMax: 310
     },
+    form: 'rect',
     color: '#0ff'
   },
   'LeftSuperTop': {
@@ -192,6 +202,7 @@ var sprites_TYPES = {
       yMin: 120,
       yMax: 170
     },
+    form: 'rect',
     color: '#0ff'
   },
   'LeftSuperBottom': {
@@ -209,6 +220,7 @@ var sprites_TYPES = {
       yMin: 240,
       yMax: 270
     },
+    form: 'rect',
     color: '#0ff'
   },
   /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/   

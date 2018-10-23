@@ -140,11 +140,18 @@ const drawSprite = ( ctx, sprite ) => {
     ctx.drawImage( sprites_Imgs[ _pro.img ].data, sprite.x, sprite.y )  
     return
   }
-  if ( _pro.color ) {
+  if ( _pro.form == 'rect' ) {
     ctx.fillStyle = sprites_TYPES[ sprite.type ].color 
     ctx.fillRect( sprite.x, sprite.y, 7, 7 )
     return
-  }  
+  }
+  if ( _pro.form == 'circle' ) {
+    ctx.fillStyle = sprites_TYPES[ sprite.type ].color 
+    ctx.beginPath()
+    ctx.arc( sprite.x, sprite.y, 4, 0, 2*Math.PI ) 
+    ctx.fill()
+    return
+  } 
 }
    
 

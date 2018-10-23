@@ -13,7 +13,7 @@ export {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%  PARAMS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 const app_Params =  {
@@ -38,7 +38,7 @@ const app_Params =  {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%  APP STATES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 const startAPP = () => { drawFrame() }
@@ -58,7 +58,7 @@ const animateAllObjects = () => {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%  LOAD ASSETS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let textureLoader, objectLoader
@@ -70,7 +70,8 @@ const ASSETS = {
   },
   geoms: {
     corpus: null,
-    diod: null
+    diod: null,
+    globe: null
   }
 }  
 
@@ -102,7 +103,19 @@ const loadAssets = ( onLoad ) => {
                 })  
             } 
         )
-  } ) )  
+  } ) )
+  .then( () => new Promise ( ( resolve ) => {
+    objectLoader.load( 
+        'assets/globe.obj', 
+        ( obj ) => {
+            obj.traverse( ( child ) => {
+              if ( child instanceof THREE.Mesh != true ) return
+              ASSETS.geoms.globe = child.geometry 
+              resolve() 
+            })  
+        } 
+    )
+  } ) ) 
   .then( () => { 
     textureLoader = null
     objectLoader = null
@@ -112,7 +125,7 @@ const loadAssets = ( onLoad ) => {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%  INIT SCENE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let canvasTop, canvasBottom
@@ -152,15 +165,15 @@ const createScene = () => {
 
 const createRendererTop = c1 => {
   renderer = new THREE.WebGLRenderer( { canvas: c1.canvas } ) 
-  camera = new THREE.PerspectiveCamera( 20, c1.w / c1.h, 3.5, 15000 )
-  camera.position.set( -800, -200, 8200 )
+  camera = new THREE.PerspectiveCamera( 20, c1.w / c1.h, 3.5, 20000 )
+  camera.position.set( 0, 0, 7200 )     
 }
 
 const createRendererBottom = c2 => {
   rendererBottom = new THREE.WebGLRenderer( { canvas: c2.canvas } )
   cameraBottom = new THREE.PerspectiveCamera( 20, c2.w / c2.h, 3.5, 15000 )
-  cameraBottom.position.set( 0, -2000, -4000)
-  cameraBottom.rotation.x = 1.1
+  cameraBottom.position.set( 0, 9000, 5000)
+  cameraBottom.rotation.x = -0.8
   rendererBottom.render( scene, cameraBottom )  
 }
 
@@ -173,6 +186,14 @@ const resizeCanvas = (
         w: window.innerWidth,
         h: window.innerHeight 
       } ) => {
+  let asp = size1.h/size1.w - 0.5             
+  if ( asp < 1 ) {
+    camera.position.x = ( -800 ) + ( size1.h/size1.w - 0.5 ) * 800
+    camera.position.z = 7200
+  } else {
+    camera.position.x = 0
+    camera.position.z = 10000    
+  } 
   renderer.setSize( size1.w, size1.h )
   camera.aspect = size1.w / size1.h
   camera.updateProjectionMatrix()  
@@ -198,14 +219,14 @@ const checkVisible = elm => {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%  EARTH  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let earth, continentsMesh, glowMesh
 
 const createEarth = () => {
   glowMesh = createEarthGlow()
-  glowMesh.position.set( 65, 0, -700 )
+  glowMesh.position.set( 65, 0, -610 )
   continentsMesh = createContinents() 
   earth = new THREE.Group()
   earth.rotation.z = -0.3
@@ -217,7 +238,7 @@ const createEarth = () => {
 
 const createContinents = () => {
   let mesh =  new THREE.Mesh( 
-    new THREE.SphereGeometry( 608, 40, 40 ),
+    ASSETS.geoms.globe, //new THREE.SphereGeometry( 608, 40, 40 ),
     new THREE.ShaderMaterial( SHADERS.continentsShader )
   )  
   mesh.material.transparent = true
@@ -231,7 +252,7 @@ const createContinents = () => {
 const createEarthGlow = () => {
   let geom = new THREE.PlaneGeometry( 1800, 1800 )
   let mat = new THREE.MeshBasicMaterial( { 
-    color: 0x3fa0d3,
+    color: 0x6ff6ff,
     opacity: 1.5,
     alphaMap: ASSETS.textures.glow,
     transparent: true
@@ -246,6 +267,7 @@ const createEarthGlow = () => {
 let earthSpd = 0.002,
 addSpd = 0.0003,
 earthDir = 'left'  // || 'right'
+let clock = new THREE.Clock()
 
 const animateEarth = ( STATE ) => {
   if ( ! earth ) return
@@ -275,32 +297,38 @@ const checkEarthStateLight = () => {
 
 
  
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%% CONNECTORS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let arrConnectors = [],
 connectorsData = [
   { //america
-    dirY: 6.08,
-    dirZ: 0.8  
-  }, 
+    length: -3000,
+    dirY: 6.0,
+    dirZ: 0.7 
+  },
   { //soushAm
+    length: -4500,
     dirY: 0.2,
     dirZ: 1.8  
   }, 
   { //russia
+    length: -3500,
     dirY: 3.24,
     dirZ: 0.8  
   },
   { //europe
+    length: -4500,
     dirY: 1.5,
     dirZ: 0.8  
   },
   { //africa
+    length: -4500,
     dirY: 1.9,
     dirZ: 1.8  
   },
   { //australia
+    length: -4500,
     dirY: 3.7,
     dirZ: 2.0  
   }
@@ -313,17 +341,24 @@ const createConnectors = () => {
   connectorsCenter = new THREE.Group()
   connectorsData.forEach ( ( item ) => { 
     let  objPlug= createPlug()
-    let wire = createWire()
+    let wire = createWire( item.length )
     objPlug.plug.add( wire )
     let connector = new THREE.Group()
     connector.add( objPlug.plug )
     connector.position.set( 
-      Math.sin( item.dirZ ) * Math.sin( item.dirY ) * 795, 
-      Math.cos( item.dirZ ) * 795,  
-      Math.sin( item.dirZ ) * Math.cos( item.dirY )  * 795 
+      Math.sin( item.dirZ ) * Math.sin( item.dirY ) * 890, 
+      Math.cos( item.dirZ ) * 890,  
+      Math.sin( item.dirZ ) * Math.cos( item.dirY ) * 890
     )
     connector.lookAt( 0, 0, 0 )
-    arrConnectors.push( { connector, plug: objPlug.plug, corpus: objPlug.corpus, diod: objPlug.diod, wire } )
+    arrConnectors.push( { 
+      connector, 
+      plug: objPlug.plug,
+      corpus: objPlug.corpus, 
+      diod: objPlug.diod, 
+      wire, 
+      length: item.length 
+    } )
     connectorsCenter.add( connector )   
   } )
   continentsMesh.add( connectorsCenter ) 
@@ -348,11 +383,11 @@ const createPlug = () => {
   return { plug, corpus, diod }
 }
 
-const createWire = () => {
+const createWire = length => {
   let curveQuad = new THREE.QuadraticBezierCurve3(       
     new THREE.Vector3( 0, 0, 0 ),
     new THREE.Vector3( 0, 0, -1000 ),
-    new THREE.Vector3( 0, 0, -3500 ) 
+    new THREE.Vector3( 0, 0, length ) 
   )
   let wireGeom = new THREE.TubeBufferGeometry( curveQuad, 10, 25, 8, false )
   return new THREE.Mesh( wireGeom, materialIron )   
@@ -395,8 +430,16 @@ const animateConnectors = ( STATE ) => {
 }
 
 const animationConnectorsDark = () => {
+  const time = clock.getDelta()
+  materialDiod.uniforms.time.value += time
+  //console.log( materialDiod.uniforms.time.value )
   arrConnectors.forEach( ( item ) => {
     if ( ! item.plug || ! item.wire ) return   
+    if ( item.length == -3000 ) {
+      item.wire.geometry.parameters.path.v2.y = -4000 * Math.sin( continentsMesh.rotation.y - 0.4 )      
+    } else {
+      item.wire.geometry.parameters.path.v2.x = 5000 * Math.sin( continentsMesh.rotation.y - 0.4 )
+    }
     item.wire.geometry.parameters.path.v2.x = 5000 * Math.sin( continentsMesh.rotation.y - 0.4 )
     item.wire.geometry.dispose()  
     item.wire.geometry = new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 30, 25, 8, false  ) 
@@ -411,7 +454,7 @@ const getConnectorsFromEarthAndPutInScene = () => {
 }
 
 const animationConnectorsFlash = () => { 
-  materialDiod.uniforms.light.value -= 0.01  
+  materialDiod.uniforms.dark.value += 0.01 
   spdConnectors += 0.6
   arrConnectors.forEach( ( item ) => {
     item.plug.position.z -= spdConnectors     
@@ -433,24 +476,28 @@ const checkConnectorsStateLight = () => {
 
 
 
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%% BACKGROUND CUBES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let arrCubes = []
 
 const createCubes = () => {
+  let cubesGroup = new THREE.Group()
+  scene.add( cubesGroup )
+  cubesGroup.rotation.x = -1
+  cubesGroup.position.set( 0, 0, -6000 )
   let mat = new THREE.MeshPhongMaterial( {
     color: 0x1ee5ba,
     emissive: 0x00000,
     specular: 0xc0c0c0,
     shininess: 100 
   } )
-  let geom = new THREE.CubeGeometry( 600, 600, 600 )
+  let geom = new THREE.CubeGeometry( 1000, 1000, 1000 )
   for ( let yi = 0; yi < 20; yi ++ ) {
     for ( let xi = 0; xi < 20; xi ++ ) {
       let cube = new THREE.Mesh( geom, mat )
-      scene.add( cube )
-      cube.position.set( xi * 600 - 6000, yi * 600 - 3000, -6000 )
+      cubesGroup.add( cube )
+      cube.position.set( xi * 1000 - 10000, yi * 1000 - 5000, 0 )
       cube.rotation.x = ( xi / 5.0 + yi / 5.0 )
       arrCubes.push( cube )
     }
