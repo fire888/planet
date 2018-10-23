@@ -165,7 +165,7 @@ const createScene = () => {
 
 const createRendererTop = c1 => {
   renderer = new THREE.WebGLRenderer( { canvas: c1.canvas } ) 
-  camera = new THREE.PerspectiveCamera( 20, c1.w / c1.h, 3.5, 20000 )
+  camera = new THREE.PerspectiveCamera( 20, c1.w / c1.h, 3.5, 25000 )
   camera.position.set( 0, 0, 7200 )     
 }
 
@@ -238,7 +238,7 @@ const createEarth = () => {
 
 const createContinents = () => {
   let mesh =  new THREE.Mesh( 
-    ASSETS.geoms.globe, //new THREE.SphereGeometry( 608, 40, 40 ),
+    ASSETS.geoms.globe,
     new THREE.ShaderMaterial( SHADERS.continentsShader )
   )  
   mesh.material.transparent = true
@@ -250,13 +250,10 @@ const createContinents = () => {
 }
 
 const createEarthGlow = () => {
-  let geom = new THREE.PlaneGeometry( 1800, 1800 )
-  let mat = new THREE.MeshBasicMaterial( { 
-    color: 0x6ff6ff,
-    opacity: 1.5,
-    alphaMap: ASSETS.textures.glow,
-    transparent: true
-  } )
+  let geom = new THREE.PlaneGeometry( 1900, 1900 )
+  SHADERS.setMapToGlowShader( ASSETS.textures.glow )
+  let mat = new THREE.ShaderMaterial( SHADERS.glowShader )
+  mat.transparent = true
   let mesh = new THREE.Mesh( geom, mat )
   return mesh  
 }
@@ -288,6 +285,7 @@ const earthUpdateParamsDark = () => {
 const earthUpdateParamsFlash = () => {
   earthSpd < app_Params.earthSpdFree ? earthSpd += addSpd : earthSpd = app_Params.earthSpdFree
   if ( continentsMesh.material.uniforms.light.value < 1.35 ) continentsMesh.material.uniforms.light.value += 0.012
+  if ( SHADERS.glowShader.uniforms.light.value < 1.5 ) SHADERS.glowShader.uniforms.light.value += 0.12 
 }
 
 const checkEarthStateLight = () => {
@@ -432,7 +430,6 @@ const animateConnectors = ( STATE ) => {
 const animationConnectorsDark = () => {
   const time = clock.getDelta()
   materialDiod.uniforms.time.value += time
-  //console.log( materialDiod.uniforms.time.value )
   arrConnectors.forEach( ( item ) => {
     if ( ! item.plug || ! item.wire ) return   
     if ( item.length == -3000 ) {
@@ -442,7 +439,7 @@ const animationConnectorsDark = () => {
     }
     item.wire.geometry.parameters.path.v2.x = 5000 * Math.sin( continentsMesh.rotation.y - 0.4 )
     item.wire.geometry.dispose()  
-    item.wire.geometry = new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 30, 25, 8, false  ) 
+    item.wire.geometry = new THREE.TubeBufferGeometry( item.wire.geometry.parameters.path, 30, 25, 8, false ) 
     item.wire.geometry.needsUpdate = true
   } ) 
 }
@@ -485,7 +482,7 @@ const createCubes = () => {
   let cubesGroup = new THREE.Group()
   scene.add( cubesGroup )
   cubesGroup.rotation.x = -1
-  cubesGroup.position.set( 0, 0, -6000 )
+  cubesGroup.position.set( 0, 0, -6600 )
   let mat = new THREE.MeshPhongMaterial( {
     color: 0x1ee5ba,
     emissive: 0x00000,

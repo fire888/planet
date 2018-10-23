@@ -1,7 +1,7 @@
 
 
 
-export { continentsShader, glowEarthShader, diodShader }
+export { continentsShader, glowShader, setMapToGlowShader, diodShader }
 
 const continentsShader = {
   uniforms: {		
@@ -36,7 +36,7 @@ const continentsShader = {
 
     'float point (in vec2 uv, in vec2 center, in float radius) {',
       'float len = length(center - uv);',
-      'return float(1. - smoothstep(radius, radius + .6, len));',  
+      'return float(1. - smoothstep(radius, radius + .4, len));',  
     '}',
 
     'void main() {',	
@@ -46,7 +46,7 @@ const continentsShader = {
       "vec4 diff = texture2D(tDiffuse, uv);",
 
       //points
-      'vec2 tileuv = vec2(uv.x, uv.y*0.8) * 180.;',
+      'vec2 tileuv = vec2(uv.x, uv.y*0.8) * 100.;',
       'float radius = .03;',
       'vec2 center = floor( tileuv ) + vec2( 0.5, 0.5 );',
       'float point = point( tileuv, center, radius );',
@@ -59,6 +59,34 @@ const continentsShader = {
       "gl_FragColor = contur + continents + points;",
     '}'
   ].join( "\n" )
+}
+
+const setMapToGlowShader = map => {
+  glowShader.uniforms[ 'tDiffuse' ].value = map
+}
+
+const glowShader = {
+  uniforms: {		
+    'tDiffuse': { type: 't', value: null },
+    'light': { value: 1.0 },        	
+  },
+  vertexShader: [	
+    'varying vec2 vUv;',
+    'void main() {',
+      'vUv = uv;',
+      'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+    '}'
+  ].join( '\n' ),	
+  fragmentShader: [
+    'varying vec2 vUv;',
+    'uniform sampler2D tDiffuse;',
+    'uniform float light;',
+    'void main() {',
+      'vec2 uv = vUv;',
+      'vec4 txt = texture2D(tDiffuse, uv);',
+      'gl_FragColor = vec4( txt.xyz * vec3( 1.5, 1.9, 2.6) * light, txt.x*2.0);',
+    '}'
+  ].join( "\n" )  
 }
   
 const diodShader = {
@@ -82,11 +110,11 @@ const diodShader = {
     'varying vec2 vUv;',
     'void main() {',
       'vec2 st = vUv.xy;',
-      'float translate = fract(time*0.15);',
-      'st.y -= translate*5.1981;',    
-      'float line = float(sin(st.y/0.09));',      
+      'float translate = fract(time*0.13);',
+      'st.y -= translate*5.1980;',    
+      'float line = float(sin(st.y/0.0915));',      
       /*'float alpha = sin(clr.y/0.8)/0.1+3.0;',*/
-      'gl_FragColor = vec4( 0.3 + line - dark*3.0, 0.7 + line*0.35 - dark, 0.8 + line*0.35 - dark, 1.0 );',
+      'gl_FragColor = vec4( 0.3 - dark*2.0, 0.6 + line*0.2 - dark*2.0, 1.1 + line*0.4 - dark*2.0, 1.0 );',
     '}'
   ].join( "\n" )
 } 
