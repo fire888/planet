@@ -466,7 +466,7 @@ const animationConnectorsFlash = () => {
 const checkConnectorsStateLight = () => {
   if ( arrConnectors.length == 0 ) return true
   if ( ! arrConnectors[0].plug ) return true
-  if ( arrConnectors[0].plug.position.z < -5000 ) {
+  if ( arrConnectors[0].plug.position.z < -6000 ) {
     removeConnectorsFromScene()
     return true
   } 
@@ -484,7 +484,7 @@ const createCubes = () => {
   let cubesGroup = new THREE.Group()
   scene.add( cubesGroup )
   cubesGroup.rotation.x = -1
-  cubesGroup.position.set( 0, 0, -7000 )
+  cubesGroup.position.set( 0, 0, -9000 )
   let mat = new THREE.MeshPhongMaterial( {
     color: 0x1ee5ba,
     emissive: 0x00000,
