@@ -466,7 +466,7 @@ const animationConnectorsFlash = () => {
 const checkConnectorsStateLight = () => {
   if ( arrConnectors.length == 0 ) return true
   if ( ! arrConnectors[0].plug ) return true
-  if ( arrConnectors[0].plug.position.z < -6000 ) {
+  if ( arrConnectors[0].plug.position.z < -15000 ) {
     removeConnectorsFromScene()
     return true
   } 
