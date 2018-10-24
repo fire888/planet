@@ -190,9 +190,11 @@ const resizeCanvas = (
   if ( asp < 1 ) {
     camera.position.x = ( -800 ) + ( size1.h/size1.w - 0.5 ) * 800
     camera.position.z = 7200
+    glowMesh.position.x = 65 
   } else {
     camera.position.x = 0
-    camera.position.z = 10000    
+    camera.position.z = 10000
+    glowMesh.position.x = 0  
   } 
   renderer.setSize( size1.w, size1.h )
   camera.aspect = size1.w / size1.h
@@ -326,7 +328,7 @@ connectorsData = [
     dirZ: 1.8  
   },
   { //australia
-    length: -4500,
+    length: -5500,
     dirY: 3.7,
     dirZ: 2.0  
   }
