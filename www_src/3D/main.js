@@ -323,7 +323,7 @@ connectorsData = [
     dirZ: 0.8  
   },
   { //africa
-    length: -4500,
+    length: -5000,
     dirY: 1.9,
     dirZ: 1.8  
   },
@@ -484,7 +484,7 @@ const createCubes = () => {
   let cubesGroup = new THREE.Group()
   scene.add( cubesGroup )
   cubesGroup.rotation.x = -1
-  cubesGroup.position.set( 0, 0, -6600 )
+  cubesGroup.position.set( 0, 0, -7000 )
   let mat = new THREE.MeshPhongMaterial( {
     color: 0x1ee5ba,
     emissive: 0x00000,
