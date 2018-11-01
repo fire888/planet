@@ -5,6 +5,7 @@ import * as APP_3D from './3D/main'
 import * as C_2D from './2D/main' 
 
 window.onload = () => {
+  initBottomHTML()
   C_2D.InitStart( () => {
     APP_3D.loadAssets( () => {    
       APP_3D.initAPP( 
@@ -14,15 +15,18 @@ window.onload = () => {
           h: window.innerHeight
         },
         { 
-          canvas:  document.getElementById( 'webgl_bottom' ),
+          canvas:  document.getElementById( 'webgl-bottom' ),
           w: window.innerWidth,
-          h: window.innerWidth * 0.5 
+          h: window.innerHeight
         }  
       )
       APP_3D.startAPP() 
       showElement( document.getElementById( 'webgl' ) )
       hideElement( document.getElementById( 'preloader' ) )
-      setMouseWeel( APP_3D.onUserActionMouseWheel )   
+      setMouseWeel( APP_3D.onUserActionMouseWheel )
+      APP_3D.setScrolltoBottom( checkScrolledToBottomCanvas )   
+      APP_3D.setOnBottomAnimationStart( fixScroll )   
+      APP_3D.setOnBottomAnimationDone( showBottomBlock )  
       setWindowResize( APP_3D.resizeCanvas )
     } )    
   } )
@@ -40,7 +44,7 @@ const setWindowResize = f => {
     window.addEventListener( 'resize', () => { 
         onResize( 
           { w: window.innerWidth, h: window.innerHeight },  
-          { w: window.innerWidth, h: window.innerWidth * 0.5 },  
+          { w: window.innerWidth, h: window.innerHeight },  
          ) 
       }, false )
 }
@@ -70,6 +74,39 @@ let onMouseWheel = () => {
       let slogan = document.getElementById( 'slogan' )
       slogan.className = 'show' 
     }, 500 )
+}
+
+
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+
+let bottomCanvas, bottomCanvasPositionY
+
+const initBottomHTML = () => {
+  bottomCanvas = document.getElementById( 'webgl-bottom' )
+  bottomCanvasPositionY = bottomCanvas.offsetTop
+} 
+
+const showBottomBlock = () => {
+  let bottomBlock = document.getElementById( 'bottom-scheme' )
+  bottomBlock.className = 'show'
+  console.log( 'show' )
+  unfixScroll()
+} 
+
+const checkScrolledToBottomCanvas = () => {
+  let posY = window.pageYOffset 
+  if ( posY > bottomCanvasPositionY + window.innerHeight ) { fixScroll() }
+}
+
+const fixScroll = () => {
+  let posY = window.pageYOffset
+  document.body.style.position = 'fixed'
+  document.body.style.top = -posY - window.innerHeight + 'px'
+}
+
+const unfixScroll = () => {
+  document.body.style.position = 'static'
+  window.scrollTo( 0, bottomCanvasPositionY)
 }
 
 

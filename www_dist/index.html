@@ -82,6 +82,20 @@
   #app-webgl .hidden {
     display: none;
   }
+  #bottom-scheme {
+    font-size: 50px;
+    margin-top: -80vh;
+    margin-bottom: 100vh;
+  }
+
+  .show { 
+    display: block;  
+    animation: animatonShow 0.4s ease-out 1; 
+  }
+  .hidden {
+    display: none;
+  }
+
   @keyframes animatonShow {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -114,7 +128,11 @@
   <div id = 'preloader' class = 'show'>LOADING</div>
   <div id = 'slogan' class = 'hidden'>WIRELESS COMMUNICATIONS</div> 
 </div> 
-<script src = 'js/libs.min.js'></script>    
+<script src = 'js/libs.min.js'></script>
+<script src = 'js/EffectComposer.js'></script>  
+<script src = 'js/CopyShader.js'></script>
+<script src = 'js/ShaderPass.js'></script>
+<script src = 'js/RenderPass.js'></script>
 <script src = 'js/main.min.js'></script>
 <!-- ************************************************************ --> 
 
@@ -200,7 +218,8 @@
 
 
 <!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->   
-<canvas id = 'webgl_bottom'></canvas>
+<canvas id = 'webgl-bottom'></canvas>
+<div id = 'bottom-scheme' class = 'hidden'>AAAAA</div>
 <!-- ************************************************************ --> 
 
 

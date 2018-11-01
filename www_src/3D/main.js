@@ -8,7 +8,10 @@ export {
   initAPP,
   startAPP,
   onUserActionMouseWheel,
-  resizeCanvas
+  resizeCanvas,
+  setOnBottomAnimationDone,
+  setOnBottomAnimationStart,
+  setScrolltoBottom
 } 
 
 
@@ -44,6 +47,7 @@ const app_Params =  {
 const startAPP = () => { drawFrame() }
 
 let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
+let BOTTOM_APP_STATE = 'NONE' // || 'DELAYbeforeCIRCLES || 'CIRCLES' || 'FREESPACE' || 'TEXT'
 
 const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
 
@@ -54,7 +58,35 @@ const animateAllObjects = () => {
   animateEarth( APP_STATE )
   animateConnectors( APP_STATE )
   animateCubes( APP_STATE )
+  /************************************/
+  if ( BOTTOM_APP_STATE == 'NONE' ) {
+    if ( checkVisible( canvasBottom ) ) {
+      onBottomAnimationStart()
+      startDelay()
+      onCheckScrollToBottomCanvas() 
+      BOTTOM_APP_STATE = 'DELAYbeforeCIRCLES'
+    }   
+  }
+  if ( BOTTOM_APP_STATE == 'CIRCLES') {
+    updateCanvasBottomCircles()
+    if ( checkCirclesDone() ) {
+      BOTTOM_APP_STATE = 'FREESPACE'
+    }
+  }
+  if ( BOTTOM_APP_STATE == 'FREESPACE' ) {
+    console.log( ' !! ')
+    onBottomAnimationDone() 
+    BOTTOM_APP_STATE = 'TEXT'
+  }
 }
+
+const startDelay = () => { setTimeout( () => { BOTTOM_APP_STATE = 'CIRCLES'}, 1000 ) }
+
+let onBottomAnimationStart = () => {}, onBottomAnimationDone = () => {}, onCheckScrollToBottomCanvas = () => {}
+
+const setOnBottomAnimationStart = f => onBottomAnimationStart = f  
+const setOnBottomAnimationDone = f => onBottomAnimationDone = f  
+const setScrolltoBottom = f => onCheckScrollToBottomCanvas = f
 
 
 
@@ -153,7 +185,8 @@ const initAPP = (
   resizeCanvas( c1, c2 )
 }
 
-let scene, camera, renderer, rendererBottom, cameraBottom
+let scene, camera, renderer, 
+cameraBottom, rendererBottom, composerBottom, passSpace, startTime 
 
 const createScene = () => {
   let lightPoint = new THREE.PointLight( 0xf114b5d, 0.3 )
@@ -170,12 +203,20 @@ const createRendererTop = c1 => {
 }
 
 const createRendererBottom = c2 => {
+  startTime = Date.now()
   rendererBottom = new THREE.WebGLRenderer( { canvas: c2.canvas } )
-  cameraBottom = new THREE.PerspectiveCamera( 20, c2.w / c2.h, 3.5, 15000 )
-  cameraBottom.position.set( 0, 9000, 5000)
-  cameraBottom.rotation.x = -0.8
-  rendererBottom.render( scene, cameraBottom )  
+  composerBottom = new THREE.EffectComposer( rendererBottom )	
+  cameraBottom = new THREE.PerspectiveCamera( 40, c2.w / c2.h, 3.5, 15000 )
+  cameraBottom.position.set( 0, 4000, 0)
+  cameraBottom.rotation.x = -0.4  
+  composerBottom.addPass( new THREE.RenderPass( scene, cameraBottom ) )
+  passSpace = new THREE.ShaderPass( SHADERS.spaceShader )
+  composerBottom.addPass( passSpace )
+  passSpace.renderToScreen = true  
 }
+
+
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 const resizeCanvas = (       
       size1 = { 
@@ -184,7 +225,7 @@ const resizeCanvas = (
       },
       size2 = { 
         w: window.innerWidth,
-        h: window.innerHeight 
+        h: window.innerWidth 
       } ) => {
   let asp = size1.h/size1.w - 0.5             
   if ( asp < 1 ) {
@@ -198,25 +239,48 @@ const resizeCanvas = (
   } 
   renderer.setSize( size1.w, size1.h )
   camera.aspect = size1.w / size1.h
-  camera.updateProjectionMatrix()  
-  rendererBottom.setSize( size2.w, size2.h )
-  cameraBottom.aspect = size2.w / size2.h
-  cameraBottom.updateProjectionMatrix()  
+  camera.updateProjectionMatrix()
+  if ( rendererBottom ) rendererBottom.setSize( size2.w, size2.h )
+  if ( cameraBottom ) { 
+    cameraBottom.aspect = size2.w / size2.h * size2.h / size2.w
+    cameraBottom.updateProjectionMatrix()
+  }
+  if ( passSpace ) passSpace.uniforms.iResolution.value = new THREE.Vector2( size2.w, size2.h )   
+  let size = rendererBottom.getDrawingBufferSize()
+  if ( composerBottom )composerBottom.setSize( size.width, size.height ); 
 } 
+
+
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 const drawFrame = () => {  
   let onFocusTop = checkVisible( canvasTop )
   let onFocusBottom = checkVisible( canvasBottom )  
   if ( onFocusTop || onFocusBottom ) animateAllObjects()
   if ( onFocusTop ) renderer.render( scene, camera )
-  if ( onFocusBottom ) rendererBottom.render( scene, cameraBottom )
+  if ( onFocusBottom && composerBottom && passSpace ) { 
+    let currentTime = Date.now()
+    passSpace.uniforms.iGlobalTime.value = (currentTime - startTime) * 0.001;
+    composerBottom.render() 
+  }
   requestAnimationFrame( drawFrame ) 
 }
 
 const checkVisible = elm => {
   let rect = elm.getBoundingClientRect()
-  let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+  let viewHeight = Math.max( document.documentElement.clientHeight, window.innerHeight )
   return ! ( rect.bottom < 0 || rect.top - viewHeight >= 0 )
+}
+
+let spdCircles = 0.001
+const updateCanvasBottomCircles = () => { 
+  passSpace.uniforms.circleSize.value += spdCircles
+  spdCircles *= 1.01 
+} 
+
+const checkCirclesDone = () => {
+  if ( passSpace.uniforms.circleSize.value > 1.0 ) return true
+  return false
 }
 
 
