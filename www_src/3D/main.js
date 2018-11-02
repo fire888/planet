@@ -578,10 +578,7 @@ const createCubes = () => {
   }     
 }
 
-const animateCubes = STATE => {
-  arrCubes.forEach( ( item ) => {
-    item.rotation.x += 0.01 
-  } )
-}  
+const animateCubes = () => arrCubes.forEach( item => item.rotation.x += 0.01 )
+
 
 
