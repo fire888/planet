@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang='en' >
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <style type="text/css">
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, user-scalable=no'>
+  <style type='text/css'>
 
   * {
     padding: 0px;
     margin: 0px;
-  }  
+  }
 
   body {
     color: white;
@@ -20,11 +20,11 @@
     text-align: center;
   }
 
-    body img{
+  body img{
     max-width: 100vw;
   }
 
-  .section{
+  .section {
     min-height: 20vw;
     color: black;
     max-width: 1100px;
@@ -52,47 +52,45 @@
 
 
   /* APPLICATION STYLES ********************************************/  
-  #app-webgl{
+  .app-webgl {
     width: 100vw; 
     height: 100vh; 
     display: table;
     background-color: black;
   }
-  #app-webgl #preloader, #app-webgl #slogan {
+
+  .app-webgl #preloader, .app-webgl #slogan {
     position: absolute;
     top: 35vw;
     width: 100vw;
   }
-  #app-webgl #preloader {
+
+  .app-webgl #preloader {
     text-align: center; 
   }
-  #app-webgl #slogan {
+
+  .app-webgl #slogan {
     padding-left: 10vw; 
     text-align: left;
-  } 
-  #app-webgl .show { 
+  }
+
+  .app-webgl #bottom-scheme {
+    font-size: 50px;
+    margin-top: -80vh;
+  }
+
+  .app-webgl .show { 
     display: block;  
     animation: animatonShow 0.4s ease-out 1; 
   }
-  #app-webgl .hide {
+
+  .app-webgl .hide {
     opacity: 0;
     display: block;    
     animation: animatonHide 0.4s ease-in 1; 
-  }  
-  #app-webgl .hidden {
-    display: none;
-  }
-  #bottom-scheme {
-    font-size: 50px;
-    margin-top: -80vh;
-    margin-bottom: 100vh;
   }
 
-  .show { 
-    display: block;  
-    animation: animatonShow 0.4s ease-out 1; 
-  }
-  .hidden {
+  .app-webgl .hidden {
     display: none;
   }
 
@@ -100,6 +98,7 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
+
   @keyframes animatonHide {
     from { opacity: 1; }  
     to { opacity: 0; }
@@ -123,17 +122,13 @@
 
 
 <!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->   
-<div id = 'app-webgl'>
-  <canvas id = 'webgl' class = 'hidden'></canvas>
-  <div id = 'preloader' class = 'show'>LOADING</div>
-  <div id = 'slogan' class = 'hidden'>WIRELESS COMMUNICATIONS</div> 
+<div class='app-webgl'>
+  <canvas id='webgl' class='hidden'></canvas>
+  <div id='preloader' class='show'>LOADING</div>
+  <div id='slogan' class='hidden'>WIRELESS COMMUNICATIONS</div> 
 </div> 
-<script src = 'js/libs.min.js'></script>
-<script src = 'js/EffectComposer.js'></script>  
-<script src = 'js/CopyShader.js'></script>
-<script src = 'js/ShaderPass.js'></script>
-<script src = 'js/RenderPass.js'></script>
-<script src = 'js/main.min.js'></script>
+<script src='js/libs.min.js'></script>
+<script src='js/main.min.js'></script>
 <!-- ************************************************************ --> 
 
 
@@ -162,64 +157,66 @@
 <br/><br/>
 
 
-<div class = "section">
+<div class='section'>
   <!-- ILLUSTRATION ********************************************* --> 
-  <canvas id = 'canvas-dr01' width = "500" height = "600"></canvas>
+  <canvas id='canvas-dr01' width='500' height='600'></canvas>
   <!-- ********************************************************** --> 
-  <div class = "slogan">
+  <div class='slogan'>
     WE NOT FORGET<br/>ABOUT MAIN 
   </div>  
 </div><br/><br/><br/><br/>  
 
 
 
-<div class = "section">
-  <div class = "slogan">
+<div class='section'>
+  <div class='slogan'>
     DATA<br/>TRANSMITTION<br/>LOSS
   </div>  
   <!-- ILLUSTRATION *********************************************-->   
-  <canvas id = 'canvas-dr02' width = "500" height = "400"></canvas>
+  <canvas id='canvas-dr02' width ='500' height ='400'></canvas>
   <!-- ********************************************************* --> 
 </div><br/><br/><br/><br/>
 
 
 
-<div class = "section">
+<div class='section'>
   <!-- ILLUSTRATION ******************************************** --> 
-  <canvas id = 'canvas-dr03' width = "500" height = "400"></canvas>
+  <canvas id='canvas-dr03' width='500' height='400'></canvas>
   <!-- ********************************************************* --> 
-  <div class = "slogan">
+  <div class='slogan'>
     NEW<br/>VISION
   </div>  
-</div><br/><br/><br/><br/>  
+</div><br/><br/><br/><br/>
 
 
 
-<div class = "section">
-  <div class = "slogan">
+<div class='section'>
+  <div class='slogan'>
     NEW<br/>OPPORTUNITIES
   </div>  
   <!-- ILLUSTRATION ********************************************* -->   
-  <canvas id = 'canvas-dr04' width = "500" height = "400"></canvas>
+  <canvas id='canvas-dr04' width='500' height='400'></canvas>
   <!-- ********************************************************** --> 
 </div><br/><br/><br/><br/>
 
 
 
-<div class = "section">
+<div class = 'section'>
   <!-- ILLUSTRATION ********************************************* --> 
-  <canvas id = 'canvas-dr05' width = "500" height = "400"></canvas>
+  <canvas id='canvas-dr05' width='500' height='400'></canvas>
   <!-- ********************************************************** --> 
-  <div class = "slogan">
+  <div class='slogan'>
     NEW<br/>CHALLENGE
   </div>  
 </div><br/><br/><br/><br/>
 
 
 
-<!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->   
-<canvas id = 'webgl-bottom'></canvas>
-<div id = 'bottom-scheme' class = 'hidden'>AAAAA</div>
+<!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->  
+<div class='app-webgl'> 
+  <canvas id='webgl-bottom'></canvas>
+  <div id='bottom-scheme' class='hidden'>SCHEME</div>
+</div>
 <!-- ************************************************************ --> 
 
 

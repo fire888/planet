@@ -70,6 +70,11 @@ const createDataSprites = ( sprite_type, count ) =>  {
   for ( let i = 0; i < count; i ++ ) {
     let newSprite = {}
     setStartParamsSprite( newSprite, sprite_type )
+    for ( let frame = 0; frame < 150; frame ++ ) {
+      newSprite.x += newSprite.spdX
+      newSprite.y += newSprite.spdY
+      if ( newSprite.x > sprites_TYPES[ sprite_type ].finish.xMin ) setStartParamsSprite( newSprite, sprite_type )
+    }    
     arr.push( newSprite )
   }
   return arr
@@ -86,16 +91,12 @@ const setStartParamsSprite = ( s, type ) => {
 }
 
 
-
-
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
 let interval 
   
-const startAnimationCanvases = () => {
-  interval = setInterval( drawFrameCanvases, 30 )
-}
-  
+const startAnimationCanvases = () => interval = setInterval( drawFrameCanvases, 30 )
+
 const drawFrameCanvases = () => {
   for ( let key in CANVASES ) {
     if ( checkVisible( CANVASES[ key ].canvas ) )

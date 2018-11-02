@@ -42,50 +42,56 @@ const app_Params =  {
 
 
 /*%%  APP STATES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/  
+
+let TOP_CANVAS_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
+
+const updateTopCanvasSTATE = () => {
+  if ( TOP_CANVAS_STATE == 'FLASH') 
+    if ( checkEarthStateLight() && checkConnectorsStateLight() ) TOP_CANVAS_STATE = 'LIGHT'
+  animateEarth( TOP_CANVAS_STATE )
+  animateConnectors( TOP_CANVAS_STATE )
+  animateCubes()  
+}
+
+const onUserActionMouseWheel = () => TOP_CANVAS_STATE = 'FLASH'
+
+
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
 
-const startAPP = () => { drawFrame() }
+let BOTTOM_CANVAS_STATE = 'NONE' // || 'DELAYbeforeCIRCLES || 'CIRCLES' || 'FREESPACE' || 'TEXT'
 
-let APP_STATE = 'DARK' // || 'FLASH' || 'LIGHT'
-let BOTTOM_APP_STATE = 'NONE' // || 'DELAYbeforeCIRCLES || 'CIRCLES' || 'FREESPACE' || 'TEXT'
-
-const onUserActionMouseWheel = () => APP_STATE = 'FLASH'
-
-const animateAllObjects = () => {
-  if ( APP_STATE == 'FLASH') {
-    if ( checkEarthStateLight() && checkConnectorsStateLight() ) APP_STATE = 'LIGHT'
-  } 
-  animateEarth( APP_STATE )
-  animateConnectors( APP_STATE )
-  animateCubes( APP_STATE )
-  /************************************/
-  if ( BOTTOM_APP_STATE == 'NONE' ) {
+const updateBottomCanvasSTATE = () => {
+  if ( BOTTOM_CANVAS_STATE == 'NONE' ) {
     if ( checkVisible( canvasBottom ) ) {
       onBottomAnimationStart()
       startDelay()
       onCheckScrollToBottomCanvas() 
-      BOTTOM_APP_STATE = 'DELAYbeforeCIRCLES'
+      BOTTOM_CANVAS_STATE = 'DELAYbeforeCIRCLES'
     }   
   }
-  if ( BOTTOM_APP_STATE == 'CIRCLES') {
+  if ( BOTTOM_CANVAS_STATE == 'CIRCLES') {
     updateCanvasBottomCircles()
     if ( checkCirclesDone() ) {
-      BOTTOM_APP_STATE = 'FREESPACE'
+      BOTTOM_CANVAS_STATE = 'FREESPACE'
     }
   }
-  if ( BOTTOM_APP_STATE == 'FREESPACE' ) {
-    console.log( ' !! ')
+  if ( BOTTOM_CANVAS_STATE == 'FREESPACE' ) {
     onBottomAnimationDone() 
-    BOTTOM_APP_STATE = 'TEXT'
+    BOTTOM_CANVAS_STATE = 'TEXT'
   }
+  animateCubes() 
 }
 
-const startDelay = () => { setTimeout( () => { BOTTOM_APP_STATE = 'CIRCLES'}, 1000 ) }
+const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 1000 ) }
 
-let onBottomAnimationStart = () => {}, onBottomAnimationDone = () => {}, onCheckScrollToBottomCanvas = () => {}
-
+let onBottomAnimationStart = () => {}
 const setOnBottomAnimationStart = f => onBottomAnimationStart = f  
+
+let onBottomAnimationDone = () => {} 
 const setOnBottomAnimationDone = f => onBottomAnimationDone = f  
+
+let onCheckScrollToBottomCanvas = () => {}
 const setScrolltoBottom = f => onCheckScrollToBottomCanvas = f
 
 
@@ -253,12 +259,17 @@ const resizeCanvas = (
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-const drawFrame = () => {  
+const startAPP = () => drawFrame() 
+
+const drawFrame = () => {
   let onFocusTop = checkVisible( canvasTop )
-  let onFocusBottom = checkVisible( canvasBottom )  
-  if ( onFocusTop || onFocusBottom ) animateAllObjects()
-  if ( onFocusTop ) renderer.render( scene, camera )
-  if ( onFocusBottom && composerBottom && passSpace ) { 
+  let onFocusBottom = checkVisible( canvasBottom )   
+  if ( onFocusTop ) { 
+    updateTopCanvasSTATE()
+    renderer.render( scene, camera )
+  }  
+  if ( onFocusBottom ) { 
+    updateBottomCanvasSTATE()    
     let currentTime = Date.now()
     passSpace.uniforms.iGlobalTime.value = (currentTime - startTime) * 0.001;
     composerBottom.render() 
@@ -275,7 +286,7 @@ const checkVisible = elm => {
 let spdCircles = 0.001
 const updateCanvasBottomCircles = () => { 
   passSpace.uniforms.circleSize.value += spdCircles
-  spdCircles *= 1.01 
+  spdCircles *= 1.05 
 } 
 
 const checkCirclesDone = () => {

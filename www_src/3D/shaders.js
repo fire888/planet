@@ -196,15 +196,17 @@ const spaceShader = {
     // circle
     'float circle(in vec2 _st, in float _radius) {',
       'vec2 dist = _st-vec2(0.5);',
-      'return 1.-smoothstep(_radius-(_radius*0.01),',
-                           '_radius+(_radius*0.01),',
+      'return 1.-smoothstep(_radius-(_radius*0.0),',
+                           '_radius+(_radius*0.0),',
                            'dot(dist,dist)*4.0);',
     '}',
   
     'void mainImage( out vec4 fragColor1, in vec2 fragCoord ) {', 
       //'vec2 uv = 2. * fragCoord.xy / iResolution.xy - 1.;',
       //'vec2 uv = vec2( vUv.x*( iResolution.x / iResolution.y ), vUv.y*( iResolution.y / iResolution.x ) );',
-      'vec2 uv = vec2( vUv.x, vUv.y*( iResolution.y / iResolution.x ) );',     
+      //'vec2 uv = vec2( vUv.x, vUv.y*( iResolution.y / iResolution.x ) );',     
+      'vec2 uv =  vUv * iResolution.xy / max(iResolution.x, iResolution.y);',
+
 
       'vec2 uvs = uv * iResolution.xy / max(iResolution.x, iResolution.y);',
       'vec3 p = vec3(uvs / 4., 0) + vec3(1., -1.3, 0.);',
@@ -214,13 +216,6 @@ const spaceShader = {
       'freqs[1]=0.5;',
       'freqs[2]=0.1;',
       'freqs[3]=0.7;',
-      //Sound
-      /*
-      freqs[0] = texture2D( iChannel0, vec2( 0.01, 0.25 ) ).x;
-      freqs[1] = texture2D( iChannel0, vec2( 0.07, 0.25 ) ).x;
-      freqs[2] = texture2D( iChannel0, vec2( 0.15, 0.25 ) ).x;
-      freqs[3] = texture2D( iChannel0, vec2( 0.30, 0.25 ) ).x;
-      */
       'float t = field(p,freqs[2]);',
       'float v = (1. - exp((abs(uv.x) - 1.) * 6.)) * (1. - exp((abs(uv.y) - 1.) * 6.));',
       //Second Layer
@@ -243,8 +238,8 @@ const spaceShader = {
 
       //circle mask
       'float mask = clamp( ',
-        'circle( vec2(uv.x-0.2, uv.y), circleSize ) +',
-        'circle( vec2(uv.x+0.2, uv.y), circleSize ), 0.0, 1.0 ', 
+        'circle( vec2(uv.x - circleSize*0.1 - 0.2, uv.y ), circleSize ) +',
+        'circle( vec2(uv.x + circleSize*0.1 + 0.2, uv.y ), circleSize ), 0.0, 1.0 ', 
       ');',
       //add mask to space  
       'vec4 spaceWithMask = vec4( fragColor * ( mask ) );',

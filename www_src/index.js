@@ -89,7 +89,6 @@ const initBottomHTML = () => {
 const showBottomBlock = () => {
   let bottomBlock = document.getElementById( 'bottom-scheme' )
   bottomBlock.className = 'show'
-  console.log( 'show' )
   unfixScroll()
 } 
 
@@ -99,14 +98,14 @@ const checkScrolledToBottomCanvas = () => {
 }
 
 const fixScroll = () => {
-  let posY = window.pageYOffset
-  document.body.style.position = 'fixed'
-  document.body.style.top = -posY - window.innerHeight + 'px'
+  //let posY = window.pageYOffset
+  //document.body.style.position = 'fixed'
+  //document.body.style.top = -posY - window.innerHeight + 'px'
 }
 
 const unfixScroll = () => {
-  document.body.style.position = 'static'
-  window.scrollTo( 0, bottomCanvasPositionY)
+  //document.body.style.position = 'static'
+  //window.scrollTo( 0, bottomCanvasPositionY)
 }
 
 
