@@ -62,11 +62,11 @@ let BOTTOM_CANVAS_STATE = 'NONE' // || 'DELAYbeforeCIRCLES || 'CIRCLES' || 'FREE
 
 const updateBottomCanvasSTATE = () => {
   if ( BOTTOM_CANVAS_STATE == 'NONE' ) {
-    if ( checkVisible( canvasBottom ) ) {
+    if ( checkCenterCanvas( canvasBottom ) ) {
       onBottomAnimationStart()
       startDelay()
       BOTTOM_CANVAS_STATE = 'DELAYbeforeCIRCLES'
-    }   
+    }  
   }
   if ( BOTTOM_CANVAS_STATE == 'CIRCLES') {
     updateCanvasBottomCircles()
@@ -81,7 +81,7 @@ const updateBottomCanvasSTATE = () => {
   animateCubes() 
 }
 
-const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 1500 ) }
+const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 500 ) }
 
 let onBottomAnimationStart = () => {}
 const setOnBottomAnimationStart = f => onBottomAnimationStart = f  
@@ -257,13 +257,11 @@ const resizeCanvas = (
 const startAPP = () => drawFrame() 
 
 const drawFrame = () => {
-  let onFocusTop = checkVisible( canvasTop )
-  let onFocusBottom = checkVisible( canvasBottom )   
-  if ( onFocusTop ) { 
+  if ( checkVisible( canvasTop ) ) { 
     updateTopCanvasSTATE()
     renderer.render( scene, camera )
   }  
-  if ( onFocusBottom ) { 
+  if ( checkVisible( canvasBottom ) ) { 
     updateBottomCanvasSTATE()    
     let currentTime = Date.now()
     passSpace.uniforms.iGlobalTime.value = ( currentTime - startTime ) * 0.0001
@@ -278,14 +276,26 @@ const checkVisible = elm => {
   return ! ( rect.bottom < 0 || rect.top - viewHeight >= 0 )
 }
 
+const checkCenterCanvas = elm => {
+  let rect = elm.getBoundingClientRect()
+  let viewHeight = Math.max( document.documentElement.clientHeight, window.innerHeight )
+  return ! ( rect.bottom < 0 || rect.top + ( rect.bottom - rect.top ) * 0.5 - viewHeight >= 0 )  
+}
+
 let spdCircles = 0.001
 const updateCanvasBottomCircles = () => { 
+  if ( passSpace.uniforms.circleSize.value < 0.071 ) {
+    spdCircles *= 1.01     
+  } else if ( passSpace.uniforms.circleSize.value > 0.07 && passSpace.uniforms.circleSize.value < 0.08 ) {
+    spdCircles = 0.0002
+  } else {
+    spdCircles = 0.007    
+  }
   passSpace.uniforms.circleSize.value += spdCircles
-  spdCircles *= 1.01 
 } 
 
 const checkCirclesDone = () => {
-  if ( passSpace.uniforms.circleSize.value > 0.8 ) return true
+  if ( passSpace.uniforms.circleSize.value > 0.7 ) return true
   return false
 }
 

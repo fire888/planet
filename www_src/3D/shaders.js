@@ -235,8 +235,8 @@ const spaceShader = {
 
       //circle mask
       'float mask = clamp( ',
-        'circle( vec2(uv.x - circleSize*0.1 - 0.13, uv.y ), circleSize ) +',
-        'circle( vec2(uv.x + circleSize*0.1 + 0.13, uv.y ), circleSize ), 0.0, 1.0 ', 
+        'circle( vec2(uv.x - circleSize*0.15 - 0.13, uv.y ), circleSize ) +',
+        'circle( vec2(uv.x + circleSize*0.15 + 0.13, uv.y ), circleSize ), 0.0, 1.0 ', 
       ');',
       // glow
 
