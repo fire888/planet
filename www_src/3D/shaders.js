@@ -195,23 +195,20 @@ const spaceShader = {
    
     // circle
     'float circle(in vec2 _st, in float _radius) {',
-      'vec2 dist = _st-vec2(0.5);',
-      'return 1.-smoothstep(_radius-(_radius*0.0),',
-                           '_radius+(_radius*0.0),',
+      'vec2 dist = _st-vec2(0.5 * clamp(iResolution.x/iResolution.y, 0.0, 1.0), 0.5 * clamp( iResolution.y/iResolution.x, 0.0, 1.0 ) );',
+      'return 1.-smoothstep(_radius,',
+                           '_radius+(_radius*0.5),',
                            'dot(dist,dist)*4.0);',
     '}',
   
-    'void mainImage( out vec4 fragColor1, in vec2 fragCoord ) {', 
-      //'vec2 uv = 2. * fragCoord.xy / iResolution.xy - 1.;',
-      //'vec2 uv = vec2( vUv.x*( iResolution.x / iResolution.y ), vUv.y*( iResolution.y / iResolution.x ) );',
-      //'vec2 uv = vec2( vUv.x, vUv.y*( iResolution.y / iResolution.x ) );',     
+    'void mainImage( out vec4 fragColor1, in vec2 fragCoord ) {',     
       'vec2 uv =  vUv * iResolution.xy / max(iResolution.x, iResolution.y);',
 
 
-      'vec2 uvs = uv * iResolution.xy / max(iResolution.x, iResolution.y);',
+      'vec2 uvs = vUv * iResolution.xy / max(iResolution.x, iResolution.y);',
       'vec3 p = vec3(uvs / 4., 0) + vec3(1., -1.3, 0.);',
       'p += .2 * vec3(sin(iGlobalTime / 16.), sin(iGlobalTime / 12.),  sin(iGlobalTime / 128.));',
-      'float freqs[4];', //=float[4](0.2,0.5,0.1,0.7);	
+      'float freqs[4];',
       'freqs[0]=0.2;',
       'freqs[1]=0.5;',
       'freqs[2]=0.1;',
@@ -238,12 +235,15 @@ const spaceShader = {
 
       //circle mask
       'float mask = clamp( ',
-        'circle( vec2(uv.x - circleSize*0.1 - 0.2, uv.y ), circleSize ) +',
-        'circle( vec2(uv.x + circleSize*0.1 + 0.2, uv.y ), circleSize ), 0.0, 1.0 ', 
+        'circle( vec2(uv.x - circleSize*0.1 - 0.13, uv.y ), circleSize ) +',
+        'circle( vec2(uv.x + circleSize*0.1 + 0.13, uv.y ), circleSize ), 0.0, 1.0 ', 
       ');',
-      //add mask to space  
-      'vec4 spaceWithMask = vec4( fragColor * ( mask ) );',
+      // glow
 
+
+      //add mask to space 
+      'vec4 spaceWithMask = vec4( fragColor.xyz * ( 20.0 - clamp( circleSize * 50.0, 0.0, 19.4 ) ), 1.0 );', 
+      'spaceWithMask = vec4( spaceWithMask * ( mask ) );', 
       //back scene
       'vec4 scene = texture2D( tDiffuse, uv );',
       //add maskToBackScene

@@ -24,7 +24,6 @@ window.onload = () => {
       showElement( document.getElementById( 'webgl' ) )
       hideElement( document.getElementById( 'preloader' ) )
       setMouseWeel( APP_3D.onUserActionMouseWheel )
-      APP_3D.setScrolltoBottom( checkScrolledToBottomCanvas )   
       APP_3D.setOnBottomAnimationStart( fixScroll )   
       APP_3D.setOnBottomAnimationDone( showBottomBlock )  
       setWindowResize( APP_3D.resizeCanvas )
@@ -91,11 +90,6 @@ const showBottomBlock = () => {
   bottomBlock.className = 'show'
   unfixScroll()
 } 
-
-const checkScrolledToBottomCanvas = () => {
-  let posY = window.pageYOffset 
-  if ( posY > bottomCanvasPositionY + window.innerHeight ) { fixScroll() }
-}
 
 const fixScroll = () => {
   //let posY = window.pageYOffset

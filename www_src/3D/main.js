@@ -10,8 +10,7 @@ export {
   onUserActionMouseWheel,
   resizeCanvas,
   setOnBottomAnimationDone,
-  setOnBottomAnimationStart,
-  setScrolltoBottom
+  setOnBottomAnimationStart
 } 
 
 
@@ -66,7 +65,6 @@ const updateBottomCanvasSTATE = () => {
     if ( checkVisible( canvasBottom ) ) {
       onBottomAnimationStart()
       startDelay()
-      onCheckScrollToBottomCanvas() 
       BOTTOM_CANVAS_STATE = 'DELAYbeforeCIRCLES'
     }   
   }
@@ -83,16 +81,13 @@ const updateBottomCanvasSTATE = () => {
   animateCubes() 
 }
 
-const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 1000 ) }
+const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 1500 ) }
 
 let onBottomAnimationStart = () => {}
 const setOnBottomAnimationStart = f => onBottomAnimationStart = f  
 
 let onBottomAnimationDone = () => {} 
 const setOnBottomAnimationDone = f => onBottomAnimationDone = f  
-
-let onCheckScrollToBottomCanvas = () => {}
-const setScrolltoBottom = f => onCheckScrollToBottomCanvas = f
 
 
 
@@ -253,7 +248,7 @@ const resizeCanvas = (
   }
   if ( passSpace ) passSpace.uniforms.iResolution.value = new THREE.Vector2( size2.w, size2.h )   
   let size = rendererBottom.getDrawingBufferSize()
-  if ( composerBottom )composerBottom.setSize( size.width, size.height ); 
+  if ( composerBottom )composerBottom.setSize( size.width, size.height )
 } 
 
 
@@ -271,7 +266,7 @@ const drawFrame = () => {
   if ( onFocusBottom ) { 
     updateBottomCanvasSTATE()    
     let currentTime = Date.now()
-    passSpace.uniforms.iGlobalTime.value = (currentTime - startTime) * 0.001;
+    passSpace.uniforms.iGlobalTime.value = ( currentTime - startTime ) * 0.0001
     composerBottom.render() 
   }
   requestAnimationFrame( drawFrame ) 
@@ -286,11 +281,11 @@ const checkVisible = elm => {
 let spdCircles = 0.001
 const updateCanvasBottomCircles = () => { 
   passSpace.uniforms.circleSize.value += spdCircles
-  spdCircles *= 1.05 
+  spdCircles *= 1.01 
 } 
 
 const checkCirclesDone = () => {
-  if ( passSpace.uniforms.circleSize.value > 1.0 ) return true
+  if ( passSpace.uniforms.circleSize.value > 0.8 ) return true
   return false
 }
 
