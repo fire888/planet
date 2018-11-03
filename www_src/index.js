@@ -78,11 +78,11 @@ let onMouseWheel = () => {
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-let bottomCanvas, bottomCanvasPositionY
+let bottomCanvas //, bottomCanvasPositionY
 
 const initBottomHTML = () => {
-  bottomCanvas = document.getElementById( 'webgl-bottom' )
-  bottomCanvasPositionY = bottomCanvas.offsetTop
+//  bottomCanvas = document.getElementById( 'webgl-bottom' )
+//  bottomCanvasPositionY = bottomCanvas.offsetTop
 } 
 
 const showBottomBlock = () => {

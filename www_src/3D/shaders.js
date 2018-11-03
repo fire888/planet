@@ -197,7 +197,7 @@ const spaceShader = {
     'float circle(in vec2 _st, in float _radius) {',
       'vec2 dist = _st-vec2(0.5 * clamp(iResolution.x/iResolution.y, 0.0, 1.0), 0.5 * clamp( iResolution.y/iResolution.x, 0.0, 1.0 ) );',
       'return 1.-smoothstep(_radius,',
-                           '_radius+(_radius*0.5),',
+                           '_radius+( _radius * max( 0.6 - _radius, 0.01 ) ),',
                            'dot(dist,dist)*4.0);',
     '}',
   
