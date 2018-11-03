@@ -44,7 +44,8 @@ const setWindowResize = f => {
         onResize( 
           { w: window.innerWidth, h: window.innerHeight },  
           { w: window.innerWidth, h: window.innerHeight },  
-         ) 
+         )
+        resizeIcons()
       }, false )
 }
 
@@ -78,12 +79,21 @@ let onMouseWheel = () => {
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-let bottomCanvas //, bottomCanvasPositionY
+let icons //, bottomCanvasPositionY
+const initBottomHTML = () => { 
+  icons = document.getElementById( 'icons' )
+  resizeIcons()
+}  
 
-const initBottomHTML = () => {
-//  bottomCanvas = document.getElementById( 'webgl-bottom' )
-//  bottomCanvasPositionY = bottomCanvas.offsetTop
-} 
+const resizeIcons = () => {
+  if ( window.innerWidth/window.innerHeight < 1.3 ) {
+    icons.style.width = window.innerWidth + 'px'  
+    icons.style.height = 'auto' 
+  } else {
+    icons.style.height = window.innerHeight + 'px'  
+    icons.style.width = 'auto'     
+  } 
+}
 
 const showBottomBlock = () => {
   let bottomBlock = document.getElementById( 'bottom-scheme' )

@@ -57,6 +57,7 @@
     height: 100vh; 
     display: table;
     background-color: black;
+    overflow: hidden;
   }
 
   .app-webgl #preloader, .app-webgl #slogan {
@@ -76,7 +77,17 @@
 
   .app-webgl #bottom-scheme {
     font-size: 50px;
-    margin-top: -80vh;
+    margin-top: -100vh;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .app-webgl #icons {
+    width: 100vw;
+    height: auto;
+    margin: 0 auto;
   }
 
   .app-webgl .show { 
@@ -215,7 +226,7 @@
 <!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->  
 <div class='app-webgl'> 
   <canvas id='webgl-bottom'></canvas>
-  <div id='bottom-scheme' class='hidden'>SCHEME</div>
+  <div id='bottom-scheme' class='hidden'><img id='icons' src="assets/iсons.svg"></div>
 </div>
 <!-- ************************************************************ --> 
 
