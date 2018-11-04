@@ -20,7 +20,7 @@
         fill: #cbe7e7;
       }
       .svg-butt{ stroke:#4ebeff;stroke-width:1.1811;stroke-linecap:round;fill: #4ebeff; fill-opacity: 0.08; }
-      .svg-butt:hover{ fill: #4ebeff; fill-opacity: 0.28; }
+      .svg-butt:hover{ fill: #4ebeff; fill-opacity: 0.28; cursor: pointer; }
     </style>
   </defs>
   <title>iсons</title>
