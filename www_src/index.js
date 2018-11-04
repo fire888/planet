@@ -86,11 +86,12 @@ const initBottomHTML = () => {
 }  
 
 const resizeIcons = () => {
+  if ( ! icons ) return
   if ( window.innerWidth/window.innerHeight < 1.3 ) {
-    icons.style.width = window.innerWidth + 'px'  
-    icons.style.height = 'auto' 
+    icons.style.width = window.innerWidth * 0.9 + 'px'  
+    icons.style.height = 'auto'
   } else {
-    icons.style.height = window.innerHeight + 'px'  
+    icons.style.height = window.innerHeight * 0.9 + 'px'  
     icons.style.width = 'auto'     
   } 
 }
@@ -98,6 +99,7 @@ const resizeIcons = () => {
 const showBottomBlock = () => {
   let bottomBlock = document.getElementById( 'bottom-scheme' )
   bottomBlock.className = 'show'
+  bottomBlock.style.display = 'flex'
   unfixScroll()
 } 
 
