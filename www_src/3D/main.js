@@ -7,7 +7,7 @@ export {
   loadAssets,
   initAPP,
   startAPP,
-  onUserActionMouseWheel,
+  startFlashTopCanvas,
   resizeCanvas,
   setOnBottomAnimationDone,
   setOnBottomAnimationStart
@@ -53,7 +53,7 @@ const updateTopCanvasSTATE = () => {
   animateCubes()  
 }
 
-const onUserActionMouseWheel = () => TOP_CANVAS_STATE = 'FLASH'
+const startFlashTopCanvas = () => TOP_CANVAS_STATE = 'FLASH'
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 

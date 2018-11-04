@@ -23,7 +23,7 @@ window.onload = () => {
       APP_3D.startAPP() 
       showElement( document.getElementById( 'webgl' ) )
       hideElement( document.getElementById( 'preloader' ) )
-      setMouseWeel( APP_3D.onUserActionMouseWheel )
+      setMouseWeel( APP_3D.startFlashTopCanvas )
       APP_3D.setOnBottomAnimationStart( fixScroll )   
       APP_3D.setOnBottomAnimationDone( showBottomBlock )  
       setWindowResize( APP_3D.resizeCanvas )
@@ -121,9 +121,9 @@ const showElement = elem => elem.className = 'show'
 
 const hideElement = elem => {
   elem.className = 'hide'
-  setTimeout( () => { 
+  /*setTimeout( () => { 
       elem.className = 'hidden'    
-    }, 1000 )
+    }, 1000 )*/
 }
 
 

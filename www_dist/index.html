@@ -75,6 +75,12 @@
     text-align: left;
   }
 
+  /****************************/
+
+  .app-webgl #webgl-bottom {
+    z-index: 0;
+  }
+
   .app-webgl #bottom-scheme {
     font-size: 50px;
     margin-top: -100vh;
@@ -90,7 +96,10 @@
     width: 100vw;
     height: auto;
     margin: 0 auto;
+    z-index: 200;
   }
+
+  /*****************************/
 
   .app-webgl .show { 
     display: block;  
@@ -231,8 +240,8 @@
 <!-- APPLICATION CONTAINERS/SCRIPTS ***************************** -->  
 <div class='app-webgl'> 
   <canvas id='webgl-bottom'></canvas>
-  <div id='bottom-scheme' class='hidden'>
-    <object id='icons' type="image/svg+xml" data="assets/iсons.svg" width="100" height="100"></object>	
+  <div id='bottom-scheme' class="hidden">
+    <object id='icons' type="image/svg+xml" data="assets/icons.svg" width="100" height="100"></object>	
     <!--<img id='icons' src="assets/iсons.svg">-->
   </div>
 </div>
