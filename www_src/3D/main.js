@@ -264,7 +264,7 @@ const drawFrame = () => {
   if ( checkVisible( canvasBottom ) ) { 
     updateBottomCanvasSTATE()    
     let currentTime = Date.now()
-    passSpace.uniforms.iGlobalTime.value = ( currentTime - startTime ) * 0.0001
+    passSpace.uniforms.iGlobalTime.value = ( currentTime - startTime ) * 0.0002
     composerBottom.render() 
   }
   requestAnimationFrame( drawFrame ) 

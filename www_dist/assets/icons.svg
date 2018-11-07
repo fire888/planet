@@ -1,171 +1,183 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="660.58" height="658.6" viewBox="0 0 660.58 658.6">
-  <defs>
-    <style>
-      .a, .b, .d {
-        stroke: #cbe7e7;
-        stroke-width: 1.18px;
-      }
-
-      .a {
-        stroke-linecap: round;
-      }
-
-      .c, .d {
-        isolation: isolate;
-        font-size: 26.06px;
-        font-family: ISOCPEUR;
-      }
-
-      .c {
-        fill: #cbe7e7;
-      }
-      .svg-butt{ stroke:#4ebeff;stroke-width:1.1811;stroke-linecap:round;fill: #4ebeff; fill-opacity: 0.08; }
-      .svg-butt:hover{ fill: #4ebeff; fill-opacity: 0.28; cursor: pointer; }
-    </style>
-  </defs>
-  <title>iсons</title>
-  <g class="svg-butt">
-    <path class="a" d="M112.3,400.07h18.48c1,0,5.13-3.08,5.13-8.22,0-4.11-3.08-8.22-7.19-7.19a8.1,8.1,0,0,0-8.22-8.22,7.79,7.79,0,0,0-7.19,8.22c0-1-2.05-3.08-5.13-2.05-2.05,2.05-1,6.16,0,7.19-2.05,0-4.11,2.05-4.11,5.13C105.12,401.1,111.28,400.07,112.3,400.07Z" transform="translate(-19.01 -20.45)"/>
-    <circle class="b" cx="100.48" cy="370.38" r="20.54"/>
-    <line class="a" x1="97.4" y1="401.19" x2="97.4" y2="384.76"/>
-    <line class="a" x1="96.37" y1="387.84" x2="97.4" y2="384.76"/>
-    <line class="a" x1="98.43" y1="387.84" x2="97.4" y2="384.76"/>
-    <line class="a" x1="105.61" y1="384.76" x2="105.61" y2="401.19"/>
-    <line class="a" x1="104.59" y1="397.08" x2="105.61" y2="401.19"/>
-    <line class="a" x1="106.64" y1="397.08" x2="105.61" y2="401.19"/>
-    <circle class="a" cx="102.53" cy="436.1" r="99.61"/>
-    <text class="c" transform="translate(30.65 436.1)">MULTI-GIGABIT</text>
-    <text class="d" transform="translate(30.65 436.1)">MULTI-GIGABIT</text>
-    <text class="c" transform="translate(73.78 467.93)">CLOUD</text>
-    <text class="d" transform="translate(73.78 467.93)">CLOUD</text>
-    <text class="c" transform="translate(55.3 499.77)">SREAMING</text>
-    <text class="d" transform="translate(55.3 499.77)">SREAMING</text>
-  </g>
-  <g class="svg-butt">
-    <rect class="a" x="224.74" y="478.09" width="35.67" height="24.32"/>
-    <rect class="a" x="226.79" y="480.15" width="30.78" height="18.81"/>
-    <line class="a" x1="227.82" y1="502.74" x2="227.82" y2="505.82"/>
-    <line class="a" x1="256.57" y1="502.74" x2="256.57" y2="504.79"/>
-    <line class="a" x1="257.6" y1="500.69" x2="255.54" y2="500.69"/>
-    <circle class="a" cx="242.19" cy="507.87" r="23.62"/>
-    <polyline class="a" points="239.11 530.47 239.11 520.2 247.33 520.2 247.33 529.44"/>
-    <path class="a" d="M265.31,535.51c-2.05-1-5.13-2.05-7.19,0" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M267.37,533.46a9.34,9.34,0,0,0-11.3-1,1,1,0,0,0-1,1m0,0a1,1,0,0,1,1-1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M269.42,530.38c-4.11-3.08-10.27-3.08-15.4,0a1,1,0,0,0-1,1" transform="translate(-19.01 -20.45)"/>
-    <circle class="a" cx="245.27" cy="556.14" r="99.61"/>
-    <text class="c" transform="translate(199.06 565.38)">WIRELESS</text>
-    <text class="d" transform="translate(199.06 565.38)">WIRELESS</text>
-    <text class="c" transform="translate(204.2 597.21)">DISPLAY</text>
-    <text class="d" transform="translate(204.2 597.21)">DISPLAY</text>
-  </g>
-  <g class="svg-butt">
-    <path class="b" d="M438.31,502.86h19.51c3.08,0,3.08,2.05,3.08,6.16v7.19c0,2.05-1,4.11-3.08,4.11h-6.16c-1,0-1-5.13-3.08-5.13s-2.05,5.13-3.08,5.13h-8.22c-2.05,0-2.05-2.05-2.05-4.11V509C435.23,504.91,435.23,502.86,438.31,502.86Z" transform="translate(-19.01 -20.45)"/>
-    <circle class="b" cx="423.41" cy="491.65" r="3.08"/>
-    <circle class="b" cx="435.73" cy="491.65" r="3.08"/>
-    <circle class="b" cx="429.57" cy="494.73" r="21.56"/>
-    <path class="a" d="M452.69,531.61c-2.05-1-4.11-2.05-4.11-4.11s3.08-4.11,6.16-4.11,5.13,2.05,5.13,4.11-1,3.08-3.08,4.11V546h-4.11V531.61Z" transform="translate(-19.01 -20.45)"/>
-    <line class="a" x1="435.73" y1="512.19" x2="435.73" y2="514.24"/>
-    <ellipse class="a" cx="435.73" cy="506.02" rx="3.08" ry="2.05"/>
-    <path class="a" d="M439.34,531.61c-2.05-1-3.08-2.05-3.08-4.11s2.05-4.11,5.13-4.11,5.13,2.05,5.13,4.11-1,3.08-3.08,4.11V546h-4.11V531.61Z" transform="translate(-19.01 -20.45)"/>
-    <line class="a" x1="422.38" y1="512.19" x2="422.38" y2="514.24"/>
-    <ellipse class="a" cx="422.38" cy="506.02" rx="3.08" ry="2.05"/>
-    <circle class="a" cx="427.52" cy="558.4" r="99.61"/>
-    <text class="c" transform="translate(398.76 567.64)">MIXED</text>
-    <text class="d" transform="translate(398.76 567.64)">MIXED</text>
-    <text class="c" transform="translate(414.17 599.47)">VR</text>
-    <text class="d" transform="translate(414.17 599.47)">VR</text>
-  </g>
-  <g class="svg-butt">
-    <path class="a" d="M567.07,379.78l1,3.08,2.05,2.05a1.42,1.42,0,0,0,2.05,0s0,4.11,3.08,4.11c4.11,0,3.08-4.11,3.08-4.11l9.24,1s1,3.08,3.08,3.08a3,3,0,0,0,3.08-3.08h3.08a1,1,0,0,1,1-1v-6.16a3.18,3.18,0,0,1-2.05-1,48.35,48.35,0,0,0-5.13-2.05h-1c-1-1-4.11-4.11-6.16-5.13a17.48,17.48,0,0,0-7.19-1,22.4,22.4,0,0,0-5.13,4.11,8,8,0,0,1-3.08,1v3.08Z" transform="translate(-19.01 -20.45)"/>
-    <line class="a" x1="551.14" y1="356.25" x2="550.11" y2="358.3"/>
-    <line class="a" x1="576.81" y1="359.33" x2="576.81" y2="361.38"/>
-    <path class="a" d="M565,372.59c-3.08,2.05-3.08,6.16-2.05,9.24" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M561.93,369.51c-4.11,4.11-5.13,9.24-2.05,14.38h0m0,0h0" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M558.85,367.46c-4.11,5.13-5.13,12.32-2.05,17.46,0,1,1,1,1,2.05" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M599.93,375.67c3.08,2.05,4.11,5.13,2.05,8.22" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M603,372.59a11.2,11.2,0,0,1,3.08,13.35l-1,1m0,0,1-1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M606.09,370.54c4.11,4.11,5.13,11.3,3.08,17.46a1,1,0,0,0-1,1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M576.31,365.41c2.05-2.05,6.16-2.05,9.24,0" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M574.26,362.33a10.8,10.8,0,0,1,13.35,0h1m0,0h-1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M572.2,359.24a13.91,13.91,0,0,1,17.46,0c1,0,1,1,2.05,1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M575.28,394.16c3.08,2.05,6.16,3.08,9.24,1" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M573.23,398.27a11,11,0,0,0,14.38-1h0m0,0h0" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M571.18,401.35c6.16,3.08,13.35,3.08,18.48-1a1,1,0,0,1,1-1" transform="translate(-19.01 -20.45)"/>
-    <line class="a" x1="540.87" y1="392.19" x2="549.08" y2="392.19"/>
-    <line class="a" x1="553.19" y1="392.19" x2="561.41" y2="392.19"/>
-    <line class="a" x1="565.51" y1="392.19" x2="574.75" y2="392.19"/>
-    <line class="a" x1="578.86" y1="392.19" x2="587.08" y2="392.19"/>
-    <circle class="a" cx="560.38" cy="423" r="99.61"/>
-    <text class="c" transform="translate(518.27 438.4)">AI DATA</text>
-    <text class="d" transform="translate(518.27 438.4)">AI DATA</text>
-    <text class="c" transform="translate(509.03 470.24)">EXCHANGE</text>
-    <text class="d" transform="translate(509.03 470.24)">EXCHANGE</text>
-  </g>
-  <g class="svg-butt">
-    <rect class="b" x="539.7" y="186.3" width="22.63" height="4.71"/>
-    <rect class="b" x="539.7" y="179.11" width="22.63" height="4.71"/>
-    <rect class="b" x="539.7" y="171.92" width="22.63" height="4.71"/>
-    <line class="b" x1="541.75" y1="174.45" x2="543.81" y2="174.45"/>
-    <line class="b" x1="545.86" y1="174.45" x2="560.24" y2="174.45"/>
-    <line class="b" x1="541.75" y1="181.63" x2="543.81" y2="181.63"/>
-    <line class="b" x1="545.86" y1="181.63" x2="560.24" y2="181.63"/>
-    <line class="b" x1="541.75" y1="188.65" x2="543.81" y2="188.65"/>
-    <line class="b" x1="545.86" y1="188.65" x2="560.24" y2="188.65"/>
-    <circle class="b" cx="549.97" cy="179.11" r="20.54"/>
-    <line class="a" x1="546.89" y1="167.81" x2="546.89" y2="151.38"/>
-    <line class="a" x1="544.84" y1="155.49" x2="546.89" y2="151.38"/>
-    <line class="a" x1="547.92" y1="155.49" x2="546.89" y2="151.38"/>
-    <line class="a" x1="555.1" y1="151.38" x2="555.1" y2="167.81"/>
-    <line class="a" x1="553.05" y1="164.73" x2="555.1" y2="167.81"/>
-    <line class="a" x1="556.13" y1="164.73" x2="555.1" y2="167.81"/>
-    <circle class="a" cx="552.02" cy="230.45" r="99.61"/>
-    <text class="c" transform="translate(506.84 241.75)">WIRELESS</text>
-    <text class="d" transform="translate(506.84 241.75)">WIRELESS</text>
-    <text class="c" transform="translate(514.03 273.58)">DOCKING</text>
-    <text class="d" transform="translate(514.03 273.58)">DOCKING</text>
-  </g>
-  <g class="svg-butt">
-    <path class="b" d="M420.21,62.12h22.59a2.21,2.21,0,0,1,2.05,2.05V78.55H419.19c-1,0-1,0-1-1V64.17A2.21,2.21,0,0,1,420.21,62.12Z" transform="translate(-19.01 -20.45)"/>
-    <rect class="b" x="401.2" y="43.72" width="22.37" height="13.05"/>
-    <path class="b" d="M414.05,78.55H449V80.6c0,1,0,1-1,1H415.08a1,1,0,0,1-1-1V78.55Z" transform="translate(-19.01 -20.45)"/>
-    <rect class="b" x="407.36" y="58.1" width="8.85" height="1.26"/>
-    <path class="b" d="M421.24,42.61h20.54c2.05,0,3.08,1,3.08,5.13v7.19c0,2.05-1,4.11-3.08,4.11h-7.19c-1,0-1-5.13-3.08-5.13S429.46,59,428.43,59h-7.19c-2.05,0-3.08-2.05-3.08-4.11V47.74C418.16,43.63,419.19,42.61,421.24,42.61Z" transform="translate(-19.01 -20.45)"/>
-    <circle class="b" cx="406.34" cy="30.37" r="3.08"/>
-    <circle class="b" cx="418.66" cy="30.37" r="3.08"/>
-    <circle class="b" cx="412.5" cy="31.4" r="21.56"/>
-    <circle class="a" cx="415.58" cy="100.2" r="99.61"/>
-    <text class="c" transform="translate(374.5 117.66)">PC VR</text>
-    <text class="d" transform="translate(374.5 117.66)">PC VR</text>
-  </g>
-  <g class="svg-butt">
-    <path class="a" d="M242.76,73.83c5.13,0,8.22-1,11.3-4.11L233.52,44.05c-4.11,3.08-7.19,7.19-7.19,13.35a16.69,16.69,0,0,0,11.3,15.4A11.17,11.17,0,0,0,242.76,73.83Z" transform="translate(-19.01 -20.45)"/>
-    <circle class="b" cx="230.94" cy="31.81" r="3.08"/>
-    <line class="a" x1="228.89" y1="33.87" x2="224.78" y2="36.95"/>
-    <path class="a" d="M245.84,47.13A5.65,5.65,0,0,1,251,44.05c5.13,0,8.22,3.08,8.22,7.19a7.72,7.72,0,0,1-5.13,7.19" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M242.76,43A11.66,11.66,0,0,1,251,39.94c7.19,0,12.32,5.13,12.32,11.3,0,4.11-3.08,8.22-6.16,10.27" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M240.71,41c3.08-3.08,6.16-5.13,10.27-5.13a15.12,15.12,0,0,1,15.4,15.4c0,6.16-3.08,10.27-7.19,13.35" transform="translate(-19.01 -20.45)"/>
-    <path class="a" d="M231.47,49.18a14.84,14.84,0,0,0-2.05,7.19c0,5.13,1,7.19,1,7.19" transform="translate(-19.01 -20.45)"/>
-    <polyline class="a" points="223.75 53.38 228.89 70.84 214.51 70.84 218.62 52.35"/>
-    <circle class="a" cx="225.81" cy="103.7" r="99.61"/>
-    <text class="c" transform="translate(148.79 114.99)">RADIOLOCATION</text>
-    <text class="d" transform="translate(148.79 114.99)">RADIOLOCATION</text>
-    <text class="c" transform="translate(186.78 146.82)">SUSTEM</text>
-    <text class="d" transform="translate(186.78 146.82)">SUSTEM</text>
-  </g>
-  <g class="svg-butt">
-    <circle class="a" cx="100.2" cy="243.51" r="99.61"/>
-    <path class="b" d="M106.89,216.72h20.54c2.05,0,3.08,1,3.08,5.13v8.22c0,2.05-1,4.11-3.08,4.11h-7.19c-1-1-1-5.13-3.08-5.13s-2.05,4.11-3.08,5.13h-7.19c-2.05,0-3.08-2.05-3.08-4.11v-8.22C103.81,217.75,104.84,216.72,106.89,216.72Z" transform="translate(-19.01 -20.45)"/>
-    <circle class="b" cx="91.98" cy="204.49" r="3.08"/>
-    <circle class="b" cx="104.31" cy="204.49" r="3.08"/>
-    <circle class="b" cx="98.15" cy="203.46" r="21.56"/>
-    <rect class="b" x="80.69" y="173.68" width="35.88" height="17.04" rx="2.05" ry="2.05"/>
-    <rect class="b" x="84.8" y="175.73" width="25.77" height="12.9"/>
-    <line class="b" x1="82.74" y1="176.76" x2="82.74" y2="177.79"/>
-    <line class="b" x1="82.74" y1="178.81" x2="82.74" y2="180.87"/>
-    <circle class="b" cx="113.55" cy="182.92" r="1.03"/>
-    <text class="c" transform="translate(70.42 254.8)">GEAR</text>
-    <text class="d" transform="translate(70.42 254.8)">GEAR</text>
-    <text class="c" transform="translate(83.77 286.64)">VR</text>
-    <text class="d" transform="translate(83.77 286.64)">VR</text>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 660.6 658.6" style="enable-background:new 0 0 660.6 658.6;" xml:space="preserve">
+<style type="text/css">
+	.st4{font-family:'Tahoma';}
+	.st5{font-size:23px;}
+	.st6{font-size:26.06px;}
+	.svg-butt{ stroke:#97F8FF;stroke-width:1.1811;stroke-linecap:round;fill: #97F8FF; fill-opacity: 0.08; }
+    .svg-butt:hover{ fill: #4ebeff; fill-opacity: 0.28; cursor: pointer; }
+</style>
+<title>iсons</title>
+<g class="svg-butt">
+	<path class="st0" d="M93.3,379.6h18.5c1,0,5.1-3.1,5.1-8.2c0-4.1-3.1-8.2-7.2-7.2c0.1-4.5-3.5-8.2-8-8.2c-0.1,0-0.2,0-0.2,0
+		c-4.2,0.3-7.4,4-7.2,8.2c0-1-1.6-3.2-4.7-1.5c-3.3,2-1.4,5.6-0.4,6.6c-2.1,0-4.1,2-4.1,5.1C86.1,380.6,92.3,379.6,93.3,379.6z"/>
+	<circle class="st0" cx="101.2" cy="372" r="20.5"/>
+	<line class="st1" x1="97.4" y1="401.2" x2="97.4" y2="384.8"/>
+	<line class="st1" x1="96.4" y1="387.8" x2="97.4" y2="384.8"/>
+	<line class="st1" x1="98.4" y1="387.8" x2="97.4" y2="384.8"/>
+	<line class="st1" x1="105.6" y1="384.8" x2="105.6" y2="401.2"/>
+	<line class="st1" x1="104.6" y1="397.1" x2="105.6" y2="401.2"/>
+	<line class="st1" x1="106.6" y1="397.1" x2="105.6" y2="401.2"/>
+	<circle class="st0" cx="101.6" cy="434.1" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 20.0211 434.1)" class="st3 st4 st5">MULTI-GIGABIT</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 65.674 465.93)" class="st3 st4 st5">CLOUD</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 45.9055 497.77)" class="st3 st4 st5">SREAMING</text>
+	</g>
+</g>
+<g class="svg-butt">
+	<rect x="226.4" y="478.1" class="st0" width="35.7" height="24.3"/>
+	<rect x="228.4" y="480.1" class="st0" width="30.8" height="18.8"/>
+	<line class="st1" x1="229.4" y1="502.7" x2="229.4" y2="505.8"/>
+	<line class="st1" x1="258.2" y1="502.7" x2="258.2" y2="504.8"/>
+	<line class="st1" x1="259.2" y1="500.7" x2="257.2" y2="500.7"/>
+	<circle class="st0" cx="243.8" cy="507.9" r="23.6"/>
+	<polyline class="st0" points="239.7,531.3 239.7,520.2 247.9,520.2 247.9,530.9 	"/>
+	<path class="st0" d="M252,509.9c0-0.4-1.4-2.6-8.1-2.5c-5.6,0-8.2,2-8.2,2.6"/>
+	<circle class="st0" cx="246.8" cy="557.3" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 186.3517 570.38)" class="st3 st4 st6">WIRELESS</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 196.8687 602.21)" class="st3 st4 st6">DISPLAY</text>
+	</g>
+	<path class="st0" d="M250.3,512.4c0-0.3-1.1-2.1-6.5-2c-4.5,0-6.6,1.6-6.6,2.1"/>
+	<path class="st0" d="M248.4,514.3c0-0.2-0.8-1.4-4.5-1.4c-3.1,0-4.5,1.1-4.5,1.4"/>
+</g>
+<g class="svg-butt">
+	<path class="st0" d="M415.3,489.4h19.5c3.1,0,3.1,2,3.1,6.2v7.2c0,2-1,4.1-3.1,4.1h-6.2c-1,0-1-5.1-3.1-5.1s-2,5.1-3.1,5.1h-8.2
+		c-2,0-2-2-2-4.1v-7.2C412.2,491.5,412.2,489.4,415.3,489.4z"/>
+	<circle class="st0" cx="419.4" cy="498.6" r="3.1"/>
+	<circle class="st0" cx="431.7" cy="498.6" r="3.1"/>
+	<circle class="st0" cx="425.6" cy="501.7" r="21.6"/>
+	<path class="st0" d="M429.7,518.2c-2-1-4.1-2-4.1-4.1s3.1-4.1,6.2-4.1s5.1,2,5.1,4.1s-1,3.1-3.1,4.1v14.4h-4.1L429.7,518.2
+		L429.7,518.2z"/>
+	<line class="st1" x1="431.7" y1="519.2" x2="431.7" y2="521.2"/>
+	<ellipse class="st0" cx="431.7" cy="513" rx="3.1" ry="2"/>
+	<path class="st0" d="M416.3,518.2c-2-1-3.1-2-3.1-4.1s2-4.1,5.1-4.1s5.1,2,5.1,4.1s-1,3.1-3.1,4.1v14.4h-4.1L416.3,518.2
+		L416.3,518.2z"/>
+	<line class="st1" x1="418.4" y1="519.2" x2="418.4" y2="521.2"/>
+	<ellipse class="st0" cx="418.4" cy="513" rx="3.1" ry="2"/>
+	<circle class="st0" cx="427.5" cy="556.4" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 388.1472 565.64)" class="st3 st4 st6">MIXED</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 410.3087 597.47)" class="st3 st4 st6">VR</text>
+	</g>
+</g>
+<g class="svg-butt">
+	<path class="st0" d="M546.1,369.3l1,3.1l2,2c0.5,0.6,1.4,0.6,2,0c0,0,0,0,0,0c0,0,0,4.1,3.1,4.1c4.1,0,3.1-4.1,3.1-4.1l9.2,1
+		c0,0,1,3.1,3.1,3.1c1.7,0,3-1.3,3.1-2.9c0-0.1,0-0.1,0-0.2h3.1c0-0.6,0.4-1,1-1v-6.2c-0.8-0.1-1.5-0.4-2-1c-1.7-0.8-3.4-1.5-5.1-2
+		h-1c-1-1-4.1-4.1-6.2-5.1c-2.3-0.8-4.7-1.2-7.2-1c-1.9,1.1-3.6,2.5-5.1,4.1c-0.9,0.5-2,0.9-3.1,1v3.1L546.1,369.3z"/>
+	<line class="st1" x1="549.1" y1="366.3" x2="548.1" y2="368.3"/>
+	<line class="st1" x1="574.8" y1="369.3" x2="574.8" y2="371.4"/>
+	<path class="st0" d="M544,362.1c-2.6,0.3-4.2,7.2-2,9.2"/>
+	<line class="st1" x1="538.9" y1="401.2" x2="547.1" y2="401.2"/>
+	<line class="st1" x1="551.2" y1="401.2" x2="559.4" y2="401.2"/>
+	<line class="st1" x1="563.5" y1="401.2" x2="572.8" y2="401.2"/>
+	<line class="st1" x1="576.9" y1="401.2" x2="585.1" y2="401.2"/>
+	<circle class="st0" cx="558.6" cy="417.1" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 511.4521 438.4)" class="st3 st4 st6">AI DATA</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 496.0125 470.24)" class="st3 st4 st6">EXCHANGE</text>
+	</g>
+	<path class="st0" d="M541.5,359.4c-4,0.4-6.3,10.9-3.1,14"/>
+	<path class="st0" d="M538.5,356.4c-5,0.6-8,13.8-3.9,17.7"/>
+	<path class="st0" d="M578.3,362.8c2.8,0.5,4.1,7.4,1.7,9.3"/>
+	<path class="st0" d="M581.4,360.2c4.2,0.7,6.2,11.2,2.6,14.1"/>
+	<path class="st0" d="M584.6,357.4c5.4,0.9,7.9,14.2,3.3,17.9"/>
+	<path class="st0" d="M556.7,357.3c1-2.7,8.1-2.5,9.5,0.3"/>
+	<path class="st0" d="M554.8,353.8c1.5-4,12.3-3.8,14.4,0.4"/>
+	<path class="st0" d="M552.7,350.1c2-5.1,15.5-4.8,18.2,0.5"/>
+	<path class="st0" d="M556.6,381.2c0.9,2.8,8,3,9.5,0.3"/>
+	<path class="st0" d="M554.6,384.8c1.4,4.2,12.1,4.6,14.4,0.4"/>
+	<path class="st0" d="M552.3,388.4c1.7,5.3,15.3,5.8,18.2,0.5"/>
+</g>
+<g class="svg-butt">
+	<rect x="547.7" y="186.3" class="st0" width="22.6" height="4.7"/>
+	<rect x="547.7" y="179.1" class="st0" width="22.6" height="4.7"/>
+	<rect x="547.7" y="171.9" class="st0" width="22.6" height="4.7"/>
+	<line class="st1" x1="549.7" y1="174.4" x2="551.8" y2="174.4"/>
+	<line class="st1" x1="553.8" y1="174.4" x2="568.2" y2="174.4"/>
+	<line class="st1" x1="549.7" y1="181.6" x2="551.8" y2="181.6"/>
+	<line class="st1" x1="553.8" y1="181.6" x2="568.2" y2="181.6"/>
+	<line class="st1" x1="549.7" y1="188.6" x2="551.8" y2="188.6"/>
+	<line class="st1" x1="553.8" y1="188.6" x2="568.2" y2="188.6"/>
+	<circle class="st0" cx="557.9" cy="179.1" r="20.5"/>
+	<line class="st1" x1="554.8" y1="167.8" x2="554.8" y2="151.4"/>
+	<line class="st1" x1="552.8" y1="155.5" x2="554.8" y2="151.4"/>
+	<line class="st1" x1="555.9" y1="155.5" x2="554.8" y2="151.4"/>
+	<line class="st1" x1="563" y1="151.4" x2="563" y2="167.8"/>
+	<line class="st1" x1="561" y1="164.7" x2="563" y2="167.8"/>
+	<line class="st1" x1="564.1" y1="164.7" x2="563" y2="167.8"/>
+	<circle class="st0" cx="560" cy="230.4" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 498.79 241.75)" class="st3 st4 st6">WIRELESS</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 503.98 273.58)" class="st3 st4 st6">DOCKING</text>
+	</g>
+</g>
+<g class="svg-butt">
+	<path class="st0" d="M401.2,55.7h22.6c1.1,0.1,2,1,2,2v14.4h-25.7c-1,0-1,0-1-1V57.7C399.3,56.6,400.1,55.8,401.2,55.7z"/>
+	<rect x="401.2" y="57.7" class="st0" width="22.4" height="13"/>
+	<path class="st0" d="M395,72.1h35v2c0,1,0,1-1,1h-32.9c-0.6,0-1-0.4-1-1L395,72.1L395,72.1z"/>
+	<rect x="407.4" y="72.1" class="st0" width="8.9" height="1.3"/>
+	<path class="st0" d="M402.2,36.2h20.5c2,0,3.1,1,3.1,5.1v7.2c0,2-1,4.1-3.1,4.1h-7.2c-1,0-1-5.1-3.1-5.1s-2.1,5.1-3.1,5.1h-7.2
+		c-2,0-3.1-2-3.1-4.1v-7.1C399.1,37.2,400.2,36.2,402.2,36.2z"/>
+	<circle class="st0" cx="406.3" cy="44.4" r="3.1"/>
+	<circle class="st0" cx="418.7" cy="44.4" r="3.1"/>
+	<circle class="st0" cx="412.5" cy="45.4" r="21.6"/>
+	<circle class="st0" cx="415.6" cy="101.2" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 374.5 118.66)" class="st3 st4 st6">PC VR</text>
+	</g>
+</g>
+<g class="svg-butt">
+	<path class="st0" d="M223.8,53.4c5.1,0,8.2-1,11.3-4.1l-20.5-25.7c-4.1,3.1-7.2,7.2-7.2,13.4c0.2,7,4.7,13.1,11.3,15.4
+		C220.2,53.1,222,53.4,223.8,53.4z"/>
+	<circle class="st0" cx="230.9" cy="31.8" r="3.1"/>
+	<line class="st1" x1="228.9" y1="33.9" x2="224.8" y2="37"/>
+	<path class="st0" d="M226.8,26.7c1-1.9,3-3.1,5.2-3.1c5.1,0,8.2,3.1,8.2,7.2c0,3.2-2.1,6.1-5.1,7.2"/>
+	<path class="st0" d="M223.8,22.5c2.2-2.1,5.2-3.2,8.2-3.1c7.2,0,12.3,5.1,12.3,11.3c0,4.1-3.1,8.2-6.2,10.3"/>
+	<path class="st0" d="M221.2,19.5c2.4-2,6.7-4.1,10.8-4.1c10-0.3,15.2,6.5,15.4,14.8c0,0.2,0,0.4,0,0.6c0,6.2-3.1,10.3-7.2,13.3"/>
+	<path class="st0" d="M212.5,28.7c-1.3,2.2-2,4.7-2.1,7.2c0,5.1,1,7.2,1,7.2"/>
+	<polyline class="st0" points="223.8,53.4 228.9,70.8 214.5,70.8 218.6,52.3 	"/>
+	<circle class="st0" cx="227.8" cy="103.2" r="99.6"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 137.0527 111.99)" class="st3 st4 st5">RADIOLOCATION</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 186.3962 146.82)" class="st3 st4 st5">SUSTEM</text>
+	</g>
+</g>
+<g class="svg-butt">
+	<circle class="st0" cx="100.2" cy="243.5" r="99.6"/>
+	<path class="st0" d="M87.9,196.3h20.5c2,0,3.1,1,3.1,5.1v8.2c0,2.1-1,4.1-3.1,4.1h-7.2c-1-1-1-5.1-3.1-5.1s-2.1,4.1-3.1,5.1h-7.2
+		c-2.1,0-3.1-2.1-3.1-4.1v-8.2C84.8,197.3,85.8,196.3,87.9,196.3z"/>
+	<circle class="st0" cx="92" cy="204.5" r="3.1"/>
+	<circle class="st0" cx="104.3" cy="204.5" r="3.1"/>
+	<circle class="st0" cx="98.2" cy="203.5" r="21.6"/>
+	<path class="st0" d="M82.7,173.7h31.8c1.1,0,2.1,0.9,2.1,2.1v12.9c0,1.1-0.9,2.1-2.1,2.1H82.7c-1.1,0-2.1-0.9-2.1-2.1v-12.9
+		C80.7,174.6,81.6,173.7,82.7,173.7z"/>
+	<rect x="84.8" y="175.7" class="st0" width="25.8" height="12.9"/>
+	<line class="st1" x1="82.7" y1="176.8" x2="82.7" y2="177.8"/>
+	<line class="st1" x1="82.7" y1="178.8" x2="82.7" y2="180.9"/>
+	<circle class="st0" cx="113.6" cy="182.9" r="1"/>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 65.4933 253.4502)" class="st3 st4 st6">GEAR</text>
+	</g>
+	<g class="st2">
+		<text transform="matrix(1 0 0 1 82.1989 284.64)" class="st3 st4 st6">VR</text>
+	</g>
+</g>
 </svg>
