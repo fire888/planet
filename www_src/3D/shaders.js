@@ -207,7 +207,7 @@ const spaceShader = {
 
       'vec2 uvs = vUv * iResolution.xy / max(iResolution.x, iResolution.y);',
       'vec3 p = vec3(uvs / 4., 0) + vec3(1., -1.3, 0.);',
-      'p += .2 * vec3(sin(iGlobalTime / 16.), sin(iGlobalTime / 12.),  sin(iGlobalTime / 128.));',
+      'p += .2 * vec3(0.04*iGlobalTime, 0.1,  0.1);',
       'float freqs[4];',
       'freqs[0]=0.2;',
       'freqs[1]=0.5;',
@@ -217,7 +217,7 @@ const spaceShader = {
       'float v = (1. - exp((abs(uv.x) - 1.) * 6.)) * (1. - exp((abs(uv.y) - 1.) * 6.));',
       //Second Layer
       'vec3 p2 = vec3(uvs / (4.+sin(iGlobalTime*0.11)*0.2+0.2+sin(iGlobalTime*0.15)*0.3+0.4), 1.5) + vec3(2., -1.3, -1.);',
-      'p2 += 0.25 * vec3(sin(iGlobalTime / 16.), sin(iGlobalTime / 12.),  sin(iGlobalTime / 128.));',
+      'p2 += 0.25 * vec3(0.06*iGlobalTime, 0.2,  0.2);',
       'float t2 = field2(p2,freqs[3]);',
       'vec4 c2 = mix(.4, 1., v) * vec4(1.3 * t2 * t2 * t2 ,1.8  * t2 * t2 , t2* freqs[0], t2);',
       //Let's add some stars
