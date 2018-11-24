@@ -10,7 +10,6 @@ export {
   startFlashTopCanvas,
   resizeCanvas,
   setOnBottomAnimationDone,
-  setOnBottomAnimationStart
 } 
 
 
@@ -63,7 +62,6 @@ let BOTTOM_CANVAS_STATE = 'NONE' // || 'DELAYbeforeCIRCLES || 'CIRCLES' || 'FREE
 const updateBottomCanvasSTATE = () => {
   if ( BOTTOM_CANVAS_STATE == 'NONE' ) {
     if ( checkCenterCanvas( canvasBottom ) ) {
-      onBottomAnimationStart()
       startDelay()
       BOTTOM_CANVAS_STATE = 'DELAYbeforeCIRCLES'
     }  
@@ -82,9 +80,6 @@ const updateBottomCanvasSTATE = () => {
 }
 
 const startDelay = () => { setTimeout( () => { BOTTOM_CANVAS_STATE = 'CIRCLES'}, 500 ) }
-
-let onBottomAnimationStart = () => {}
-const setOnBottomAnimationStart = f => onBottomAnimationStart = f  
 
 let onBottomAnimationDone = () => {} 
 const setOnBottomAnimationDone = f => onBottomAnimationDone = f  

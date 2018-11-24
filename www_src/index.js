@@ -2,7 +2,9 @@
 
 
 import * as APP_3D from './3D/main'
-import * as C_2D from './2D/main' 
+import * as C_2D from './2D/main'
+
+const startTime = new Date().getTime()
 
 window.onload = () => {
   initBottomHTML()
@@ -20,17 +22,24 @@ window.onload = () => {
           h: window.innerHeight
         }  
       )
-      APP_3D.startAPP() 
-      showElement( document.getElementById( 'webgl' ) )
-      hideElement( document.getElementById( 'preloader' ) )
-      setMouseWeel( APP_3D.startFlashTopCanvas )
-      APP_3D.setOnBottomAnimationStart( fixScroll )   
-      APP_3D.setOnBottomAnimationDone( showBottomBlock )  
-      setWindowResize( APP_3D.resizeCanvas )
+      checkStartingTimeAndStart()
     } )    
   } )
 }
 
+const checkStartingTimeAndStart = () => {
+  let loadingTime = new Date().getTime() - startTime
+  loadingTime < 1500 ? setTimeout( startApp, 1500 - loadingTime ) : startApp()
+}
+
+const startApp = () => {
+  APP_3D.startAPP() 
+  showElement( document.getElementById( 'webgl' ) )
+  hideElement( document.getElementById( 'preloader' ) )
+  setMouseWeel( APP_3D.startFlashTopCanvas )  
+  APP_3D.setOnBottomAnimationDone( showBottomBlock )  
+  setWindowResize( APP_3D.resizeCanvas )
+}
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
@@ -100,19 +109,7 @@ const showBottomBlock = () => {
   let bottomBlock = document.getElementById( 'bottom-scheme' )
   bottomBlock.className = 'show'
   bottomBlock.style.display = 'flex'
-  unfixScroll()
 } 
-
-const fixScroll = () => {
-  //let posY = window.pageYOffset
-  //document.body.style.position = 'fixed'
-  //document.body.style.top = -posY - window.innerHeight + 'px'
-}
-
-const unfixScroll = () => {
-  //document.body.style.position = 'static'
-  //window.scrollTo( 0, bottomCanvasPositionY)
-}
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/ 
@@ -121,9 +118,6 @@ const showElement = elem => elem.className = 'show'
 
 const hideElement = elem => {
   elem.className = 'hide'
-  /*setTimeout( () => { 
-      elem.className = 'hidden'    
-    }, 1000 )*/
 }
 
 
