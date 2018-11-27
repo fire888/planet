@@ -88,7 +88,7 @@ let onMouseWheel = () => {
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-let icons //, bottomCanvasPositionY
+let icons
 const initBottomHTML = () => { 
   icons = document.getElementById( 'icons' )
   resizeIcons()

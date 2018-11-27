@@ -284,13 +284,13 @@ const updateCanvasBottomCircles = () => {
   } else if ( passSpace.uniforms.circleSize.value > 0.07 && passSpace.uniforms.circleSize.value < 0.08 ) {
     spdCircles = 0.0002
   } else {
-    spdCircles = 0.007    
+    spdCircles *= 1.03 + 0.0005    
   }
   passSpace.uniforms.circleSize.value += spdCircles
 } 
 
 const checkCirclesDone = () => {
-  if ( passSpace.uniforms.circleSize.value > 0.7 ) return true
+  if ( passSpace.uniforms.circleSize.value > 2.2 ) return true
   return false
 }
 
