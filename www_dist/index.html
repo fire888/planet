@@ -183,29 +183,7 @@
 </div> 
 <script src='js/libs.min.js'></script>
 <script src='js/main.min.js'></script>
-<!-- ************************************************************ --> 
-
-
-
-
-
-
-<!-- DELAY AFTER MOUSE SCROLL TO SHOW BOTTOM CONTENT  *********** -->   
-<script>
-  document.addEventListener( 'wheel', wheelMouseWindow, false );
-  document.addEventListener( 'touchstart', wheelMouseWindow, false);
-  function wheelMouseWindow () {
-    document.removeEventListener( 'wheel', wheelMouseWindow, false );
-    document.removeEventListener( 'touchstart', wheelMouseWindow, false);
-    setTimeout( function () {
-      document.body.style.position = 'static'
-      document.body.style.overflowY = 'auto'      
-    }, 2000 )
-  }
-</script>
-<!-- ************************************************************ --> 
-
-
+<!-- ************************************************************ -->
 
 
 <br/><br/>

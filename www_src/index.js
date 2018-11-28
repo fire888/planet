@@ -63,11 +63,15 @@ const setWindowResize = f => {
 
 let actionMouseWheel
 
-const setMouseWeel = f => { 
+const setMouseWeel = f => {
   actionMouseWheel = f
   document.addEventListener( 'wheel', onMouseWheel, false )
   document.addEventListener( 'scroll', onMouseWheel, false ) 
-  document.addEventListener( 'touchstart', onMouseWheel, false)    
+  document.addEventListener( 'touchstart', onMouseWheel, false) 
+  setTimeout( () => { 
+      document.body.style.position = 'static'
+      document.body.style.overflowY = 'auto'    
+    }, 4000 ) 
 }   
 
 const removeListenerMouseWheel = () => {
