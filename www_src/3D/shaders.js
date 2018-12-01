@@ -162,28 +162,11 @@ const spaceShader = {
         'float mag = dot(p, p);',
         'p = abs(p) / mag + vec3(-.5, -.4, -1.5);',
         'float w = exp(-float(i) / 7.);',
-        'accum += w * exp(-strength * pow(abs(mag - prev), 2.2));',
+        'accum += w * exp(-strength * pow(abs(mag - prev), 8.2));',
         'tw += w;',
         'prev = mag;',
       '}',
-      'return max(0., 5. * accum / tw - .7);',
-    '}',
-    // Less iterations for second layer
-    'float field2(in vec3 p, float s) {',
-      'float strength = 5. + .03 * log(1.e-6 + fract(sin(iGlobalTime) * 4373.11));',
-      //float strength = 7. + .03 * log(1.e-6 + fract(sin(iGlobalTime) * 4373.11));
-      'float accum = s/4.;',
-      'float prev = 0.;',
-      'float tw = 0.;',
-      'for (int i = 0; i < 18; ++i) {',
-        'float mag = dot(p, p);',
-        'p = abs(p) / mag + vec3(-.5, -.4, -1.5);',
-        'float w = exp(-float(i) / 7.);',
-        'accum += w * exp(-strength * pow(abs(mag - prev), 2.2));',
-        'tw += w;',
-        'prev = mag;',
-      '}',
-      'return max(0., 5. * accum / tw - .7);',
+      'return max(0., 3. * accum / tw - .7);',
     '}',
   
     'vec3 nrand3( vec2 co ) {',
@@ -218,20 +201,18 @@ const spaceShader = {
       //Second Layer
       'vec3 p2 = vec3(uvs / (4.+sin(iGlobalTime*0.11)*0.2+0.2+sin(iGlobalTime*0.15)*0.3+0.4), 1.5) + vec3(2., -1.3, -1.);',
       'p2 += 0.25 * vec3(0.06*iGlobalTime, 0.2,  0.2);',
-      'float t2 = field2(p2,freqs[3]);',
-      'vec4 c2 = mix(.4, 1., v) * vec4(1.3 * t2 * t2 * t2 ,1.8  * t2 * t2 , t2* freqs[0], t2);',
       //Let's add some stars
       //Thanks to http://glsl.heroku.com/e#6904.0
-      'vec2 seed = p.xy * 2.0;',	
-      'seed = floor(seed * iResolution.x);',
+      'vec2 seed = p.xy * 2.9;',	
+      'seed = floor(seed * max(iResolution.y, iResolution.x));',
       'vec3 rnd = nrand3( seed );',
       'vec4 starcolor = vec4(pow(rnd.y,40.0));', 
       //Second Layer
-      'vec2 seed2 = p2.xy * 2.0;',
-      'seed2 = floor(seed2 * iResolution.x);',
+      'vec2 seed2 = p2.xy * 2.9;',
+      'seed2 = floor(seed2 * max(iResolution.y, iResolution.x));',
       'vec3 rnd2 = nrand3( seed2 );',
       'starcolor += vec4(pow(rnd2.y,40.0));',
-      'vec4 fragColor = mix(freqs[3]-.3, 1., v) * vec4(1.5*freqs[2] * t * t* t , 1.2*freqs[1] * t * t, freqs[3]*t, 1.0)+c2+starcolor;',
+      'vec4 fragColor = mix(freqs[3]-.3, 1., v) * vec4(1.5*freqs[2] * t * t* t , 1.2*freqs[1] * t * t, freqs[3]*t, 1.0)+starcolor;',
 
       //circle mask
       'float mask = clamp( ',
