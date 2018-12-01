@@ -38,7 +38,7 @@ const startApp = () => {
   hideElement( document.getElementById( 'preloader' ) )
   setTimeout( () =>  {
     setMouseWeel( APP_3D.startFlashTopCanvas )  
-  }, 2000 )
+  }, 1000 )
   APP_3D.setOnBottomAnimationDone( showBottomBlock )  
   setWindowResize( APP_3D.resizeCanvas )
 }
@@ -73,7 +73,7 @@ const setMouseWeel = f => {
   setTimeout( () => { 
       document.body.style.position = 'static'
       document.body.style.overflowY = 'auto'    
-    }, 4000 ) 
+    }, 3500 ) 
 }   
 
 const removeListenerMouseWheel = () => {
