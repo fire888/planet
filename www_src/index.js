@@ -36,7 +36,9 @@ const startApp = () => {
   APP_3D.startAPP() 
   showElement( document.getElementById( 'webgl' ) )
   hideElement( document.getElementById( 'preloader' ) )
-  setMouseWeel( APP_3D.startFlashTopCanvas )  
+  setTimeout( () =>  {
+    setMouseWeel( APP_3D.startFlashTopCanvas )  
+  }, 2000 )
   APP_3D.setOnBottomAnimationDone( showBottomBlock )  
   setWindowResize( APP_3D.resizeCanvas )
 }

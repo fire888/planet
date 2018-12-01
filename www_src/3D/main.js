@@ -444,7 +444,7 @@ const createMaterialIron = () => {
     color: 0x0c0a19,
     emissive: 0x00000,
     specular: 0xffffff,
-    shininess: 300
+    shininess: 20
   } )
 }
 
